@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OwlStack API",
+    "title": "FoPost API",
     "version": "1.0.0",
-    "description": "REST API for OwlStack — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the OwlStack dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the OwlStack dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-owlstack-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
+    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
     "contact": {
       "name": "FoPost Support",
       "url": "https://fopost.com/contact"
@@ -97,7 +97,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Returns the OpenAPI 3.1 description of the OwlStack public API. No auth required.",
+        "description": "Returns the OpenAPI 3.1 description of the FoPost public API. No auth required.",
         "security": []
       }
     },
@@ -130,7 +130,7 @@
           }
         },
         "description": "Lists posts across all workspaces the user belongs to, newest first. All filters are optional and combine with AND semantics.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "page",
@@ -294,7 +294,7 @@
           }
         },
         "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
           "content": {
@@ -342,7 +342,7 @@
           }
         },
         "description": "Requires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -403,7 +403,7 @@
           }
         },
         "description": "Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -461,7 +461,7 @@
           }
         },
         "description": "Soft-deletes the post. Already-published platform posts are not removed.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -541,7 +541,7 @@
           }
         },
         "description": "Queues delivery of a draft or scheduled post to its assigned accounts (or the `accountIds` subset). Accounts with expired or revoked credentials are failed immediately; degraded accounts publish with a warning. Delivery is asynchronous — poll the deliveries endpoint or subscribe to webhooks for the outcome. With `options.dryRun` the request validates and returns the target accounts without publishing (200 instead of 202).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -621,7 +621,7 @@
           }
         },
         "description": "Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. Deliveries past the retry limit are reported in `exceeded` and skipped.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -684,7 +684,7 @@
           }
         },
         "description": "Cancels pending, queued, or delayed deliveries (optionally limited to `accountIds`) and recalculates the post status. Send `{}` to cancel all.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -744,7 +744,7 @@
           }
         },
         "description": "Checks each assigned account for hard blockers (`issues`) and returns advisory per-platform content quality signals. Signals never block publishing.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -805,7 +805,7 @@
           }
         },
         "description": "Returns the per-account delivery records, newest first.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -866,7 +866,7 @@
           }
         },
         "description": "The post’s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -933,7 +933,7 @@
           }
         },
         "description": "Copies the post — content, target accounts, per-platform settings and labels — into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -983,7 +983,7 @@
           }
         },
         "description": "Aggregated metrics for a post across every platform it was delivered to, using the latest collected snapshot per platform post.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -1061,7 +1061,7 @@
           }
         },
         "description": "Applies one action to up to 200 posts in a single transaction. Every post is validated first: any id outside the workspace answers 404 and any post that is no longer draft or scheduled answers 409, in both cases without changing anything. `shift` moves each `schedule_at` by `offset_minutes` (negative moves earlier) and refuses offsets that land in the past; `label` applies `label_ids` with mode `replace` (an empty list clears), `add` or `remove`; `delete` soft-deletes the posts and cancels their queued deliveries.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
           "content": {
@@ -1179,7 +1179,7 @@
           }
         },
         "description": "Dry-runs a CSV/TSV import (max 500 data rows, 2 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
           "content": {
@@ -1244,7 +1244,7 @@
           }
         },
         "description": "Re-validates the uploaded CSV/TSV and creates one scheduled post per row, all stamped with a fresh batch id. All-or-nothing: if any row fails validation, nothing is created and the failing rows are returned.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
           "content": {
@@ -1318,7 +1318,7 @@
           }
         },
         "description": "Soft-deletes the batch's posts that are still draft or scheduled and cancels their queued deliveries. Refused with 409 if any post in the batch has already published or is publishing.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "batchId",
@@ -1373,7 +1373,7 @@
           }
         },
         "description": "Lists every workspace the user belongs to, with connected accounts.\n\nRequires the `workspaces` scope when using an API key.",
-        "x-owlstack-scope": "workspaces"
+        "x-fopost-scope": "workspaces"
       },
       "post": {
         "operationId": "createWorkspace",
@@ -1434,7 +1434,7 @@
           }
         },
         "description": "Requires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "workspaces",
+        "x-fopost-scope": "workspaces",
         "requestBody": {
           "required": true,
           "content": {
@@ -1490,7 +1490,7 @@
           }
         },
         "description": "Requires the `workspaces` scope when using an API key.",
-        "x-owlstack-scope": "workspaces",
+        "x-fopost-scope": "workspaces",
         "parameters": [
           {
             "name": "id",
@@ -1559,7 +1559,7 @@
           }
         },
         "description": "Requires the workspace owner or admin role.\n\nRequires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "workspaces",
+        "x-fopost-scope": "workspaces",
         "parameters": [
           {
             "name": "id",
@@ -1617,7 +1617,7 @@
           }
         },
         "description": "Soft-deletes the workspace. Requires the workspace owner role.\n\nRequires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "workspaces",
+        "x-fopost-scope": "workspaces",
         "parameters": [
           {
             "name": "id",
@@ -1667,7 +1667,7 @@
           }
         },
         "description": "Latest follower and post totals for every account in the workspace.\n\nRequires the `workspaces` scope when using an API key.",
-        "x-owlstack-scope": "workspaces",
+        "x-fopost-scope": "workspaces",
         "parameters": [
           {
             "name": "id",
@@ -1722,7 +1722,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "workspaceId",
@@ -1778,7 +1778,7 @@
           }
         },
         "description": "Creates a connected account from caller-supplied credentials (for platforms that use tokens or keys instead of an OAuth redirect flow). Credentials are validated against the platform before the account is stored.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "requestBody": {
           "required": true,
           "content": {
@@ -1820,7 +1820,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "workspaceId",
@@ -1878,7 +1878,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -1926,7 +1926,7 @@
           }
         },
         "description": "Revokes platform access where supported, clears stored credentials, and soft-deletes the account.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -1993,7 +1993,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -2073,7 +2073,7 @@
           }
         },
         "description": "Checks the stored credentials against the platform and updates the health status.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -2131,7 +2131,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -2221,7 +2221,7 @@
           }
         },
         "description": "Manually refreshes the OAuth token for platforms that support it.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -2271,7 +2271,7 @@
           }
         },
         "description": "Account-level snapshots (followers, reach, profile views), newest first.\n\nRequires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "id",
@@ -2342,7 +2342,7 @@
           }
         },
         "description": "Only X (Twitter) accounts have communities.\n\nRequires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "accountId",
@@ -2406,7 +2406,7 @@
           }
         },
         "description": "Fetches the account’s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.\n\nRequires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "accountId",
@@ -2491,7 +2491,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "accountId",
@@ -2576,7 +2576,7 @@
           }
         },
         "description": "Returns the existing record (200) if the community is already linked.\n\nRequires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "accountId",
@@ -2641,7 +2641,7 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
-        "x-owlstack-scope": "accounts",
+        "x-fopost-scope": "accounts",
         "parameters": [
           {
             "name": "accountId",
@@ -2705,7 +2705,7 @@
           }
         },
         "description": "Requires the `labels` scope when using an API key.",
-        "x-owlstack-scope": "labels",
+        "x-fopost-scope": "labels",
         "parameters": [
           {
             "name": "workspace_id",
@@ -2753,7 +2753,7 @@
           }
         },
         "description": "Requires the `labels` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "labels",
+        "x-fopost-scope": "labels",
         "requestBody": {
           "required": true,
           "content": {
@@ -2801,7 +2801,7 @@
           }
         },
         "description": "Requires the `labels` scope when using an API key.",
-        "x-owlstack-scope": "labels",
+        "x-fopost-scope": "labels",
         "parameters": [
           {
             "name": "id",
@@ -2852,7 +2852,7 @@
           }
         },
         "description": "Requires the `labels` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "labels",
+        "x-fopost-scope": "labels",
         "parameters": [
           {
             "name": "id",
@@ -2910,7 +2910,7 @@
           }
         },
         "description": "Requires the `labels` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "labels",
+        "x-fopost-scope": "labels",
         "parameters": [
           {
             "name": "id",
@@ -2965,7 +2965,7 @@
           }
         },
         "description": "Requires the `webhooks` scope when using an API key.",
-        "x-owlstack-scope": "webhooks"
+        "x-fopost-scope": "webhooks"
       },
       "post": {
         "operationId": "createWebhook",
@@ -3006,7 +3006,7 @@
           }
         },
         "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "webhooks",
+        "x-fopost-scope": "webhooks",
         "requestBody": {
           "required": true,
           "content": {
@@ -3065,7 +3065,7 @@
           }
         },
         "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "webhooks",
+        "x-fopost-scope": "webhooks",
         "parameters": [
           {
             "name": "id",
@@ -3123,7 +3123,7 @@
           }
         },
         "description": "Requires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "webhooks",
+        "x-fopost-scope": "webhooks",
         "parameters": [
           {
             "name": "id",
@@ -3173,7 +3173,7 @@
           }
         },
         "description": "Dispatches a test `post.published` payload to the webhook endpoint.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "webhooks",
+        "x-fopost-scope": "webhooks",
         "parameters": [
           {
             "name": "id",
@@ -3217,7 +3217,7 @@
           }
         },
         "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "accountId",
@@ -3283,7 +3283,7 @@
           }
         },
         "description": "Daily-bucketed engagement, follower, and post counts. Use either `days` or an explicit `from`/`to` range.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "accountId",
@@ -3378,8 +3378,8 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Posts ranked by engagement (or newest first with `sort=recent`). Includes platform-native posts not published through OwlStack.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "description": "Posts ranked by engagement (or newest first with `sort=recent`). Includes platform-native posts not published through FoPost.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "limit",
@@ -3507,8 +3507,8 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Post metrics rolled up per label, ranked by engagement. Only posts published through OwlStack carry labels, so platform-native and unlabelled posts are excluded. A post on two labels counts in full toward each.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "description": "Post metrics rolled up per label, ranked by engagement. Only posts published through FoPost carry labels, so platform-native and unlabelled posts are excluded. A post on two labels counts in full toward each.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "days",
@@ -3593,7 +3593,7 @@
           }
         },
         "description": "Paginated posts of every status with per-delivery outcomes and a status summary.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "page",
@@ -3696,7 +3696,7 @@
           }
         },
         "description": "Requires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "workspace_id",
@@ -3740,7 +3740,7 @@
           }
         },
         "description": "Latest age, gender, country, and city splits summed across the selected accounts, with the list of accounts that did or did not contribute data.\n\nRequires the `analytics` scope when using an API key.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "audience",
@@ -3815,7 +3815,7 @@
           }
         },
         "description": "Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).\n\nRequires the `analytics` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "analytics",
+        "x-fopost-scope": "analytics",
         "parameters": [
           {
             "name": "accountId",
@@ -3870,7 +3870,7 @@
           }
         },
         "description": "Requires the `automations` scope when using an API key.",
-        "x-owlstack-scope": "automations"
+        "x-fopost-scope": "automations"
       },
       "post": {
         "operationId": "createAutomation",
@@ -3911,7 +3911,7 @@
           }
         },
         "description": "Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "requestBody": {
           "required": true,
           "content": {
@@ -3953,7 +3953,7 @@
           }
         },
         "description": "Totals plus run counts by status for the last 24 hours and the 10 latest runs.\n\nRequires the `automations` scope when using an API key.",
-        "x-owlstack-scope": "automations"
+        "x-fopost-scope": "automations"
       }
     },
     "/v1/automations/{id}": {
@@ -3999,7 +3999,7 @@
           }
         },
         "description": "Requires the `automations` scope when using an API key.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4058,7 +4058,7 @@
           }
         },
         "description": "When `steps` is provided the full step list is replaced.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4133,7 +4133,7 @@
           }
         },
         "description": "Requires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4200,7 +4200,7 @@
           }
         },
         "description": "Requires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4279,7 +4279,7 @@
           }
         },
         "description": "Requires the `automations` scope when using an API key.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4358,7 +4358,7 @@
           }
         },
         "description": "Includes per-step execution logs.\n\nRequires the `automations` scope when using an API key.",
-        "x-owlstack-scope": "automations",
+        "x-fopost-scope": "automations",
         "parameters": [
           {
             "name": "id",
@@ -4500,7 +4500,7 @@
           }
         },
         "description": "Requires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "workspaceId",
@@ -4558,7 +4558,7 @@
           }
         },
         "description": "Accepts up to 5 files (max 50 MB each) as multipart/form-data under the `files` field. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
           "content": {
@@ -4630,7 +4630,7 @@
           }
         },
         "description": "Removes the stored file and the media library record.\n\nRequires the `posts` scope when using an API key.",
-        "x-owlstack-scope": "posts",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -4652,13 +4652,13 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key",
-        "description": "API key created in the OwlStack dashboard. A key may be bound to a single workspace, in which case every request is confined to it: naming any other workspace returns 403, and listings return only that workspace. Keys created without a workspace keep access to every workspace on the account."
+        "description": "API key created in the FoPost dashboard. A key may be bound to a single workspace, in which case every request is confined to it: naming any other workspace returns 403, and listings return only that workspace. Keys created without a workspace keep access to every workspace on the account."
       },
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "Session token used by the OwlStack dashboard"
+        "description": "Session token used by the FoPost dashboard"
       }
     },
     "schemas": {
@@ -7814,7 +7814,7 @@
               "null"
             ],
             "format": "uuid",
-            "description": "OwlStack post id, or null for platform-native posts"
+            "description": "FoPost post id, or null for platform-native posts"
           },
           "externalPostId": {
             "type": [
@@ -7825,7 +7825,7 @@
           "source": {
             "type": "string",
             "enum": [
-              "owlstack",
+              "fopost",
               "platform"
             ]
           },

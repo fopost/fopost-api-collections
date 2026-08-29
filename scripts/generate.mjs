@@ -78,7 +78,7 @@ for (const [tag, entries] of groups) {
   lines.push(`## ${tag}`, '');
   lines.push('| Method | Path | Operation | Scope |', '| --- | --- | --- | --- |');
   for (const { method, path, op } of entries) {
-    const scope = op['x-owlstack-scope'] ? `\`${op['x-owlstack-scope']}\`` : '—';
+    const scope = op['x-fopost-scope'] ? `\`${op['x-fopost-scope']}\`` : '—';
     lines.push(
       `| ${method.toUpperCase()} | \`${path}\` | ${rebrand(op.summary ?? op.operationId ?? '')} | ${scope} |`,
     );
