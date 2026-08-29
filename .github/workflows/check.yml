@@ -1,0 +1,34 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Catches the case where the API ships an endpoint and the collections do not follow.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  generated-output-is-current:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Collections match the committed spec
+        run: npm run check
+
+  spec-is-current:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Committed spec matches the live API
+        run: |
+          npm run sync
+          git diff --exit-code -- openapi.json \
+            || (echo "::warning::openapi.json is behind the live API. Run npm run sync && npm run generate." && exit 1)
