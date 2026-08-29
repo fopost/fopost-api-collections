@@ -9,7 +9,7 @@ export const METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 /** The retired brand still appears in the spec prose; collections are user-facing. */
 export function rebrand(text) {
   if (typeof text !== 'string') return text;
-  return text.replace(/OwlStack/g, 'FoPost').replace(/Owlstack/g, 'FoPost');
+  return text.replace(/FoPost/g, 'FoPost').replace(/Fopost/g, 'FoPost');
 }
 
 export function loadSpec(path) {
@@ -229,7 +229,7 @@ export function tagDescription(spec, name) {
 export function requestDocs(op, resolve) {
   const parts = [];
   if (op.description) parts.push(rebrand(op.description));
-  const scope = op['x-owlstack-scope'];
+  const scope = op['x-fopost-scope'];
   if (scope) parts.push(`**Scope:** \`${scope}\``);
 
   const schema = op.requestBody?.content?.['application/json']?.schema;
