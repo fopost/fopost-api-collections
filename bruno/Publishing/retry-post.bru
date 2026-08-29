@@ -1,0 +1,45 @@
+meta {
+  name: Retry failed deliveries
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/:id/retry
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "includePublished": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. Deliveries past the retry limit are reported in `exceeded` and skipped.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `accountIds`: string (uuid)[]
+  - `includePublished`: boolean
+}

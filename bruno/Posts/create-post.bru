@@ -1,0 +1,72 @@
+meta {
+  name: Create a post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/posts
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "accounts": [
+      "{{accountId}}"
+    ],
+    "content": [
+      {
+        "text": "Hello from FoPost."
+      }
+    ]
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('postId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `content_type`: `post` | `thread` | `reel`
+  - `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `link_share`
+  - `status`: `draft` | `scheduled`
+  - `schedule_at`: string (date-time) | null
+  - `repeatable`: boolean
+  - `repeatable_times`: integer | null
+  - `repeatable_gap`: integer | null
+  - `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`
+  - `labels`: string (uuid)[]
+  - `title`: string | null
+  - `internal_title`: string | null
+  - `summary`: string | null
+  - `auto_plug`: boolean
+  - `auto_plug_content`: string | null
+  - `settings`: object
+  - `source_ids`: string (uuid)[]
+  - `companion_of`: string (uuid) | null
+}

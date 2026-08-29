@@ -1,0 +1,33 @@
+meta {
+  name: Trigger an automation via webhook
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/v1/automations/:id/trigger
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Public endpoint for `api_webhook` automations. Authenticated by the automation’s secret in the `x-automation-secret` header (returned when the automation was created), not by an API key. The JSON body (optional) becomes the trigger payload.
+}

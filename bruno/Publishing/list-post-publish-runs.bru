@@ -1,0 +1,29 @@
+meta {
+  name: List publish runs for a post
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/posts/:id/publish-runs
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The post’s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

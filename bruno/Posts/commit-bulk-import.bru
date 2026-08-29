@@ -1,0 +1,27 @@
+meta {
+  name: Commit a bulk-import CSV
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/bulk-import/commit
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Re-validates the uploaded CSV/TSV and creates one scheduled post per row, all stamped with a fresh batch id. All-or-nothing: if any row fails validation, nothing is created and the failing rows are returned.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+}

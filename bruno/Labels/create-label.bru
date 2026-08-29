@@ -1,0 +1,45 @@
+meta {
+  name: Create a label
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/labels
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "name": "Example name",
+    "color": "#2563eb"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('labelId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `labels` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `labels`
+}

@@ -1,0 +1,37 @@
+meta {
+  name: Duplicate a post
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/:id/duplicate
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('postId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Copies the post — content, target accounts, per-platform settings and labels — into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

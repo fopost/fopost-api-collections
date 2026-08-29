@@ -1,0 +1,35 @@
+meta {
+  name: Get posts with delivery breakdown
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/posts-table
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~page: 1
+  ~limit: 20
+  ~accountId: 
+  ~workspace_id: 
+  ~from: 
+  ~to: 
+  ~days: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Paginated posts of every status with per-delivery outcomes and a status summary.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

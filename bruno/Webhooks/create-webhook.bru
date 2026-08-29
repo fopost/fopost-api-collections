@@ -1,0 +1,49 @@
+meta {
+  name: Create a webhook
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/webhooks
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "url": "https://example.com",
+    "events": [
+      "post.published"
+    ]
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('webhookId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.
+
+  Requires the `webhooks` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `webhooks`
+}

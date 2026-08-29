@@ -1,0 +1,33 @@
+meta {
+  name: Get per-label campaign roll-up
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/labels
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~days: 7
+  ~from: 
+  ~to: 
+  ~accountId: 
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Post metrics rolled up per label, ranked by engagement. Only posts published through FoPost carry labels, so platform-native and unlabelled posts are excluded. A post on two labels counts in full toward each.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

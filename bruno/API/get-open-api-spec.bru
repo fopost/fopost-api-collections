@@ -1,0 +1,21 @@
+meta {
+  name: Get this OpenAPI document
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/openapi.json
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Returns the OpenAPI 3.1 description of the FoPost public API. No auth required.
+}

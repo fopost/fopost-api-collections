@@ -1,0 +1,29 @@
+meta {
+  name: Toggle an automation on or off
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/automations/:id/toggle
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `automations` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `automations`
+}

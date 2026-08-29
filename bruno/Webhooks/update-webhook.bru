@@ -1,0 +1,47 @@
+meta {
+  name: Update a webhook
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/v1/webhooks/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{webhookId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "url": "https://example.com",
+    "active": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Re-enabling a webhook (`active: true`) resets its failure count.
+
+  Requires the `webhooks` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `webhooks`
+
+  **Optional fields** (not in the example body):
+  - `url`: string (uri)
+  - `events`: `post.published` | `post.failed` | `post.partially_failed` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.health_changed`[]
+  - `active`: boolean
+}

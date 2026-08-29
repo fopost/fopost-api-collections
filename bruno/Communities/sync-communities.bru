@@ -1,0 +1,29 @@
+meta {
+  name: Sync communities from X
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:accountId/communities/sync
+  body: none
+  auth: inherit
+}
+
+params:path {
+  accountId: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Fetches the account’s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

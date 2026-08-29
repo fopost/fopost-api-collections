@@ -1,0 +1,35 @@
+meta {
+  name: List labels
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/labels
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('labelId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `labels` scope when using an API key.
+
+  **Scope:** `labels`
+}

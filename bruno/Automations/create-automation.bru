@@ -1,0 +1,56 @@
+meta {
+  name: Create an automation
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/automations
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "name": "Example name",
+    "triggerType": "cross_post",
+    "steps": [
+      {
+        "actionType": "publish"
+      }
+    ]
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('automationId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.
+
+  Requires the `automations` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `automations`
+
+  **Optional fields** (not in the example body):
+  - `triggerConfig`: object
+  - `active`: boolean
+}

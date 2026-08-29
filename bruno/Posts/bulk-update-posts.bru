@@ -1,0 +1,35 @@
+meta {
+  name: Bulk reschedule, relabel or delete posts
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/bulk
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "string"
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Applies one action to up to 200 posts in a single transaction. Every post is validated first: any id outside the workspace answers 404 and any post that is no longer draft or scheduled answers 409, in both cases without changing anything. `shift` moves each `schedule_at` by `offset_minutes` (negative moves earlier) and refuses offsets that land in the past; `label` applies `label_ids` with mode `replace` (an empty list clears), `add` or `remove`; `delete` soft-deletes the posts and cancels their queued deliveries.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Delete a media item
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/v1/media/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{mediaId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes the stored file and the media library record.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

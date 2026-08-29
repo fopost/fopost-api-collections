@@ -1,0 +1,29 @@
+meta {
+  name: List X communities for an account
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:accountId/communities
+  body: none
+  auth: inherit
+}
+
+params:path {
+  accountId: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only X (Twitter) accounts have communities.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

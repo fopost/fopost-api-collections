@@ -1,0 +1,27 @@
+meta {
+  name: Get a workspace
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/workspaces/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{workspaceId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `workspaces` scope when using an API key.
+
+  **Scope:** `workspaces`
+}

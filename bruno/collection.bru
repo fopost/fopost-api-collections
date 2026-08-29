@@ -1,0 +1,33 @@
+auth {
+  mode: apikey
+}
+
+auth:apikey {
+  key: X-API-Key
+  value: {{apiKey}}
+  placement: header
+}
+
+docs {
+  REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.
+
+  ## Authentication
+
+  Programmatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.
+
+  ## Scopes
+
+  Each operation lists its required scope (also machine-readable as `x-owlstack-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.
+
+  ## Errors
+
+  Errors return `{ "error": "<code>", "message": "<explanation>" }` with a matching HTTP status. Some errors include additional context fields.
+
+  ## Rate limiting
+
+  Requests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.
+
+  ## Pagination
+
+  List endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.
+}

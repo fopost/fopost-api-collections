@@ -1,0 +1,29 @@
+meta {
+  name: List deliveries for a post
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/posts/:id/deliveries
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Returns the per-account delivery records, newest first.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

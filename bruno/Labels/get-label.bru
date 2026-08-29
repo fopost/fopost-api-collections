@@ -1,0 +1,27 @@
+meta {
+  name: Get a label
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/labels/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{labelId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `labels` scope when using an API key.
+
+  **Scope:** `labels`
+}

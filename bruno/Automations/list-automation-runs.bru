@@ -1,0 +1,32 @@
+meta {
+  name: List automation runs
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/automations/:id/runs
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~page: 1
+  ~per_page: 30
+}
+
+params:path {
+  id: {{automationId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `automations` scope when using an API key.
+
+  **Scope:** `automations`
+}

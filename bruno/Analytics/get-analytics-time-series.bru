@@ -1,0 +1,33 @@
+meta {
+  name: Get daily time series
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/time-series
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+  ~workspace_id: 
+  ~days: 7
+  ~from: 
+  ~to: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Daily-bucketed engagement, follower, and post counts. Use either `days` or an explicit `from`/`to` range.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

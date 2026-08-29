@@ -1,0 +1,29 @@
+meta {
+  name: Get analytics for a post
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/posts/:id/analytics
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Aggregated metrics for a post across every platform it was delivered to, using the latest collected snapshot per platform post.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Get 365-day posting activity
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/posting-streak
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

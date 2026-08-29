@@ -1,0 +1,53 @@
+meta {
+  name: Create a workspace
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/workspaces
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "slug": "x"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('workspaceId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `workspaces` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `workspaces`
+
+  **Optional fields** (not in the example body):
+  - `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`
+  - `logo`: string | null
+  - `website`: string | null
+  - `timezone`: string
+  - `country`: string | null
+  - `description`: string | null
+  - `language`: string
+}

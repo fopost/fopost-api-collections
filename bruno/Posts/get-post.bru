@@ -1,0 +1,27 @@
+meta {
+  name: Get a post
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/posts/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

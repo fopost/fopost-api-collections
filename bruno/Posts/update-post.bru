@@ -1,0 +1,65 @@
+meta {
+  name: Update a post
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/posts/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "content_type": "post",
+    "artifact_type": "text_post",
+    "status": "draft",
+    "schedule_at": "2026-01-01T12:00:00.000Z",
+    "repeatable": false,
+    "repeatable_times": 1
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `accounts`: string (uuid)[]
+  - `content`: object[]
+  - `content_type`: `post` | `thread` | `reel`
+  - `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `link_share`
+  - `status`: `draft` | `scheduled`
+  - `schedule_at`: string (date-time) | null
+  - `repeatable`: boolean
+  - `repeatable_times`: integer | null
+  - `repeatable_gap`: integer | null
+  - `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`
+  - `labels`: string (uuid)[]
+  - `title`: string | null
+  - `internal_title`: string | null
+  - `summary`: string | null
+  - `auto_plug`: boolean
+  - `auto_plug_content`: string | null
+  - `settings`: object
+}

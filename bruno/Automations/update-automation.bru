@@ -1,0 +1,48 @@
+meta {
+  name: Update an automation
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/v1/automations/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "active": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  When `steps` is provided the full step list is replaced.
+
+  Requires the `automations` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `automations`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `triggerConfig`: object
+  - `steps`: object[]
+  - `active`: boolean
+}

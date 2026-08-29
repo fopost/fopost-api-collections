@@ -1,0 +1,30 @@
+meta {
+  name: Get an automation run
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/automations/:id/runs/:runId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+  runId: {{runId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Includes per-step execution logs.
+
+  Requires the `automations` scope when using an API key.
+
+  **Scope:** `automations`
+}

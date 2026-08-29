@@ -1,0 +1,42 @@
+meta {
+  name: Add a community by id
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:accountId/communities/manual
+  body: json
+  auth: inherit
+}
+
+params:path {
+  accountId: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "communityId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200, 201]);
+  });
+}
+
+docs {
+  Returns the existing record (200) if the community is already linked.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+}

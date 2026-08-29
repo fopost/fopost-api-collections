@@ -1,0 +1,31 @@
+meta {
+  name: Refresh an OAuth token
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/refresh-token
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Manually refreshes the OAuth token for platforms that support it.
+
+  Requires the `accounts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `accounts`
+}

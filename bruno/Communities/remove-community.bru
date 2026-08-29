@@ -1,0 +1,28 @@
+meta {
+  name: Remove a community
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:accountId/communities/:communityId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  accountId: {{accountId}}
+  communityId: {{communityId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

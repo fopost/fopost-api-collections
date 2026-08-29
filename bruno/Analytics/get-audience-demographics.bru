@@ -1,0 +1,31 @@
+meta {
+  name: Get audience demographics
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/demographics
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~audience: followers
+  ~accountId: 
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Latest age, gender, country, and city splits summed across the selected accounts, with the list of accounts that did or did not contribute data.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

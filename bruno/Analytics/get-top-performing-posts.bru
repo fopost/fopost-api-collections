@@ -1,0 +1,36 @@
+meta {
+  name: Get top performing posts
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/top-posts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~limit: 5
+  ~days: 7
+  ~from: 
+  ~to: 
+  ~accountId: 
+  ~workspace_id: 
+  ~sort: recent
+  ~label: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Posts ranked by engagement (or newest first with `sort=recent`). Includes platform-native posts not published through FoPost.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

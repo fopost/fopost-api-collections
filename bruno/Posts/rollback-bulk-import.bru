@@ -1,0 +1,31 @@
+meta {
+  name: Roll back a bulk-import batch
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/v1/posts/bulk-import/:batchId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  batchId: {{batchId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Soft-deletes the batch's posts that are still draft or scheduled and cancels their queued deliveries. Refused with 409 if any post in the batch has already published or is publishing.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+}

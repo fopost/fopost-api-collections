@@ -1,0 +1,40 @@
+meta {
+  name: Update a label
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/labels/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{labelId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "color": "#2563eb"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `labels` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `labels`
+}

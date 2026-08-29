@@ -1,0 +1,60 @@
+meta {
+  name: Update a workspace
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/workspaces/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{workspaceId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "slug": "x",
+    "type": "PERSONAL",
+    "logo": "string",
+    "website": "string",
+    "timezone": "UTC"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the workspace owner or admin role.
+
+  Requires the `workspaces` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `workspaces`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `slug`: string
+  - `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`
+  - `logo`: string | null
+  - `website`: string | null
+  - `timezone`: string
+  - `country`: string | null
+  - `description`: string | null
+  - `language`: string
+  - `requireApproval`: boolean
+  - `aiAltTextEnabled`: boolean
+  - `brandColor`: string | null
+}

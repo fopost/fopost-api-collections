@@ -1,0 +1,33 @@
+meta {
+  name: Get account analytics history
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/analytics
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~limit: 30
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Account-level snapshots (followers, reach, profile views), newest first.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

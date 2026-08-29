@@ -1,0 +1,31 @@
+meta {
+  name: Disconnect an account
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Revokes platform access where supported, clears stored credentials, and soft-deletes the account.
+
+  Requires the `accounts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,52 @@
+meta {
+  name: Connect an account with credentials
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "platform": "twitter",
+    "username": "Example user",
+    "name": "Example name"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() < 300) {
+    const body = res.getBody();
+    const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));
+    if (id) bru.setEnvVar('accountId', id);
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates a connected account from caller-supplied credentials (for platforms that use tokens or keys instead of an OAuth redirect flow). Credentials are validated against the platform before the account is stored.
+
+  Requires the `accounts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `avatar`: string | null
+  - `credentials`: object
+}

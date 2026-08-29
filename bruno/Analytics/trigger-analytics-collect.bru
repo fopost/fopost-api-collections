@@ -1,0 +1,31 @@
+meta {
+  name: Trigger analytics collection
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/v1/analytics/collect
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).
+
+  Requires the `analytics` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `analytics`
+}

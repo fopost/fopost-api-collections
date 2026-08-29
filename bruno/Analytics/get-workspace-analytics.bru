@@ -1,0 +1,29 @@
+meta {
+  name: Get workspace analytics
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/workspaces/:id/analytics
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{workspaceId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Latest follower and post totals for every account in the workspace.
+
+  Requires the `workspaces` scope when using an API key.
+
+  **Scope:** `workspaces`
+}

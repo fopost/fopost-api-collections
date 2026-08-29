@@ -1,0 +1,31 @@
+meta {
+  name: Delete a post
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/v1/posts/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Soft-deletes the post. Already-published platform posts are not removed.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+}

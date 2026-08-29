@@ -1,0 +1,46 @@
+meta {
+  name: Cancel pending deliveries
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/:id/cancel
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "accountIds": [
+      "{{accountId}}"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Cancels pending, queued, or delayed deliveries (optionally limited to `accountIds`) and recalculates the post status. Send `{}` to cancel all.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `accountIds`: string (uuid)[]
+}

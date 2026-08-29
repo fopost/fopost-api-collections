@@ -1,0 +1,31 @@
+meta {
+  name: Get analytics overview
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/overview
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+  ~workspace_id: 
+  ~days: 7
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

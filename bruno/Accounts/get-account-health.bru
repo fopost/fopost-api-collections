@@ -1,0 +1,31 @@
+meta {
+  name: Get account health
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/health
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~refresh: true
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
