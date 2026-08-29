@@ -32,7 +32,8 @@ Bruno is open source and stores requests as plain text, one file per request.
 1. Install Bruno, then **Open Collection** and pick the `bruno/` folder.
 2. Choose the **Production** environment and set `apiKey` (it is declared as a secret, so it stays out
    of the repo).
-3. Send any request.
+3. Send any request. Captured ids are written to runtime variables, so running the collection never
+   modifies a tracked file.
 
 ## Other clients
 
@@ -47,7 +48,7 @@ That spec is also all you need for a generated SDK, a mock server, or `curl`.
 
 ## Chaining requests
 
-Ids captured from responses are written back to the environment, so folders work in order without
+Ids are captured from responses and written back automatically, so folders work in order without
 copying uuids by hand:
 
 | Variable | Set by |
@@ -60,8 +61,15 @@ copying uuids by hand:
 | `automationId` | List or create an automation |
 | `mediaId` | List media or upload a file |
 
-`baseUrl` and `apiKey` are the only two you set yourself. `communityId`, `runId`, and `batchId` are
-filled in from whichever record you are working with.
+`baseUrl` and `apiKey` are the only two you set yourself, and they are the only two an environment
+carries. The ids are runtime state, not environment config: Postman keeps them as collection
+variables and Bruno as runtime variables, in both cases written by the request that returned them.
+An environment entry of the same name would resolve first and shadow the captured value with an
+empty string, so `npm run generate` refuses to emit one.
+
+Any request can ignore the variable entirely: type a literal id into the URL or body and only that
+request changes. `communityId`, `runId`, and `batchId` are filled in from whichever record you are
+working with.
 
 ## Authentication and scopes
 
