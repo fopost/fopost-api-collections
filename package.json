@@ -1,0 +1,24 @@
+{
+  "name": "fopost-api-collections",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API client collections for the FoPost API, generated from its OpenAPI specification.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sync": "node scripts/sync-spec.mjs",
+    "generate": "node scripts/generate.mjs",
+    "check": "node scripts/generate.mjs --check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fopost/fopost-api-collections.git"
+  },
+  "homepage": "https://fopost.com",
+  "bugs": {
+    "url": "https://github.com/fopost/fopost-api-collections/issues"
+  }
+}
