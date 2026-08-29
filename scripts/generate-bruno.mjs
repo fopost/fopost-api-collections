@@ -125,7 +125,7 @@ function requestFile(entry, seq, resolve) {
           'if (res.getStatus() < 300) {',
           '  const body = res.getBody();',
           '  const id = body.id || (body.data && (body.data.id || (body.data[0] && body.data[0].id)));',
-          `  if (id) bru.setEnvVar('${variable}', id);`,
+          `  if (id) bru.setVar('${variable}', id);`,
           '}',
         ].join('\n'),
       ),
@@ -183,26 +183,12 @@ export function generateBruno(spec, outDir) {
 
   const envDir = join(outDir, 'environments');
   mkdirSync(envDir, { recursive: true });
+  // Ids are captured into runtime variables, not here: an environment entry would
+  // shadow them, and writing ids back would dirty a tracked file on every run.
   const env = (name, baseUrl) =>
-    [
-      block(
-        'vars',
-        kv([
-          ['baseUrl', baseUrl],
-          ['workspaceId', ''],
-          ['accountId', ''],
-          ['postId', ''],
-          ['labelId', ''],
-          ['webhookId', ''],
-          ['automationId', ''],
-          ['mediaId', ''],
-          ['communityId', ''],
-          ['runId', ''],
-          ['batchId', ''],
-        ]),
-      ),
-      block('vars:secret', 'apiKey', '[', ']'),
-    ].join('\n');
+    [block('vars', kv([['baseUrl', baseUrl]])), block('vars:secret', 'apiKey', '[', ']')].join(
+      '\n',
+    );
   writeFileSync(join(envDir, 'production.bru'), env('Production', 'https://api.fopost.com'));
   writeFileSync(join(envDir, 'local.bru'), env('Local', 'http://localhost:8080'));
 

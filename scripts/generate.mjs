@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generatePostman } from './generate-postman.mjs';
 import { generateBruno } from './generate-bruno.mjs';
-import { groupByTag, loadSpec, rebrand } from './lib/spec.mjs';
+import { CAPTURE, groupByTag, loadSpec, rebrand } from './lib/spec.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
@@ -42,6 +42,27 @@ const spec = loadSpec(join(root, 'openapi.json'));
 
 const postman = generatePostman(spec, join(root, 'postman'));
 const bruno = generateBruno(spec, join(root, 'bruno'));
+
+// Postman resolves environment variables before collection variables, so an
+// environment entry sharing a name with a captured id would shadow it with an
+// empty string and silently break request chaining. Pin that it cannot come back.
+const captured = new Set(Object.values(CAPTURE));
+for (const file of ['fopost-production', 'fopost-local']) {
+  const env = JSON.parse(readFileSync(join(root, 'postman', `${file}.postman_environment.json`), 'utf8'));
+  const shadowed = env.values.map((v) => v.key).filter((key) => captured.has(key));
+  if (shadowed.length) {
+    throw new Error(
+      `${file} declares ${shadowed.join(', ')}, which would shadow the captured collection variable(s).`,
+    );
+  }
+}
+for (const file of ['production', 'local']) {
+  const env = readFileSync(join(root, 'bruno', 'environments', `${file}.bru`), 'utf8');
+  const shadowed = [...captured].filter((key) => new RegExp(`^\\s*${key}:`, 'm').test(env));
+  if (shadowed.length) {
+    throw new Error(`bruno ${file} environment declares ${shadowed.join(', ')}, which would shadow runtime vars.`);
+  }
+}
 
 // A browsable index so the endpoint list is readable on GitHub without an API client.
 const groups = groupByTag(spec);

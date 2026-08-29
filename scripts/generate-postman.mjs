@@ -195,15 +195,15 @@ export function generatePostman(spec, outDir) {
     `${JSON.stringify(collection, null, 2)}\n`,
   );
 
+  // Only what genuinely differs per environment. Ids are runtime state captured
+  // by the test scripts into collection variables; an environment entry of the
+  // same name would resolve first and shadow them with an empty string.
   const environment = (name, baseUrl) => ({
     id: `fopost-env-${name.toLowerCase()}`,
     name: `FoPost ${name}`,
     values: [
       { key: 'baseUrl', value: baseUrl, type: 'default', enabled: true },
       { key: 'apiKey', value: '', type: 'secret', enabled: true },
-      { key: 'workspaceId', value: '', type: 'default', enabled: true },
-      { key: 'accountId', value: '', type: 'default', enabled: true },
-      { key: 'postId', value: '', type: 'default', enabled: true },
     ],
     _postman_variable_scope: 'environment',
   });
