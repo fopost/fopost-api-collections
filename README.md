@@ -18,7 +18,7 @@ labels, webhooks, analytics, automations, and media. The full list is in [ENDPOI
    `postman/fopost-production.postman_environment.json`.
 2. Select the **FoPost Production** environment.
 3. Set `apiKey` to a key from **Settings → API Keys** in the FoPost dashboard
-   (<https://app.fopost.com/settings/api-keys>).
+   (<https://fopost.com/dashboard/settings/api-keys>).
 4. Send **Workspaces → List workspaces**. The collection stores the first workspace id in
    `workspaceId`, so the rest of the requests are ready to go.
 
