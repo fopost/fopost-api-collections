@@ -1,24 +1,25 @@
 meta {
-  name: List a form’s leads
+  name: Get an ad’s insights over a date range
   type: http
-  seq: 19
+  seq: 20
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+  url: {{baseUrl}}/v1/ads/:id/insights?workspace_id=&since=&until=
   body: none
   auth: inherit
 }
 
 params:query {
-  ~workspace_id: 
-  connection_id: 
-  page_id: 
-  ~after: 
+  workspace_id: 
+  since: 
+  until: 
+  ~breakdown: age
+  ~daily: 
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 tests {
@@ -28,7 +29,7 @@ tests {
 }
 
 docs {
-  One page of leads; pass `nextCursor` back as `after` for the next.
+  For an ad created through FoPost. Same report as `GET /v1/ads/insights`.
 
   Requires the `ads` scope when using an API key.
 

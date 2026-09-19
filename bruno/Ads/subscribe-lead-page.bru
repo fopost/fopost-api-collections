@@ -1,11 +1,11 @@
 meta {
-  name: Create an Instant Form
+  name: Collect a Page’s leads
   type: http
-  seq: 18
+  seq: 52
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/lead-forms
+  url: {{baseUrl}}/v1/ads/lead-pages
   body: json
   auth: inherit
 }
@@ -18,13 +18,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "string",
-    "name": "Example name",
-    "questions": [
-      "EMAIL"
-    ],
-    "privacyPolicyUrl": "https://example.com",
-    "thankYouMessage": "Hello from FoPost."
+    "pageId": "string"
   }
 }
 
@@ -35,10 +29,9 @@ tests {
 }
 
 docs {
+  Turns on new-lead notifications for the Page and backfills its most recent leads into the feed.
+
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
-
-  **Optional fields** (not in the example body):
-  - `followUpUrl`: string (uri)
 }

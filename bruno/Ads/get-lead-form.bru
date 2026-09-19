@@ -1,11 +1,11 @@
 meta {
-  name: Search the targeting catalogue
+  name: Get an Instant Form
   type: http
-  seq: 16
+  seq: 48
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country
+  url: {{baseUrl}}/v1/ads/lead-forms/:formId?connection_id=&page_id=
   body: none
   auth: inherit
 }
@@ -13,8 +13,11 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  type: country
-  ~q: 
+  page_id: 
+}
+
+params:path {
+  formId: {{formId}}
 }
 
 tests {
@@ -24,8 +27,6 @@ tests {
 }
 
 docs {
-  Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`

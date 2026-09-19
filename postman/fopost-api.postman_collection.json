@@ -5951,7 +5951,7 @@
                 "ads"
               ]
             },
-            "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url",
+            "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"pageId\": \"string\",\n  \"text\": \"Hello from FoPost.\"\n}",
@@ -6405,6 +6405,39 @@
           ]
         },
         {
+          "name": "List ad networks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/providers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "providers"
+              ]
+            },
+            "description": "Every ad network, with whether it can be connected on this deployment.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "List ad accounts and Pages",
           "request": {
             "method": "GET",
@@ -6745,6 +6778,1978 @@
               ]
             },
             "description": "One page of leads; pass `nextCursor` back as `after` for the next.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an ad’s insights over a date range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/:id/insights?workspace_id=&since=&until=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                ":id",
+                "insights"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "YYYY-MM-DD, inclusive",
+                  "disabled": false
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "description": "YYYY-MM-DD, inclusive",
+                  "disabled": false
+                },
+                {
+                  "key": "breakdown",
+                  "value": "age",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "daily",
+                  "value": "",
+                  "description": "Add a day-by-day timeline",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Ad id"
+                }
+              ]
+            },
+            "description": "For an ad created through FoPost. Same report as `GET /v1/ads/insights`.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get insights over a date range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/insights?connection_id=&object_id=&since=&until=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "insights"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "object_id",
+                  "value": "",
+                  "description": "`act_…` or a Meta object id",
+                  "disabled": false
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "YYYY-MM-DD, inclusive",
+                  "disabled": false
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "description": "YYYY-MM-DD, inclusive",
+                  "disabled": false
+                },
+                {
+                  "key": "breakdown",
+                  "value": "age",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "daily",
+                  "value": "",
+                  "description": "Add a day-by-day timeline",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Totals for an ad account (`act_…`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Estimate audience size",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/reach-estimate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "reach-estimate"
+              ]
+            },
+            "description": "How many people the targeting reaches on the Page’s placements.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"pageId\": \"string\",\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an ad account’s campaign tree",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/accounts/:adAccountId/tree?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "accounts",
+                ":adAccountId",
+                "tree"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "adAccountId",
+                  "value": "{{adAccountId}}",
+                  "description": "`act_…`"
+                }
+              ]
+            },
+            "description": "Every campaign on the ad account with its ad sets and ads, whoever made them. Read live from Meta and never stored.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/campaigns",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "campaigns"
+              ]
+            },
+            "description": "Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a campaign",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/campaigns/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "campaigns",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta campaign id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a campaign",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/campaigns/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "campaigns",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta campaign id"
+                }
+              ]
+            },
+            "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `status`: `active` | `paused`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a campaign",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/campaigns/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "campaigns",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta campaign id"
+                }
+              ]
+            },
+            "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate a campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/campaigns/:id/duplicate?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "campaigns",
+                ":id",
+                "duplicate"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta campaign id"
+                }
+              ]
+            },
+            "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paused\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an ad set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-sets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-sets"
+              ]
+            },
+            "description": "Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"campaignId\": \"x\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an ad set",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-sets/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-sets",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad set id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update an ad set",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-sets/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-sets",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad set id"
+                }
+              ]
+            },
+            "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `status`: `active` | `paused`\n- `budgetMinor`: integer — New budget in minor units; the budget type set at creation stays\n- `endAt`: string (date-time)\n- `targeting`: object",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"status\": \"active\",\n  \"budgetMinor\": 1,\n  \"endAt\": \"2026-01-01T12:00:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete an ad set",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-sets/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-sets",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad set id"
+                }
+              ]
+            },
+            "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate an ad set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-sets/:id/duplicate?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-sets",
+                ":id",
+                "duplicate"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad set id"
+                }
+              ]
+            },
+            "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paused\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an ad in an ad set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ads",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ads"
+              ]
+            },
+            "description": "Joins an ad set and a creative. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adSetId\": \"x\",\n  \"creativeId\": \"x\",\n  \"name\": \"Example name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an ad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ads/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ads",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update an ad",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ads/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ads",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad id"
+                }
+              ]
+            },
+            "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `status`: `active` | `paused`\n- `creativeId`: string — Meta object id",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"status\": \"active\",\n  \"creativeId\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete an ad",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ads/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ads",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad id"
+                }
+              ]
+            },
+            "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate an ad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ads/:id/duplicate?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ads",
+                ":id",
+                "duplicate"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta ad id"
+                }
+              ]
+            },
+            "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paused\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pause or resume many objects",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "status"
+              ]
+            },
+            "description": "Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"status\": \"active\",\n  \"objects\": [\n    {\n      \"id\": \"x\",\n      \"level\": \"campaign\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List the creative library",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/creatives?connection_id=&ad_account_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "creatives"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "ad_account_id",
+                  "value": "",
+                  "description": "`act_…`",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a creative",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/creatives",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "creatives"
+              ]
+            },
+            "description": "An image, video or carousel creative from library media. Nothing runs until an ad uses it.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `callToAction`: `LEARN_MORE` | `SHOP_NOW` | `SIGN_UP` | `SUBSCRIBE` | `CONTACT_US` | `DOWNLOAD` | `GET_OFFER` | `BOOK_NOW` | `APPLY_NOW` | `WATCH_MORE` — Defaults to `LEARN_MORE`\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`\n- `mediaUrl`: string — A media library asset url: the image, or the video. Required for `video`\n- `thumbnailMediaUrl`: string — A video's poster frame, as a library image; Meta's own frame when omitted\n- `cards`: object[] — Carousel cards; required for `carousel`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"format\": \"image\",\n  \"text\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a creative",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/creatives/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "creatives",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta creative id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a creative",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/creatives/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "creatives",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta creative id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a custom audience",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta audience id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rename or describe a custom audience",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta audience id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `description`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"description\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a custom audience",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta audience id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add people to a customer-list audience",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences/:id/users?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences",
+                ":id",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Meta audience id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\n    \"someone@example.com\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an Instant Form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-forms/:formId?connection_id=&page_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-forms",
+                ":formId"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "page_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "{{formId}}",
+                  "description": "Instant Form id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Archive an Instant Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-forms/:formId/archive",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-forms",
+                ":formId",
+                "archive"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "{{formId}}",
+                  "description": "Instant Form id"
+                }
+              ]
+            },
+            "description": "The form stops collecting; its leads stay readable.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List the leads feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/leads",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "leads"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "form_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Every lead collected from subscribed Pages across the team, newest first. Pass `nextCursor` back as `cursor` for the next page.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Pages feeding the leads feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-pages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-pages"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Collect a Page’s leads",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-pages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-pages"
+              ]
+            },
+            "description": "Turns on new-lead notifications for the Page and backfills its most recent leads into the feed.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stop collecting a Page’s leads",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-pages/:pageId?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-pages",
+                ":pageId"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "pageId",
+                  "value": "{{pageId}}",
+                  "description": "Facebook Page id"
+                }
+              ]
+            },
+            "description": "Leads already in the feed stay.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [

@@ -1,0 +1,51 @@
+meta {
+  name: Update an ad
+  type: http
+  seq: 36
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/ads/:id?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "status": "active",
+    "creativeId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Setting `status` to `active` starts spend. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `status`: `active` | `paused`
+  - `creativeId`: string — Meta object id
+}

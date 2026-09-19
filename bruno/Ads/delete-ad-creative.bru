@@ -1,24 +1,22 @@
 meta {
-  name: List a form’s leads
+  name: Delete a creative
   type: http
-  seq: 19
+  seq: 43
 }
 
-get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+delete {
+  url: {{baseUrl}}/v1/ads/creatives/:id?workspace_id=&connection_id=
   body: none
   auth: inherit
 }
 
 params:query {
-  ~workspace_id: 
+  workspace_id: 
   connection_id: 
-  page_id: 
-  ~after: 
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 tests {
@@ -28,8 +26,6 @@ tests {
 }
 
 docs {
-  One page of leads; pass `nextCursor` back as `after` for the next.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`

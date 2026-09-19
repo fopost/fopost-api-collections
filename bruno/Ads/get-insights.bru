@@ -1,11 +1,11 @@
 meta {
-  name: Search the targeting catalogue
+  name: Get insights over a date range
   type: http
-  seq: 16
+  seq: 21
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country
+  url: {{baseUrl}}/v1/ads/insights?connection_id=&object_id=&since=&until=
   body: none
   auth: inherit
 }
@@ -13,8 +13,11 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  type: country
-  ~q: 
+  object_id: 
+  since: 
+  until: 
+  ~breakdown: age
+  ~daily: 
 }
 
 tests {
@@ -24,7 +27,7 @@ tests {
 }
 
 docs {
-  Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.
+  Totals for an ad account (`act_…`), campaign, ad set or ad, optionally split by one breakdown and by day.
 
   Requires the `ads` scope when using an API key.
 

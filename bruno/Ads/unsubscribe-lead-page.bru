@@ -1,24 +1,22 @@
 meta {
-  name: List a form’s leads
+  name: Stop collecting a Page’s leads
   type: http
-  seq: 19
+  seq: 53
 }
 
-get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+delete {
+  url: {{baseUrl}}/v1/ads/lead-pages/:pageId?workspace_id=&connection_id=
   body: none
   auth: inherit
 }
 
 params:query {
-  ~workspace_id: 
+  workspace_id: 
   connection_id: 
-  page_id: 
-  ~after: 
 }
 
 params:path {
-  formId: {{formId}}
+  pageId: {{pageId}}
 }
 
 tests {
@@ -28,7 +26,7 @@ tests {
 }
 
 docs {
-  One page of leads; pass `nextCursor` back as `after` for the next.
+  Leads already in the feed stay.
 
   Requires the `ads` scope when using an API key.
 

@@ -1,0 +1,43 @@
+meta {
+  name: Pause or resume many objects
+  type: http
+  seq: 39
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/status
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "status": "active",
+    "objects": [
+      {
+        "id": "x",
+        "level": "campaign"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

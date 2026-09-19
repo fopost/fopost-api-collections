@@ -1,24 +1,21 @@
 meta {
-  name: List a form’s leads
+  name: List the leads feed
   type: http
-  seq: 19
+  seq: 50
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+  url: {{baseUrl}}/v1/ads/leads
   body: none
   auth: inherit
 }
 
 params:query {
   ~workspace_id: 
-  connection_id: 
-  page_id: 
-  ~after: 
-}
-
-params:path {
-  formId: {{formId}}
+  ~form_id: 
+  ~page_id: 
+  ~cursor: 
+  ~limit: 
 }
 
 tests {
@@ -28,7 +25,7 @@ tests {
 }
 
 docs {
-  One page of leads; pass `nextCursor` back as `after` for the next.
+  Every lead collected from subscribed Pages across the team, newest first. Pass `nextCursor` back as `cursor` for the next page.
 
   Requires the `ads` scope when using an API key.
 

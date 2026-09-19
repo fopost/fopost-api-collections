@@ -1,11 +1,11 @@
 meta {
-  name: Search the targeting catalogue
+  name: Get an ad
   type: http
-  seq: 16
+  seq: 35
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country
+  url: {{baseUrl}}/v1/ads/ads/:id?connection_id=
   body: none
   auth: inherit
 }
@@ -13,8 +13,10 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  type: country
-  ~q: 
+}
+
+params:path {
+  id: {{id}}
 }
 
 tests {
@@ -24,8 +26,6 @@ tests {
 }
 
 docs {
-  Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`

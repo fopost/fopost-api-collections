@@ -1,11 +1,11 @@
 meta {
-  name: Create an Instant Form
+  name: Create a campaign
   type: http
-  seq: 18
+  seq: 24
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/lead-forms
+  url: {{baseUrl}}/v1/ads/campaigns
   body: json
   auth: inherit
 }
@@ -18,13 +18,9 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "string",
+    "adAccountId": "string",
     "name": "Example name",
-    "questions": [
-      "EMAIL"
-    ],
-    "privacyPolicyUrl": "https://example.com",
-    "thankYouMessage": "Hello from FoPost."
+    "goal": "engagement"
   }
 }
 
@@ -35,10 +31,12 @@ tests {
 }
 
 docs {
+  Starts paused unless `paused` is false. Also requires the `publish` scope.
+
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
-  - `followUpUrl`: string (uri)
+  - `paused`: boolean — Create it paused; set to false to go live at once
 }

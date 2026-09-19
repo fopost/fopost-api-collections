@@ -1,24 +1,22 @@
 meta {
-  name: List a form’s leads
+  name: Delete an ad
   type: http
-  seq: 19
+  seq: 37
 }
 
-get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+delete {
+  url: {{baseUrl}}/v1/ads/ads/:id?workspace_id=&connection_id=
   body: none
   auth: inherit
 }
 
 params:query {
-  ~workspace_id: 
+  workspace_id: 
   connection_id: 
-  page_id: 
-  ~after: 
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 tests {
@@ -28,7 +26,7 @@ tests {
 }
 
 docs {
-  One page of leads; pass `nextCursor` back as `after` for the next.
+  Deletes it on Meta with everything beneath it. Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

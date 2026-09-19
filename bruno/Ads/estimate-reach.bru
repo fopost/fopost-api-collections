@@ -1,11 +1,11 @@
 meta {
-  name: Create an Instant Form
+  name: Estimate audience size
   type: http
-  seq: 18
+  seq: 22
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/lead-forms
+  url: {{baseUrl}}/v1/ads/reach-estimate
   body: json
   auth: inherit
 }
@@ -18,27 +18,29 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
     "pageId": "string",
-    "name": "Example name",
-    "questions": [
-      "EMAIL"
-    ],
-    "privacyPolicyUrl": "https://example.com",
-    "thankYouMessage": "Hello from FoPost."
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    }
   }
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([201]);
+    expect(res.getStatus()).to.be.oneOf([200]);
   });
 }
 
 docs {
+  How many people the targeting reaches on the Page’s placements.
+
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
-
-  **Optional fields** (not in the example body):
-  - `followUpUrl`: string (uri)
 }

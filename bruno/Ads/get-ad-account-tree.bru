@@ -1,11 +1,11 @@
 meta {
-  name: Search the targeting catalogue
+  name: Get an ad account’s campaign tree
   type: http
-  seq: 16
+  seq: 23
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country
+  url: {{baseUrl}}/v1/ads/accounts/:adAccountId/tree?connection_id=
   body: none
   auth: inherit
 }
@@ -13,8 +13,10 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  type: country
-  ~q: 
+}
+
+params:path {
+  adAccountId: {{adAccountId}}
 }
 
 tests {
@@ -24,7 +26,7 @@ tests {
 }
 
 docs {
-  Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.
+  Every campaign on the ad account with its ad sets and ads, whoever made them. Read live from Meta and never stored.
 
   Requires the `ads` scope when using an API key.
 

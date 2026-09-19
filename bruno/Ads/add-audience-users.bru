@@ -1,0 +1,44 @@
+meta {
+  name: Add people to a customer-list audience
+  type: http
+  seq: 47
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/audiences/:id/users?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "emails": [
+      "someone@example.com"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

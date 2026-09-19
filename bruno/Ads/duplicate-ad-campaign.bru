@@ -1,0 +1,47 @@
+meta {
+  name: Duplicate a campaign
+  type: http
+  seq: 28
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/campaigns/:id/duplicate?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "paused": true
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `paused`: boolean — Create it paused; set to false to go live at once
+}

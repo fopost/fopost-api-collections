@@ -1,17 +1,13 @@
 meta {
-  name: List ad accounts and Pages
+  name: List ad networks
   type: http
-  seq: 13
+  seq: 12
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/sources
+  url: {{baseUrl}}/v1/ads/providers
   body: none
   auth: inherit
-}
-
-params:query {
-  ~workspace_id: 
 }
 
 tests {
@@ -21,7 +17,7 @@ tests {
 }
 
 docs {
-  Every Meta Ads connection with the ad accounts and Pages its grant reaches.
+  Every ad network, with whether it can be connected on this deployment.
 
   Requires the `ads` scope when using an API key.
 

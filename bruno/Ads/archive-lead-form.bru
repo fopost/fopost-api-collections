@@ -1,0 +1,41 @@
+meta {
+  name: Archive an Instant Form
+  type: http
+  seq: 49
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/lead-forms/:formId/archive
+  body: json
+  auth: inherit
+}
+
+params:path {
+  formId: {{formId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "pageId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The form stops collecting; its leads stay readable.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
