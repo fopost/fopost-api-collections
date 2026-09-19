@@ -1,0 +1,32 @@
+meta {
+  name: Get inbox analytics
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/inbox
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+  ~workspace_id: 
+  ~days: 7
+  ~tz: UTC
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  How the social inbox performed over the period: messages received and sent, reply coverage, median first-reply time, per-platform and per-account volume, response-time buckets and a weekday-by-hour arrival heatmap. Aggregates only.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

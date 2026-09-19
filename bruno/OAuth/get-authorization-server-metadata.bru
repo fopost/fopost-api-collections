@@ -1,0 +1,21 @@
+meta {
+  name: Authorization server metadata
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/.well-known/oauth-authorization-server
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  RFC 8414 discovery document: endpoint URLs, supported grant types, PKCE methods and scopes. No auth required.
+}

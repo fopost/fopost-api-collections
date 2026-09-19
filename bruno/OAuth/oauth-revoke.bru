@@ -1,0 +1,21 @@
+meta {
+  name: Revoke a token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/oauth/revoke
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  RFC 7009. Revokes the grant behind an access or refresh token; answers 200 whether or not the token existed. Requires `client_id` (and `client_secret` for a confidential client).
+}

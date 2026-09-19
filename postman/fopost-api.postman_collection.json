@@ -185,7 +185,7 @@
                 "posts"
               ]
             },
-            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `source_ids`: string (uuid)[]\n- `companion_of`: string (uuid) | null",
+            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `source_ids`: string (uuid)[]\n- `companion_of`: string (uuid) | null",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"accounts\": [\n    \"{{accountId}}\"\n  ],\n  \"content\": [\n    {\n      \"text\": \"Hello from FoPost.\"\n    }\n  ]\n}",
@@ -288,7 +288,7 @@
                 }
               ]
             },
-            "description": "Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `content`: object[]\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object",
+            "description": "Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `content`: object[]\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"content_type\": \"post\",\n  \"artifact_type\": \"text_post\",\n  \"status\": \"draft\",\n  \"schedule_at\": \"2026-01-01T12:00:00.000Z\",\n  \"repeatable\": false,\n  \"repeatable_times\": 1\n}",
@@ -329,6 +329,14 @@
                 "posts",
                 ":id"
               ],
+              "query": [
+                {
+                  "key": "remove_from_platform",
+                  "value": "false",
+                  "description": "Also delete the published post from the networks that support it",
+                  "disabled": true
+                }
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -337,7 +345,7 @@
                 }
               ]
             },
-            "description": "Soft-deletes the post. Already-published platform posts are not removed.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
+            "description": "Soft-deletes the post. Already-published platform posts stay up unless `remove_from_platform` is set, which also asks each network that supports it (see `remote_delete` on the post accounts) to take the post down. Reaching a network needs the `publish` scope as well.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
           },
           "response": [],
           "event": [
@@ -924,7 +932,7 @@
             "description": "Requires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `workspaces`\n\n**Optional fields** (not in the example body):\n- `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`\n- `logo`: string | null\n- `website`: string | null\n- `timezone`: string\n- `country`: string | null\n- `description`: string | null\n- `language`: string",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Example name\",\n  \"slug\": \"x\"\n}",
+              "raw": "{\n  \"name\": \"Example name\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1024,10 +1032,10 @@
                 }
               ]
             },
-            "description": "Requires the workspace owner or admin role.\n\nRequires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `workspaces`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `slug`: string\n- `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`\n- `logo`: string | null\n- `website`: string | null\n- `timezone`: string\n- `country`: string | null\n- `description`: string | null\n- `language`: string\n- `requireApproval`: boolean\n- `aiAltTextEnabled`: boolean\n- `brandColor`: string | null",
+            "description": "Requires the workspace owner or admin role.\n\nRequires the `workspaces` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `workspaces`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`\n- `logo`: string | null\n- `website`: string | null\n- `timezone`: string\n- `country`: string | null\n- `description`: string | null\n- `language`: string\n- `requireApproval`: boolean\n- `aiAltTextEnabled`: boolean\n- `brandColor`: string | null\n- `connectRedirectDomains`: string[]",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Example name\",\n  \"slug\": \"x\",\n  \"type\": \"PERSONAL\",\n  \"logo\": \"string\",\n  \"website\": \"string\",\n  \"timezone\": \"UTC\"\n}",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"type\": \"PERSONAL\",\n  \"logo\": \"string\",\n  \"website\": \"string\",\n  \"timezone\": \"UTC\",\n  \"country\": \"string\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1089,6 +1097,100 @@
               }
             }
           ]
+        },
+        {
+          "name": "List request logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/logs?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "logs"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "days",
+                  "value": "7",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "success",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "method",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status_code",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "route",
+                  "value": "",
+                  "description": "Exact route pattern, e.g. /v1/posts/{id}",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Substring match against path and message",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "before",
+                  "value": "",
+                  "description": "Cursor: rows older than this id",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Recent API activity for one workspace, newest first: every request its members made against it, with route, status code, duration and any error message. Rows are kept for 30 days.\n\nRequires the `workspaces` scope when using an API key.\n\n**Scope:** `workspaces`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -1115,6 +1217,12 @@
                   "key": "workspaceId",
                   "value": "",
                   "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "external_user_id",
+                  "value": "",
+                  "description": "Only accounts connected through a hosted connect link for this end user",
                   "disabled": true
                 }
               ]
@@ -1195,6 +1303,92 @@
                   "        console.log('accountId =', id);",
                   "    }",
                   "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a hosted connect link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/connect-sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "connect-sessions"
+              ]
+            },
+            "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard → API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `workspaceId`: string (uuid)\n- `redirectUrl`: string (uri)\n- `branding`: object",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalUserId\": \"x\",\n  \"platforms\": [\n    \"twitter\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a hosted connect link",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/connect-sessions/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "connect-sessions",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Connect session id"
+                }
+              ]
+            },
+            "description": "Poll to learn the outcome: `status` moves from `pending` to `used` and `accountId` is set once the end user has connected. Sessions in other workspaces answer 404.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
                 ]
               }
             }
@@ -2046,10 +2240,10 @@
                 "webhooks"
               ]
             },
-            "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`",
+            "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string — A label for the endpoint\n- `secret`: string — Signing secret. Omit to have one generated; either way it is returned once.\n- `headers`: object — Custom headers sent with every delivery. Values are write-only and never returned; signing headers cannot be overridden.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"url\": \"https://example.com\",\n  \"events\": [\n    \"post.published\"\n  ]\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"url\": \"https://example.com\",\n  \"events\": [\n    \"post.scheduled\"\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2109,10 +2303,10 @@
                 }
               ]
             },
-            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `url`: string (uri)\n- `events`: `post.published` | `post.failed` | `post.partially_failed` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.health_changed`[]\n- `active`: boolean",
+            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"url\": \"https://example.com\",\n  \"active\": false\n}",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"url\": \"https://example.com\",\n  \"active\": false,\n  \"secret\": \"xxxxxxxxxxxxxxxx\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2199,7 +2393,7 @@
                 }
               ]
             },
-            "description": "Dispatches a test `post.published` payload to the webhook endpoint.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`"
+            "description": "Dispatches a test `post.published` payload to this endpoint only, whatever it subscribes to.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`"
           },
           "response": [],
           "event": [
@@ -2791,6 +2985,65 @@
           ]
         },
         {
+          "name": "Get inbox analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics/inbox",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics",
+                "inbox"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "",
+                  "description": "Restrict to a single connected account",
+                  "disabled": true
+                },
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "days",
+                  "value": "7",
+                  "description": "Length of the reporting period in days",
+                  "disabled": true
+                },
+                {
+                  "key": "tz",
+                  "value": "UTC",
+                  "description": "IANA time zone the heatmap is bucketed in",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "How the social inbox performed over the period: messages received and sent, reply coverage, median first-reply time, per-platform and per-account volume, response-time buckets and a weekday-by-hour arrival heatmap. Aggregates only.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Trigger analytics collection",
           "request": {
             "method": "POST",
@@ -2898,10 +3151,10 @@
                 "automations"
               ]
             },
-            "description": "Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `automations`\n\n**Optional fields** (not in the example body):\n- `triggerConfig`: object\n- `active`: boolean",
+            "description": "Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `automations`\n\n**Optional fields** (not in the example body):\n- `description`: string | null\n- `triggerConfig`: object\n- `steps`: object[] — Ordered list form; stored as a trigger-plus-chain graph. Ignored when `graph` is given.\n- `graph`: object — The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition.\n- `active`: boolean",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"name\": \"Example name\",\n  \"triggerType\": \"cross_post\",\n  \"steps\": [\n    {\n      \"actionType\": \"publish\"\n    }\n  ]\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"name\": \"Example name\",\n  \"triggerType\": \"content_created\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3034,10 +3287,10 @@
                 }
               ]
             },
-            "description": "When `steps` is provided the full step list is replaced.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `automations`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `triggerConfig`: object\n- `steps`: object[]\n- `active`: boolean",
+            "description": "When `graph` or `steps` is provided the whole graph is replaced.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `automations`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `description`: string | null\n- `triggerType`: `content_created` | `cross_post` | `rss_feed` | `api_webhook` | `schedule` | `competitor_post` | `post_outperformed` | `inbox_topic` | `inbox_message` | `radar_mention`\n- `triggerConfig`: object\n- `steps`: object[]\n- `graph`: object — The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition.\n- `active`: boolean",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Example name\",\n  \"active\": false\n}",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"description\": \"Hello from FoPost.\",\n  \"triggerType\": \"content_created\",\n  \"active\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3483,6 +3736,230 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OAuth",
+      "description": "OAuth 2.1 for third-party apps",
+      "item": [
+        {
+          "name": "Authorization server metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/.well-known/oauth-authorization-server",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ".well-known",
+                "oauth-authorization-server"
+              ]
+            },
+            "description": "RFC 8414 discovery document: endpoint URLs, supported grant types, PKCE methods and scopes. No auth required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start an authorization",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oauth/authorize?response_type=code&client_id=&redirect_uri=&scope=&code_challenge=&code_challenge_method=S256",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "client_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "",
+                  "description": "Exactly one of the URIs registered for the client",
+                  "disabled": false
+                },
+                {
+                  "key": "scope",
+                  "value": "",
+                  "description": "Space-separated scopes, the same names as API-key scopes",
+                  "disabled": false
+                },
+                {
+                  "key": "state",
+                  "value": "",
+                  "description": "Echoed back unchanged",
+                  "disabled": true
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "",
+                  "description": "BASE64URL(SHA256(code_verifier))",
+                  "disabled": false
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "S256",
+                  "description": "",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Send the user here in a browser. After validating the client and redirect_uri the user signs in, picks a workspace and approves the scopes; the browser is then sent to `redirect_uri` with `code` and `state`, or with `error=access_denied`. PKCE with S256 is required. Errors about the client or redirect_uri answer 400 here instead of redirecting."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Exchange a code or refresh token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oauth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "`grant_type=authorization_code` takes `code`, `redirect_uri`, `code_verifier` and `client_id`; `grant_type=refresh_token` takes `refresh_token` and `client_id`. A confidential client also sends `client_secret` (or HTTP Basic). Refresh tokens rotate on every use. Access tokens last one hour and go in `Authorization: Bearer`; they carry the approved scopes and are confined to the approved workspace."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revoke a token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oauth/revoke",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "revoke"
+              ]
+            },
+            "description": "RFC 7009. Revokes the grant behind an access or refresh token; answers 200 whether or not the token existed. Requires `client_id` (and `client_secret` for a confidential client)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register a client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oauth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "register"
+              ]
+            },
+            "description": "RFC 7591 registration for signed-in developers: use your API key. The client is owned by your account. `client_uri` is your site; every redirect URI must be https on that host or a subdomain of it (loopback http is allowed for native and local clients) and is matched exactly. The client name may not use the product name. `token_endpoint_auth_method` defaults to `none` (a public client, PKCE only); `client_secret_basic` or `client_secret_post` issues a secret that is shown once.\n\nMCP clients may register without a credential when every redirect URI is loopback or on a supported MCP client host; `client_uri` is then optional and the client has no owner.\n\nRequires the `workspaces` scope when using an API key.\n\n**Scope:** `workspaces`\n\n**Optional fields** (not in the example body):\n- `token_endpoint_auth_method`: `none` | `client_secret_basic` | `client_secret_post`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_name\": \"Example client\",\n  \"redirect_uris\": [\n    \"https://example.com\"\n  ],\n  \"client_uri\": \"https://example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
                   "});"
                 ]
               }

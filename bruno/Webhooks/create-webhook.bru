@@ -19,7 +19,7 @@ body:json {
     "workspaceId": "{{workspaceId}}",
     "url": "https://example.com",
     "events": [
-      "post.published"
+      "post.scheduled"
     ]
   }
 }
@@ -46,4 +46,9 @@ docs {
   Requires an active subscription; without one the request fails with 403 `subscription_required`.
 
   **Scope:** `webhooks`
+
+  **Optional fields** (not in the example body):
+  - `name`: string — A label for the endpoint
+  - `secret`: string — Signing secret. Omit to have one generated; either way it is returned once.
+  - `headers`: object — Custom headers sent with every delivery. Values are write-only and never returned; signing headers cannot be overridden.
 }

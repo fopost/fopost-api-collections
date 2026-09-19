@@ -1,21 +1,17 @@
 meta {
-  name: Get account health
+  name: Get a hosted connect link
   type: http
-  seq: 10
+  seq: 4
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/health
+  url: {{baseUrl}}/v1/connect-sessions/:id
   body: none
   auth: inherit
 }
 
-params:query {
-  ~refresh: true
-}
-
 params:path {
-  id: {{accountId}}
+  id: {{id}}
 }
 
 tests {
@@ -25,6 +21,8 @@ tests {
 }
 
 docs {
+  Poll to learn the outcome: `status` moves from `pending` to `used` and `accountId` is set once the end user has connected. Sessions in other workspaces answer 404.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

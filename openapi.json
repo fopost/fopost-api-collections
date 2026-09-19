@@ -25,6 +25,9 @@
     },
     {
       "BearerAuth": []
+    },
+    {
+      "OAuth2": []
     }
   ],
   "tags": [
@@ -71,6 +74,10 @@
     {
       "name": "API",
       "description": "API metadata"
+    },
+    {
+      "name": "OAuth",
+      "description": "OAuth 2.1 for third-party apps"
     }
   ],
   "paths": {
@@ -99,6 +106,457 @@
         },
         "description": "Returns the OpenAPI 3.1 description of the FoPost public API. No auth required.",
         "security": []
+      }
+    },
+    "/.well-known/oauth-authorization-server": {
+      "get": {
+        "operationId": "getAuthorizationServerMetadata",
+        "summary": "Authorization server metadata",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "issuer": {
+                      "type": "string"
+                    },
+                    "authorization_endpoint": {
+                      "type": "string"
+                    },
+                    "token_endpoint": {
+                      "type": "string"
+                    },
+                    "revocation_endpoint": {
+                      "type": "string"
+                    },
+                    "registration_endpoint": {
+                      "type": "string"
+                    },
+                    "response_types_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "grant_types_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "code_challenge_methods_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "token_endpoint_auth_methods_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "scopes_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "RFC 8414 discovery document: endpoint URLs, supported grant types, PKCE methods and scopes. No auth required.",
+        "security": []
+      }
+    },
+    "/oauth/authorize": {
+      "get": {
+        "operationId": "oauthAuthorize",
+        "summary": "Start an authorization",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the consent screen, or to redirect_uri with an error"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Send the user here in a browser. After validating the client and redirect_uri the user signs in, picks a workspace and approves the scopes; the browser is then sent to `redirect_uri` with `code` and `state`, or with `error=access_denied`. PKCE with S256 is required. Errors about the client or redirect_uri answer 400 here instead of redirecting.",
+        "parameters": [
+          {
+            "name": "response_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "code"
+              ]
+            }
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "Exactly one of the URIs registered for the client"
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Space-separated scopes, the same names as API-key scopes"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Echoed back unchanged"
+          },
+          {
+            "name": "code_challenge",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "BASE64URL(SHA256(code_verifier))"
+          },
+          {
+            "name": "code_challenge_method",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "S256"
+              ]
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "operationId": "oauthToken",
+        "summary": "Exchange a code or refresh token",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "enum": [
+                        "Bearer"
+                      ]
+                    },
+                    "expires_in": {
+                      "type": "integer"
+                    },
+                    "refresh_token": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid_grant (wrong verifier, used or expired code), invalid_scope, unsupported_grant_type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "invalid_client",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "`grant_type=authorization_code` takes `code`, `redirect_uri`, `code_verifier` and `client_id`; `grant_type=refresh_token` takes `refresh_token` and `client_id`. A confidential client also sends `client_secret` (or HTTP Basic). Refresh tokens rotate on every use. Access tokens last one hour and go in `Authorization: Bearer`; they carry the approved scopes and are confined to the approved workspace.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "grant_type",
+                  "client_id"
+                ],
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "enum": [
+                      "authorization_code",
+                      "refresh_token"
+                    ]
+                  },
+                  "client_id": {
+                    "type": "string"
+                  },
+                  "client_secret": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  },
+                  "redirect_uri": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "code_verifier": {
+                    "type": "string",
+                    "minLength": 43,
+                    "maxLength": 128
+                  },
+                  "refresh_token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/oauth/revoke": {
+      "post": {
+        "operationId": "oauthRevoke",
+        "summary": "Revoke a token",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Revoked, or nothing to revoke"
+          },
+          "401": {
+            "description": "invalid_client",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "RFC 7009. Revokes the grant behind an access or refresh token; answers 200 whether or not the token existed. Requires `client_id` (and `client_secret` for a confidential client).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "client_id"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "token_type_hint": {
+                    "type": "string",
+                    "enum": [
+                      "access_token",
+                      "refresh_token"
+                    ]
+                  },
+                  "client_id": {
+                    "type": "string"
+                  },
+                  "client_secret": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/oauth/register": {
+      "post": {
+        "operationId": "oauthRegister",
+        "summary": "Register a client",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "201": {
+            "description": "Registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "client_id": {
+                      "type": "string"
+                    },
+                    "client_secret": {
+                      "type": "string",
+                      "description": "Only for a confidential client; shown once"
+                    },
+                    "client_name": {
+                      "type": "string"
+                    },
+                    "redirect_uris": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "client_uri": {
+                      "type": "string"
+                    },
+                    "token_endpoint_auth_method": {
+                      "type": "string"
+                    },
+                    "grant_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "response_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "client_id_issued_at": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "RFC 7591 registration for signed-in developers: use your API key. The client is owned by your account. `client_uri` is your site; every redirect URI must be https on that host or a subdomain of it (loopback http is allowed for native and local clients) and is matched exactly. The client name may not use the product name. `token_endpoint_auth_method` defaults to `none` (a public client, PKCE only); `client_secret_basic` or `client_secret_post` issues a secret that is shown once.\n\nMCP clients may register without a credential when every redirect URI is loopback or on a supported MCP client host; `client_uri` is then optional and the client has no owner.\n\nRequires the `workspaces` scope when using an API key.",
+        "x-fopost-scope": "workspaces",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "client_name",
+                  "redirect_uris",
+                  "client_uri"
+                ],
+                "properties": {
+                  "client_name": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "redirect_uris": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "minItems": 1,
+                    "maxItems": 10
+                  },
+                  "client_uri": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "token_endpoint_auth_method": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "client_secret_basic",
+                      "client_secret_post"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/posts": {
@@ -439,7 +897,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Message"
+                  "$ref": "#/components/schemas/PostDeleteResponse"
                 }
               }
             }
@@ -460,7 +918,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Soft-deletes the post. Already-published platform posts are not removed.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Soft-deletes the post. Already-published platform posts stay up unless `remove_from_platform` is set, which also asks each network that supports it (see `remote_delete` on the post accounts) to take the post down. Reaching a network needs the `publish` scope as well.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -472,6 +930,16 @@
               "format": "uuid"
             },
             "description": "Post id"
+          },
+          {
+            "name": "remove_from_platform",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Also delete the published post from the networks that support it"
           }
         ]
       }
@@ -1733,6 +2201,15 @@
               "format": "uuid"
             },
             "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "external_user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Only accounts connected through a hosted connect link for this end user"
           }
         ]
       },
@@ -1789,6 +2266,117 @@
             }
           }
         }
+      }
+    },
+    "/v1/connect-sessions": {
+      "post": {
+        "operationId": "createConnectSession",
+        "summary": "Create a hosted connect link",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConnectSession"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard → API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "x-fopost-scope": "accounts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConnectSessionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/connect-sessions/{id}": {
+      "get": {
+        "operationId": "getConnectSession",
+        "summary": "Get a hosted connect link",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConnectSession"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Poll to learn the outcome: `status` moves from `pending` to `used` and `accountId` is set once the end user has connected. Sessions in other workspaces answer 404.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Connect session id"
+          }
+        ]
       }
     },
     "/v1/accounts/health": {
@@ -2925,6 +3513,135 @@
         ]
       }
     },
+    "/v1/logs": {
+      "get": {
+        "operationId": "listLogs",
+        "summary": "List request logs",
+        "tags": [
+          "Workspaces"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestLogListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Recent API activity for one workspace, newest first: every request its members made against it, with route, status code, duration and any error message. Rows are kept for 30 days.\n\nRequires the `workspaces` scope when using an API key.",
+        "x-fopost-scope": "workspaces",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 7,
+              "minimum": 1,
+              "maximum": 30
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "failed"
+              ]
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "route",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact route pattern, e.g. /v1/posts/{id}"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Substring match against path and message"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Cursor: rows older than this id"
+          }
+        ]
+      }
+    },
     "/v1/webhooks": {
       "get": {
         "operationId": "listWebhooks",
@@ -3172,7 +3889,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Dispatches a test `post.published` payload to the webhook endpoint.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Dispatches a test `post.published` payload to this endpoint only, whatever it subscribes to.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "webhooks",
         "parameters": [
           {
@@ -3779,6 +4496,82 @@
         ]
       }
     },
+    "/v1/analytics/inbox": {
+      "get": {
+        "operationId": "getInboxAnalytics",
+        "summary": "Get inbox analytics",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "How the social inbox performed over the period: messages received and sent, reply coverage, median first-reply time, per-platform and per-account volume, response-time buckets and a weekday-by-hour arrival heatmap. Aggregates only.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single connected account"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 7,
+              "minimum": 1,
+              "maximum": 365
+            },
+            "description": "Length of the reporting period in days"
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "UTC"
+            },
+            "description": "IANA time zone the heatmap is bucketed in"
+          }
+        ]
+      }
+    },
     "/v1/analytics/collect": {
       "post": {
         "operationId": "triggerAnalyticsCollect",
@@ -4057,7 +4850,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "When `steps` is provided the full step list is replaced.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "When `graph` or `steps` is provided the whole graph is replaced.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "automations",
         "parameters": [
           {
@@ -4659,9 +5452,90 @@
         "scheme": "bearer",
         "bearerFormat": "JWT",
         "description": "Session token used by the FoPost dashboard"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "For third-party apps acting on behalf of a FoPost user. Authorization code with PKCE (S256) is required. The token is confined to the workspace the user approved and to the scopes they granted.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.fopost.com/oauth/authorize",
+            "tokenUrl": "https://api.fopost.com/oauth/token",
+            "refreshUrl": "https://api.fopost.com/oauth/token",
+            "scopes": {
+              "posts": "Read and write posts, media and content",
+              "publish": "Publish, retry and cancel a post",
+              "accounts": "Connected social accounts",
+              "workspaces": "List and manage workspaces",
+              "labels": "Labels used to organise posts",
+              "webhooks": "Webhook endpoints",
+              "analytics": "Metrics and insights",
+              "automations": "Automation rules and runs",
+              "inbox": "Comments, mentions and messages",
+              "ai": "AI features (spends credits)",
+              "extension": "Reserved for the browser extension"
+            }
+          }
+        }
       }
     },
     "schemas": {
+      "CreateConnectSessionRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "externalUserId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "twitter",
+                "instagram",
+                "linkedin",
+                "threads",
+                "tiktok",
+                "youtube",
+                "reddit",
+                "tumblr",
+                "dribbble"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 9
+          },
+          "redirectUrl": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "branding": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "logoUrl": {
+                "type": "string",
+                "maxLength": 2048,
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "required": [
+          "externalUserId",
+          "platforms"
+        ]
+      },
       "CreatePostRequest": {
         "type": "object",
         "properties": {
@@ -4751,6 +5625,7 @@
               "article",
               "carousel",
               "short_video",
+              "story",
               "link_share"
             ],
             "default": "text_post"
@@ -4953,6 +5828,7 @@
               "article",
               "carousel",
               "short_video",
+              "story",
               "link_share"
             ]
           },
@@ -5109,6 +5985,7 @@
               "instagram-business",
               "facebook",
               "linkedin",
+              "linkedin-page",
               "tiktok",
               "youtube",
               "bluesky",
@@ -5174,12 +6051,6 @@
             "minLength": 1,
             "maxLength": 255
           },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "pattern": "^[a-z0-9-]+$"
-          },
           "type": {
             "type": "string",
             "enum": [
@@ -5237,8 +6108,7 @@
           }
         },
         "required": [
-          "name",
-          "slug"
+          "name"
         ]
       },
       "UpdateWorkspaceRequest": {
@@ -5248,12 +6118,6 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255
-          },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "pattern": "^[a-z0-9-]+$"
           },
           "type": {
             "type": "string",
@@ -5319,6 +6183,14 @@
               "null"
             ],
             "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+          },
+          "connectRedirectDomains": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(?=.{1,253}$)(?!-)[a-z0-9-]+(?<!-)(\\.(?!-)[a-z0-9-]+(?<!-))+$"
+            },
+            "maxItems": 20
           }
         }
       },
@@ -5370,26 +6242,58 @@
             "type": "string",
             "format": "uuid"
           },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "A label for the endpoint"
+          },
           "url": {
             "type": "string",
             "maxLength": 2048,
-            "format": "uri"
+            "format": "uri",
+            "description": "HTTPS endpoint on a public host"
           },
           "events": {
             "type": "array",
             "items": {
               "type": "string",
               "enum": [
+                "post.scheduled",
                 "post.published",
-                "post.failed",
                 "post.partially_failed",
+                "post.failed",
+                "post.deleted",
                 "delivery.published",
                 "delivery.failed",
                 "delivery.delayed",
-                "account.health_changed"
+                "account.connected",
+                "account.disconnected",
+                "account.health_changed",
+                "inbox.comment_received",
+                "inbox.mention_received",
+                "inbox.message_received",
+                "automation.triggered",
+                "automation.completed",
+                "automation.failed"
               ]
             },
             "minItems": 1
+          },
+          "secret": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 255,
+            "description": "Signing secret. Omit to have one generated; either way it is returned once."
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "description": "Custom headers sent with every delivery. Values are write-only and never returned; signing headers cannot be overridden."
           }
         },
         "required": [
@@ -5401,6 +6305,14 @@
       "UpdateWebhookRequest": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 120
+          },
           "url": {
             "type": "string",
             "maxLength": 2048,
@@ -5411,19 +6323,50 @@
             "items": {
               "type": "string",
               "enum": [
+                "post.scheduled",
                 "post.published",
-                "post.failed",
                 "post.partially_failed",
+                "post.failed",
+                "post.deleted",
                 "delivery.published",
                 "delivery.failed",
                 "delivery.delayed",
-                "account.health_changed"
+                "account.connected",
+                "account.disconnected",
+                "account.health_changed",
+                "inbox.comment_received",
+                "inbox.mention_received",
+                "inbox.message_received",
+                "automation.triggered",
+                "automation.completed",
+                "automation.failed"
               ]
             },
             "minItems": 1
           },
           "active": {
             "type": "boolean"
+          },
+          "secret": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 255,
+            "description": "Rotates the signing secret; the new value is returned once in this response."
+          },
+          "headers": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "description": "Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header."
           }
         }
       },
@@ -5439,13 +6382,26 @@
             "minLength": 1,
             "maxLength": 255
           },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 500
+          },
           "triggerType": {
             "type": "string",
             "enum": [
+              "content_created",
               "cross_post",
               "rss_feed",
               "api_webhook",
-              "schedule"
+              "schedule",
+              "competitor_post",
+              "post_outperformed",
+              "inbox_topic",
+              "inbox_message",
+              "radar_mention"
             ]
           },
           "triggerConfig": {
@@ -5461,9 +6417,21 @@
                 "actionType": {
                   "type": "string",
                   "enum": [
-                    "publish",
+                    "generate",
+                    "transform",
                     "delay",
-                    "transform"
+                    "publish",
+                    "condition",
+                    "set_variable",
+                    "webhook",
+                    "ab_split",
+                    "ai",
+                    "send_message",
+                    "wait_for_reply",
+                    "handoff",
+                    "add_label",
+                    "remove_label",
+                    "end"
                   ]
                 },
                 "actionConfig": {
@@ -5476,8 +6444,124 @@
                 "actionType"
               ]
             },
-            "minItems": 1,
-            "maxItems": 20
+            "maxItems": 20,
+            "description": "Ordered list form; stored as a trigger-plus-chain graph. Ignored when `graph` is given."
+          },
+          "graph": {
+            "type": "object",
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "trigger",
+                        "generate",
+                        "transform",
+                        "delay",
+                        "publish",
+                        "condition",
+                        "set_variable",
+                        "webhook",
+                        "ab_split",
+                        "ai",
+                        "send_message",
+                        "wait_for_reply",
+                        "handoff",
+                        "add_label",
+                        "remove_label",
+                        "end"
+                      ]
+                    },
+                    "label": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 120
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "default": {}
+                    },
+                    "layout": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "kind"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 60
+              },
+              "edges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 96
+                    },
+                    "source": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "sourceHandle": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 32
+                    },
+                    "target": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "source",
+                    "target"
+                  ]
+                },
+                "maxItems": 240
+              }
+            },
+            "required": [
+              "nodes",
+              "edges"
+            ],
+            "description": "The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition."
           },
           "active": {
             "type": "boolean",
@@ -5487,8 +6571,7 @@
         "required": [
           "workspaceId",
           "name",
-          "triggerType",
-          "steps"
+          "triggerType"
         ]
       },
       "UpdateAutomationRequest": {
@@ -5498,6 +6581,28 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 500
+          },
+          "triggerType": {
+            "type": "string",
+            "enum": [
+              "content_created",
+              "cross_post",
+              "rss_feed",
+              "api_webhook",
+              "schedule",
+              "competitor_post",
+              "post_outperformed",
+              "inbox_topic",
+              "inbox_message",
+              "radar_mention"
+            ]
           },
           "triggerConfig": {
             "type": "object",
@@ -5511,9 +6616,21 @@
                 "actionType": {
                   "type": "string",
                   "enum": [
-                    "publish",
+                    "generate",
+                    "transform",
                     "delay",
-                    "transform"
+                    "publish",
+                    "condition",
+                    "set_variable",
+                    "webhook",
+                    "ab_split",
+                    "ai",
+                    "send_message",
+                    "wait_for_reply",
+                    "handoff",
+                    "add_label",
+                    "remove_label",
+                    "end"
                   ]
                 },
                 "actionConfig": {
@@ -5528,6 +6645,122 @@
             },
             "minItems": 1,
             "maxItems": 20
+          },
+          "graph": {
+            "type": "object",
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "trigger",
+                        "generate",
+                        "transform",
+                        "delay",
+                        "publish",
+                        "condition",
+                        "set_variable",
+                        "webhook",
+                        "ab_split",
+                        "ai",
+                        "send_message",
+                        "wait_for_reply",
+                        "handoff",
+                        "add_label",
+                        "remove_label",
+                        "end"
+                      ]
+                    },
+                    "label": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 120
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "default": {}
+                    },
+                    "layout": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "kind"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 60
+              },
+              "edges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 96
+                    },
+                    "source": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "sourceHandle": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 32
+                    },
+                    "target": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "source",
+                    "target"
+                  ]
+                },
+                "maxItems": 240
+              }
+            },
+            "required": [
+              "nodes",
+              "edges"
+            ],
+            "description": "The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition."
           },
           "active": {
             "type": "boolean"
@@ -5723,6 +6956,10 @@
               "null"
             ]
           },
+          "remote_delete": {
+            "type": "boolean",
+            "description": "True when deleting the post with `remove_from_platform` can also take this published post down on the network"
+          },
           "error_code": {
             "type": [
               "string",
@@ -5750,6 +6987,47 @@
             "type": "integer"
           }
         }
+      },
+      "PlatformRemoval": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Social account id"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "removed": {
+            "type": "boolean",
+            "description": "False when the network refused to take the post down"
+          }
+        },
+        "required": [
+          "account_id",
+          "platform",
+          "removed"
+        ]
+      },
+      "PostDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "platform_removals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformRemoval"
+            },
+            "description": "One entry per network asked to remove the post; empty unless `remove_from_platform` was set"
+          }
+        },
+        "required": [
+          "message",
+          "platform_removals"
+        ]
       },
       "PostLabelRef": {
         "type": "object",
@@ -7062,8 +8340,110 @@
               "null"
             ],
             "format": "date-time"
+          },
+          "externalUserId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Your own id for the end user who connected through a hosted connect link"
           }
         }
+      },
+      "ConnectSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "used",
+              "expired"
+            ]
+          },
+          "externalUserId": {
+            "type": "string"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "twitter",
+                "instagram",
+                "linkedin",
+                "threads",
+                "tiktok",
+                "youtube",
+                "reddit",
+                "tumblr",
+                "dribbble"
+              ]
+            }
+          },
+          "redirectUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "branding": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "logoUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "accountId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The connected account, once the session is used"
+          },
+          "url": {
+            "type": "string",
+            "description": "The hosted link to hand to your user. Present on creation only."
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "externalUserId",
+          "platforms",
+          "expiresAt",
+          "createdAt"
+        ]
       },
       "AccountCreated": {
         "type": "object",
@@ -7191,6 +8571,51 @@
               "null"
             ],
             "format": "date-time"
+          },
+          "tokenExpiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "permissions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "capabilities": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "publish": {
+                "type": "boolean"
+              },
+              "analytics": {
+                "type": "boolean"
+              },
+              "inbox": {
+                "type": "boolean"
+              },
+              "inboxReply": {
+                "type": "boolean"
+              },
+              "messages": {
+                "type": "boolean"
+              },
+              "remoteDelete": {
+                "type": "boolean"
+              },
+              "radar": {
+                "type": "boolean"
+              }
+            }
           }
         }
       },
@@ -7417,17 +8842,132 @@
           "workspace"
         ]
       },
+      "RequestLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "auth_method": {
+            "type": "string",
+            "enum": [
+              "jwt",
+              "api_key"
+            ]
+          },
+          "method": {
+            "type": "string"
+          },
+          "route": {
+            "type": "string",
+            "description": "Route pattern, e.g. /v1/posts/{id}"
+          },
+          "path": {
+            "type": "string"
+          },
+          "status_code": {
+            "type": "integer"
+          },
+          "duration_ms": {
+            "type": "integer"
+          },
+          "platform": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Error text for failed requests"
+          }
+        }
+      },
+      "RequestLogBucket": {
+        "type": "object",
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          }
+        }
+      },
+      "RequestLogListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequestLog"
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "since": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "total": {
+                "type": "integer"
+              },
+              "errors": {
+                "type": "integer"
+              },
+              "buckets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RequestLogBucket"
+                }
+              },
+              "has_more": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
       "WebhookEvent": {
         "type": "string",
         "enum": [
+          "post.scheduled",
           "post.published",
-          "post.failed",
           "post.partially_failed",
+          "post.failed",
+          "post.deleted",
           "delivery.published",
           "delivery.failed",
           "delivery.delayed",
-          "account.health_changed"
+          "account.connected",
+          "account.disconnected",
+          "account.health_changed",
+          "inbox.comment_received",
+          "inbox.mention_received",
+          "inbox.message_received",
+          "automation.triggered",
+          "automation.completed",
+          "automation.failed"
         ]
+      },
+      "WebhookHeaderNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Names of the custom headers sent with every delivery. Values are write-only."
       },
       "Webhook": {
         "type": "object",
@@ -7440,6 +8980,12 @@
             "type": "string",
             "format": "uuid"
           },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "url": {
             "type": "string",
             "format": "uri"
@@ -7449,6 +8995,9 @@
             "items": {
               "$ref": "#/components/schemas/WebhookEvent"
             }
+          },
+          "headerNames": {
+            "$ref": "#/components/schemas/WebhookHeaderNames"
           },
           "active": {
             "type": "boolean"
@@ -7480,6 +9029,12 @@
             "type": "string",
             "format": "uuid"
           },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "url": {
             "type": "string",
             "format": "uri"
@@ -7494,8 +9049,21 @@
               "$ref": "#/components/schemas/WebhookEvent"
             }
           },
+          "headerNames": {
+            "$ref": "#/components/schemas/WebhookHeaderNames"
+          },
           "active": {
             "type": "boolean"
+          },
+          "lastTriggeredAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "failureCount": {
+            "type": "integer"
           },
           "createdAt": {
             "type": "string",
@@ -7508,6 +9076,7 @@
           "url",
           "secret",
           "events",
+          "headerNames",
           "active"
         ]
       },
@@ -7522,6 +9091,12 @@
             "type": "string",
             "format": "uuid"
           },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "url": {
             "type": "string",
             "format": "uri"
@@ -7532,11 +9107,29 @@
               "$ref": "#/components/schemas/WebhookEvent"
             }
           },
+          "headerNames": {
+            "$ref": "#/components/schemas/WebhookHeaderNames"
+          },
           "active": {
             "type": "boolean"
           },
+          "lastTriggeredAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
           "failureCount": {
             "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "secret": {
+            "type": "string",
+            "description": "Present only when this request rotated the secret. Returned once."
           }
         }
       },
@@ -8120,6 +9713,209 @@
           "data"
         ]
       },
+      "InboxAnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "totals": {
+                "type": "object",
+                "properties": {
+                  "received": {
+                    "type": "integer"
+                  },
+                  "sent": {
+                    "type": "integer"
+                  },
+                  "answered": {
+                    "type": "integer",
+                    "description": "Inbound items that got a reply"
+                  },
+                  "open": {
+                    "type": "integer",
+                    "description": "Inbound items still unread or read, not resolved"
+                  },
+                  "conversations": {
+                    "type": "integer"
+                  },
+                  "medianResponseMinutes": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "Median minutes from an inbound item to its first reply; null without replies"
+                  }
+                }
+              },
+              "deltas": {
+                "type": "object",
+                "properties": {
+                  "received": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "sent": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "answered": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Percentage change vs the previous period of the same length"
+              },
+              "series": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "received": {
+                      "type": "integer"
+                    },
+                    "sent": {
+                      "type": "integer"
+                    },
+                    "answered": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "byPlatform": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "platform": {
+                      "type": "string"
+                    },
+                    "received": {
+                      "type": "integer"
+                    },
+                    "sent": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "byType": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "comment",
+                        "mention",
+                        "reply",
+                        "dm"
+                      ]
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "byAccount": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "accountId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "received": {
+                      "type": "integer"
+                    },
+                    "sent": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "responseTime": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "bucket": {
+                      "type": "string",
+                      "enum": [
+                        "under_1h",
+                        "1h_6h",
+                        "6h_24h",
+                        "1d_3d",
+                        "over_3d"
+                      ]
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "heatmap": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "weekday": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 6,
+                      "description": "0 = Sunday"
+                    },
+                    "hour": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 23
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "timeZone": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
       "PostingStreakResponse": {
         "type": "object",
         "properties": {
@@ -8388,23 +10184,128 @@
       "AutomationStep": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
           "position": {
             "type": "integer"
+          },
+          "nodeId": {
+            "type": "string"
           },
           "actionType": {
             "type": "string",
             "enum": [
-              "publish",
+              "generate",
+              "transform",
               "delay",
-              "transform"
+              "publish",
+              "condition",
+              "set_variable",
+              "webhook",
+              "ab_split",
+              "ai",
+              "send_message",
+              "wait_for_reply",
+              "handoff",
+              "add_label",
+              "remove_label",
+              "end"
             ]
           },
           "actionConfig": {
             "type": "object",
             "additionalProperties": true
+          }
+        }
+      },
+      "WorkflowNode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "trigger",
+              "generate",
+              "transform",
+              "delay",
+              "publish",
+              "condition",
+              "set_variable",
+              "webhook",
+              "ab_split",
+              "ai",
+              "send_message",
+              "wait_for_reply",
+              "handoff",
+              "add_label",
+              "remove_label",
+              "end"
+            ]
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "position": {
+            "type": "integer"
+          },
+          "layout": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "WorkflowEdge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "sourceHandle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "target": {
+            "type": "string"
+          }
+        }
+      },
+      "WorkflowGraph": {
+        "type": "object",
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkflowNode"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkflowEdge"
+            }
           }
         }
       },
@@ -8422,13 +10323,25 @@
           "name": {
             "type": "string"
           },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "triggerType": {
             "type": "string",
             "enum": [
+              "content_created",
               "cross_post",
               "rss_feed",
               "api_webhook",
-              "schedule"
+              "schedule",
+              "competitor_post",
+              "post_outperformed",
+              "inbox_topic",
+              "inbox_message",
+              "radar_mention"
             ]
           },
           "triggerConfig": {
@@ -8472,13 +10385,25 @@
           "name": {
             "type": "string"
           },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "triggerType": {
             "type": "string",
             "enum": [
+              "content_created",
               "cross_post",
               "rss_feed",
               "api_webhook",
-              "schedule"
+              "schedule",
+              "competitor_post",
+              "post_outperformed",
+              "inbox_topic",
+              "inbox_message",
+              "radar_mention"
             ]
           },
           "triggerConfig": {
@@ -8492,11 +10417,15 @@
             "type": "string",
             "description": "Secret for the webhook trigger endpoint (`x-automation-secret` header). Returned only on creation."
           },
+          "graph": {
+            "$ref": "#/components/schemas/WorkflowGraph"
+          },
           "steps": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AutomationStep"
-            }
+            },
+            "description": "The non-trigger nodes in stored order; the list view of `graph`."
           },
           "createdAt": {
             "type": "string",
@@ -8518,13 +10447,25 @@
           "name": {
             "type": "string"
           },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "triggerType": {
             "type": "string",
             "enum": [
+              "content_created",
               "cross_post",
               "rss_feed",
               "api_webhook",
-              "schedule"
+              "schedule",
+              "competitor_post",
+              "post_outperformed",
+              "inbox_topic",
+              "inbox_message",
+              "radar_mention"
             ]
           },
           "triggerConfig": {
@@ -8544,11 +10485,15 @@
           "runCount": {
             "type": "integer"
           },
+          "graph": {
+            "$ref": "#/components/schemas/WorkflowGraph"
+          },
           "steps": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AutomationStep"
-            }
+            },
+            "description": "The non-trigger nodes in stored order; the list view of `graph`."
           },
           "createdAt": {
             "type": "string",
@@ -8567,7 +10512,8 @@
             "type": "integer"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "description": "running, deferred, waiting (parked on a Wait for Reply node), completed, failed or cancelled"
           },
           "currentStep": {
             "type": [
@@ -8620,6 +10566,20 @@
               "null"
             ]
           },
+          "currentNodeId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "waitingUntil": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When a waiting run gives up on the reply"
+          },
           "triggerEvent": {
             "type": [
               "object",
@@ -8661,6 +10621,19 @@
                 },
                 "stepPosition": {
                   "type": "integer"
+                },
+                "nodeId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The output the run left the node through"
                 },
                 "status": {
                   "type": "string"

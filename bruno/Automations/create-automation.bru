@@ -18,12 +18,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "name": "Example name",
-    "triggerType": "cross_post",
-    "steps": [
-      {
-        "actionType": "publish"
-      }
-    ]
+    "triggerType": "content_created"
   }
 }
 
@@ -51,6 +46,9 @@ docs {
   **Scope:** `automations`
 
   **Optional fields** (not in the example body):
+  - `description`: string | null
   - `triggerConfig`: object
+  - `steps`: object[] — Ordered list form; stored as a trigger-plus-chain graph. Ignored when `graph` is given.
+  - `graph`: object — The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition.
   - `active`: boolean
 }

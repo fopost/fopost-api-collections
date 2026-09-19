@@ -1,0 +1,45 @@
+meta {
+  name: Create a hosted connect link
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/connect-sessions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "externalUserId": "x",
+    "platforms": [
+      "twitter"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard → API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.
+
+  Requires the `accounts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `workspaceId`: string (uuid)
+  - `redirectUrl`: string (uri)
+  - `branding`: object
+}
