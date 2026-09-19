@@ -1,0 +1,35 @@
+meta {
+  name: Get an account’s per-network metric set
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/insights?raw=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  raw: true
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Pass `raw=true` for the numbers only this network reports, keyed by the platform’s own metric names — ad-break earnings, story taps, a retention curve, the search terms behind a listing. Read from the newest collected snapshot, never fetched live.
+
+  A network whose metric access has been requested but not granted answers `503 platform_metrics_unavailable` rather than an empty set.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}
