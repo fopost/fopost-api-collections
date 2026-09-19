@@ -1,0 +1,29 @@
+meta {
+  name: List custom audiences and pixels
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/audiences?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

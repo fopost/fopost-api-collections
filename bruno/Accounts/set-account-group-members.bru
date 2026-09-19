@@ -1,0 +1,39 @@
+meta {
+  name: Replace an account group's members
+  type: http
+  seq: 15
+}
+
+put {
+  url: {{baseUrl}}/v1/account-groups/:id/members
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "account_ids": [
+      "{{accountId}}"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

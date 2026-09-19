@@ -1,0 +1,30 @@
+meta {
+  name: Next free slot
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/queue/next?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  ~account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The time a post added to the queue now would get. Pass `account_id` to ask for one account; without it the answer is the next free occurrence of any slot.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

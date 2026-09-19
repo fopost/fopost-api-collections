@@ -1,0 +1,29 @@
+meta {
+  name: List accounts with inbox coverage
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/accounts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Every active connected account, each flagged with whether comments and DMs can be read for it yet.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -1,0 +1,29 @@
+meta {
+  name: List ads
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/ads
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Boosts and standalone ads created through FoPost, with the insights from their last refresh. Ads made elsewhere on the same ad accounts are `GET /v1/ads/external`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

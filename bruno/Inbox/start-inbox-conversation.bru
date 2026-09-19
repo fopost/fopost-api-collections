@@ -1,0 +1,41 @@
+meta {
+  name: Start a conversation
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/conversations
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "text": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Opens a DM: by `handle` from `account_id`, or as a private reply to an inbox comment by `comment_id` (Facebook and Instagram, where that is the only way). Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `account_id`: string — The account to send from, with `handle`
+  - `handle`: string — Who to message
+  - `comment_id`: string — An inbox comment to answer privately instead (Facebook, Instagram). Only where `canPrivateReply` is true
+  - `media_ids`: string[]
+}

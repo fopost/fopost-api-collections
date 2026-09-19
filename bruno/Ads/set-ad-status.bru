@@ -1,0 +1,43 @@
+meta {
+  name: Pause or resume an ad
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/:id?workspace_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,29 @@
+meta {
+  name: List replies awaiting approval
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/approvals
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replies an automation or the agent drafted that a person still has to send. Nothing reaches a platform until one is approved.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

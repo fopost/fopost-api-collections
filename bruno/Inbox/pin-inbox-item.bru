@@ -1,0 +1,29 @@
+meta {
+  name: Pin our own comment
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/pin
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only where `canPin` is true. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

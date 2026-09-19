@@ -1,0 +1,48 @@
+meta {
+  name: Change a posting slot
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/v1/queue/slots/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "account_id": "{{accountId}}",
+    "weekday": 0,
+    "time": "string",
+    "timezone": "UTC"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changes a slot. Queued posts whose time no longer matches a free occurrence are moved to the next one and listed in `moved`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `account_id`: string (uuid) | null
+  - `weekday`: integer
+  - `time`: string
+  - `timezone`: string
+}

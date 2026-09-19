@@ -1,0 +1,32 @@
+meta {
+  name: Search the targeting catalogue
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  type: country
+  ~q: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

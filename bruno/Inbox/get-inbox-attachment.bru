@@ -1,0 +1,34 @@
+meta {
+  name: Fetch a message attachment
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/:id/attachments/:index
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~variant: full
+}
+
+params:path {
+  id: {{id}}
+  index: {{index}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Streams one attachment of a DM through the API. The URL grants nothing on its own: workspace membership is checked on every request. Accepts the session cookie as well as a header credential, so a plain `<img src>` works in the dashboard.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

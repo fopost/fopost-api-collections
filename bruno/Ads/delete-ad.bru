@@ -1,0 +1,33 @@
+meta {
+  name: Delete an ad
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/:id?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Ends delivery and deletes the ad on Meta, then removes it here. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

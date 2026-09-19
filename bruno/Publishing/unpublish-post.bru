@@ -1,0 +1,31 @@
+meta {
+  name: Take a published post down everywhere
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/:id/unpublish
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Deletes the post on every network it is live on and marks each delivery `unpublished`; the post stays as a record. Refused as a whole with 409 and `unsupported_platforms` when one of those networks cannot delete a live post (see `remote_delete` on the post accounts). A network that refuses at the time keeps its delivery published and answers `removed: false`.
+
+  Requires the `publish` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `publish`
+}

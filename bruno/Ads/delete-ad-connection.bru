@@ -1,0 +1,33 @@
+meta {
+  name: Remove a Meta Ads connection
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/connections/:id?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Also deletes every ad record FoPost created through it.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

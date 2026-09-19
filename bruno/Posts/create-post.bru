@@ -17,9 +17,6 @@ headers {
 body:json {
   {
     "workspace_id": "{{workspaceId}}",
-    "accounts": [
-      "{{accountId}}"
-    ],
     "content": [
       {
         "text": "Hello from FoPost."
@@ -52,10 +49,13 @@ docs {
   **Scope:** `posts`
 
   **Optional fields** (not in the example body):
+  - `accounts`: string (uuid)[]
+  - `account_group_id`: string (uuid)
   - `content_type`: `post` | `thread` | `reel`
   - `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`
   - `status`: `draft` | `scheduled`
   - `schedule_at`: string (date-time) | null
+  - `schedule`: `queue`
   - `repeatable`: boolean
   - `repeatable_times`: integer | null
   - `repeatable_gap`: integer | null

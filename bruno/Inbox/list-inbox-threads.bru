@@ -1,0 +1,37 @@
+meta {
+  name: List comment threads by post
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/posts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~kind: comments
+  ~platform: 
+  ~account_id: 
+  ~state: unread
+  ~q: 
+  ~sort: newest
+  ~page: 1
+  ~per_page: 25
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -185,10 +185,10 @@
                 "posts"
               ]
             },
-            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `source_ids`: string (uuid)[]\n- `companion_of`: string (uuid) | null",
+            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `account_group_id`: string (uuid)\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `schedule`: `queue`\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `source_ids`: string (uuid)[]\n- `companion_of`: string (uuid) | null",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"accounts\": [\n    \"{{accountId}}\"\n  ],\n  \"content\": [\n    {\n      \"text\": \"Hello from FoPost.\"\n    }\n  ]\n}",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"content\": [\n    {\n      \"text\": \"Hello from FoPost.\"\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -288,10 +288,10 @@
                 }
               ]
             },
-            "description": "Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `content`: object[]\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object",
+            "description": "Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided. A draft, scheduled or pending-approval post takes any change. A published post takes a content change only (`content`, `title`, `settings`, `labels`, `internal_title`, `summary`), and only when every network it is live on can edit in place (see `remote_edit` on the post accounts); the change is then pushed to each network and reported in `remote_edits`. Reaching a network needs the `publish` scope as well. A published post on a network that cannot edit answers 409 with `unsupported_platforms`.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `content`: object[]\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `schedule`: `queue`\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content_type\": \"post\",\n  \"artifact_type\": \"text_post\",\n  \"status\": \"draft\",\n  \"schedule_at\": \"2026-01-01T12:00:00.000Z\",\n  \"repeatable\": false,\n  \"repeatable_times\": 1\n}",
+              "raw": "{\n  \"content_type\": \"post\",\n  \"artifact_type\": \"text_post\",\n  \"status\": \"draft\",\n  \"schedule_at\": \"2026-01-01T12:00:00.000Z\",\n  \"schedule\": \"queue\",\n  \"repeatable\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -740,6 +740,47 @@
           ]
         },
         {
+          "name": "Take a published post down everywhere",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/posts/:id/unpublish",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "posts",
+                ":id",
+                "unpublish"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{postId}}",
+                  "description": "Post id"
+                }
+              ]
+            },
+            "description": "Deletes the post on every network it is live on and marks each delivery `unpublished`; the post stays as a record. Refused as a whole with 409 and `unsupported_platforms` when one of those networks cannot delete a live post (see `remote_delete` on the post accounts). A network that refuses at the time keeps its delivery published and answers `removed: false`.\n\nRequires the `publish` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `publish`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Preflight-check a post",
           "request": {
             "method": "POST",
@@ -846,6 +887,443 @@
               ]
             },
             "description": "The post’s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Validation",
+      "description": "Check content and media before a post exists",
+      "item": [
+        {
+          "name": "Validate content for a set of platforms",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/validate/post",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "validate",
+                "post"
+              ]
+            },
+            "description": "The same checks as preflight, for content that has not been saved as a post. Returns hard blockers (`issues`) and advisory content quality signals per platform. Nothing is stored.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `content`: string — The post text\n- `media`: object[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"platforms\": [\n    \"twitter\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Check text length against platform limits",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/validate/length",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "validate",
+                "length"
+              ]
+            },
+            "description": "Counts the text the way each platform does (some bill every link at a flat rate, some count bytes) and compares it with the platform limit.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello from FoPost.\",\n  \"platforms\": [\n    \"twitter\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Check a media file by URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/validate/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "validate",
+                "media"
+              ]
+            },
+            "description": "Fetches the file and runs the upload checks on it: allowed type, bytes that match the declared type, and the size ceiling. The file is not stored. A URL that cannot be fetched, including one that points at a private address, is a `400`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Posting Queue",
+      "description": "Recurring posting slots and queue placement",
+      "item": [
+        {
+          "name": "List posting slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/slots?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "slots"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "The recurring weekly slots of a workspace, ordered by weekday and time.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add a posting slot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/slots",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "slots"
+              ]
+            },
+            "description": "Adds a weekly slot. Omit `account_id` for a slot every account in the workspace shares.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `account_id`: string (uuid) | null",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"weekday\": 0,\n  \"time\": \"string\",\n  \"timezone\": \"UTC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change a posting slot",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/slots/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "slots",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Slot id"
+                }
+              ]
+            },
+            "description": "Changes a slot. Queued posts whose time no longer matches a free occurrence are moved to the next one and listed in `moved`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `account_id`: string (uuid) | null\n- `weekday`: integer\n- `time`: string\n- `timezone`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_id\": \"{{accountId}}\",\n  \"weekday\": 0,\n  \"time\": \"string\",\n  \"timezone\": \"UTC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove a posting slot",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/slots/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "slots",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Slot id"
+                }
+              ]
+            },
+            "description": "Removes a slot. Queued posts that sat on it move to the next free occurrence and are listed in `moved`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Next free slot",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/next?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "next"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "The time a post added to the queue now would get. Pass `account_id` to ask for one account; without it the answer is the next free occurrence of any slot.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Preview upcoming slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/queue/preview?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "queue",
+                "preview"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "count",
+                  "value": "5",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "The next free occurrences in order, as a post-by-post preview of the queue.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
           },
           "response": [],
           "event": [
@@ -1191,6 +1669,76 @@
               }
             }
           ]
+        },
+        {
+          "name": "List activity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "activity"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "kind",
+                  "value": "publish",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "description": "Only events at or after this time",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "description": "Only events at or before this time",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "next_cursor from the previous page",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -1223,6 +1771,12 @@
                   "key": "external_user_id",
                   "value": "",
                   "description": "Only accounts connected through a hosted connect link for this end user",
+                  "disabled": true
+                },
+                {
+                  "key": "group_id",
+                  "value": "",
+                  "description": "Only accounts in this account group",
                   "disabled": true
                 }
               ]
@@ -1476,6 +2030,60 @@
           ]
         },
         {
+          "name": "Rename an account",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Sets a display name shown instead of the platform name. `null` or an empty string restores the platform name.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"display_name\": \"Example display\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Disconnect an account",
           "request": {
             "method": "DELETE",
@@ -1499,6 +2107,336 @@
               ]
             },
             "description": "Revokes platform access where supported, clears stored credentials, and soft-deletes the account.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Move an account to another workspace",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/move",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "move"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Moves the account, its connection and its inbox and analytics history to another workspace in one step. The caller must own both workspaces; any other target answers 404. The move is refused with 409 `move_blocked` and the `blocking_tables` list when the account still has records that belong to its current workspace (posts, automations, ads and similar), or with 409 when the target already has an account on that network. The account leaves its account groups.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List account groups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an account group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups"
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `account_ids`: string (uuid)[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"name\": \"Example name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an account group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Account group id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rename an account group",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Account group id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete an account group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Account group id"
+                }
+              ]
+            },
+            "description": "Deletes the group only; its accounts stay connected.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Replace an account group's members",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/account-groups/:id/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "account-groups",
+                ":id",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Account group id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_ids\": [\n    \"{{accountId}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           },
           "response": [],
           "event": [
@@ -2394,6 +3332,156 @@
               ]
             },
             "description": "Dispatches a test `post.published` payload to this endpoint only, whatever it subscribes to.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List deliveries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/webhooks/:id/deliveries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "webhooks",
+                ":id",
+                "deliveries"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "success",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook id"
+                }
+              ]
+            },
+            "description": "Every delivery attempt to this webhook, newest first, with the response it got. Attempts are kept for 30 days.\n\nRequires the `webhooks` scope when using an API key.\n\n**Scope:** `webhooks`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a delivery",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/webhooks/:id/deliveries/:deliveryId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "webhooks",
+                ":id",
+                "deliveries",
+                ":deliveryId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook id"
+                },
+                {
+                  "key": "deliveryId",
+                  "value": "{{deliveryId}}",
+                  "description": "Delivery id"
+                }
+              ]
+            },
+            "description": "One attempt, including the payload that was sent.\n\nRequires the `webhooks` scope when using an API key.\n\n**Scope:** `webhooks`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Redeliver",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/webhooks/:id/deliveries/:deliveryId/redeliver",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "webhooks",
+                ":id",
+                "deliveries",
+                ":deliveryId",
+                "redeliver"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook id"
+                },
+                {
+                  "key": "deliveryId",
+                  "value": "{{deliveryId}}",
+                  "description": "Delivery id"
+                }
+              ]
+            },
+            "description": "Sends the delivery again with the identical body, so `X-FoPost-Signature` and `X-FoPost-Delivery` match the original; only the timestamp and `X-FoPost-Signature-256` are fresh. One attempt, logged as the next attempt of that delivery. A paused webhook answers 409.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`"
           },
           "response": [],
           "event": [
@@ -3554,6 +4642,2128 @@
       ]
     },
     {
+      "name": "Inbox",
+      "description": "Comments, mentions and messages on connected accounts",
+      "item": [
+        {
+          "name": "List inbox items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "type",
+                  "value": "comment",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "state",
+                  "value": "unread",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "post_id",
+                  "value": "",
+                  "description": "Comments under one FoPost post",
+                  "disabled": true
+                },
+                {
+                  "key": "post_external_id",
+                  "value": "",
+                  "description": "Comments under one platform post, including posts not published here",
+                  "disabled": true
+                },
+                {
+                  "key": "conversation_id",
+                  "value": "",
+                  "description": "One DM thread",
+                  "disabled": true
+                },
+                {
+                  "key": "direction",
+                  "value": "inbound",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Searches text and author",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Comments, mentions and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Count unread items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "unread-count"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Requires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List accounts with inbox coverage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "accounts"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Every active connected account, each flagged with whether comments and DMs can be read for it yet.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List inbox-capable platforms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/platforms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "platforms"
+              ]
+            },
+            "description": "Which networks feed the inbox today, and which are coming. Not tenant data.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List comment threads by post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "kind",
+                  "value": "comments",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "state",
+                  "value": "unread",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List DM conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "conversations"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "state",
+                  "value": "unread",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=…&conversation_id=…`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start a conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "conversations"
+              ]
+            },
+            "description": "Opens a DM: by `handle` from `account_id`, or as a private reply to an inbox comment by `comment_id` (Facebook and Instagram, where that is the only way). Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `account_id`: string — The account to send from, with `handle`\n- `handle`: string — Who to message\n- `comment_id`: string — An inbox comment to answer privately instead (Facebook, Instagram). Only where `canPrivateReply` is true\n- `media_ids`: string[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mark a thread read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "read"
+              ]
+            },
+            "description": "Reads every item in one comment thread (`post_external_id`) or DM thread (`conversation_id`) on the account, the way opening a chat does.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `post_external_id`: string — The platform post id whose thread to settle\n- `conversation_id`: string — The DM thread to settle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"x\",\n  \"account_id\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Poll the inbox now",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "refresh"
+              ]
+            },
+            "description": "Fetches new comments and messages for every inbox-capable account in the workspace instead of waiting for the next scheduled poll. Platforms that bill per read are read on this call.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List replies awaiting approval",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/approvals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "approvals"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Replies an automation or the agent drafted that a person still has to send. Nothing reaches a platform until one is approved.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Approve and send a drafted reply",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/approvals/:id/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "approvals",
+                ":id",
+                "approve"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Approval id"
+                }
+              ]
+            },
+            "description": "Requires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `text`: string — Edited reply text; omit to send the draft as it stands",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reject a drafted reply",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/approvals/:id/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "approvals",
+                ":id",
+                "reject"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Approval id"
+                }
+              ]
+            },
+            "description": "Requires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change an item’s state, or edit our own comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Mark it read, resolved, unread, or snoozed until a time. A body with `text` instead edits a comment the account wrote, on the platform, where `canEdit` is true; that also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"state\": \"unread\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a comment on the platform",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Removes the comment from the platform where it was left, whether someone else wrote it or it is our own reply. Only where `canDelete` is true. Deleting our own reply also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reply to an item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/reply",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "reply"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Sends the reply on the platform as the connected account and settles the item. Only where `canReply` is true. A DM reply may carry `media_ids` (sent as short-lived signed links) and `quick_replies`; either also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `text`: string — Required unless `media_ids` is given\n- `media_ids`: string[] — Media library ids to attach to a DM. Only where `canSendMedia` is true\n- `quick_replies`: string[] — Answer buttons shown under a DM. Only where `canQuickReply` is true",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Hide a comment on the platform",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/hide",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "hide"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Requires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Unhide a comment on the platform",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/unhide",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "unhide"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Requires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Like an item",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "like"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "A like, an upvote on Reddit, a favourite on Mastodon. Only where `canLike` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove our like",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/unlike",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "unlike"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `canLike` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pin our own comment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/pin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "pin"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `canPin` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Unpin our own comment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/unpin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "unpin"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `canPin` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "React to a message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/react",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "react"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `canReact` is true. Instagram has one reaction, a heart. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reaction\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Show the typing indicator",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/conversations/:id/typing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "conversations",
+                ":id",
+                "typing"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "The conversation id of a DM"
+                }
+              ]
+            },
+            "description": "Shows or clears the typing indicator in a DM thread. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `on`: boolean — Default true; false clears the indicator",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_id\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fetch a message attachment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/attachments/:index",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "attachments",
+                ":index"
+              ],
+              "query": [
+                {
+                  "key": "variant",
+                  "value": "full",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                },
+                {
+                  "key": "index",
+                  "value": "{{index}}",
+                  "description": "Position in the item’s `attachments`"
+                }
+              ]
+            },
+            "description": "Streams one attachment of a DM through the API. The URL grants nothing on its own: workspace membership is checked on every request. Accepts the session cookie as well as a header credential, so a plain `<img src>` works in the dashboard.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ads",
+      "description": "Meta ads, audiences and lead forms",
+      "item": [
+        {
+          "name": "List ads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Boosts and standalone ads created through FoPost, with the insights from their last refresh. Ads made elsewhere on the same ad accounts are `GET /v1/ads/external`.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an ad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads"
+              ]
+            },
+            "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"pageId\": \"string\",\n  \"text\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Boost a published post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/boost",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "boost"
+              ]
+            },
+            "description": "Promotes a post FoPost already published to the given account. Candidates come from `GET /v1/ads/boostable`. The boost starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"postId\": \"{{postId}}\",\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pause or resume an ad",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/:id?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Ad id"
+                }
+              ]
+            },
+            "description": "Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete an ad",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/:id?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Ad id"
+                }
+              ]
+            },
+            "description": "Ends delivery and deletes the ad on Meta, then removes it here. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh an ad’s status and insights",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/:id/refresh?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                ":id",
+                "refresh"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Ad id"
+                }
+              ]
+            },
+            "description": "Reads the delivery status and lifetime insights from Meta and stores them.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List ads made outside FoPost",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/external",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "external"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Ads that live on the connected ad accounts but were not created here. Read live from Meta on every call and never stored.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List posts that can be boosted",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/boostable",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "boostable"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Published posts with a delivery on an account a Meta Ads connection reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Meta Ads connections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/connections",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "connections"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start a Meta Ads connection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/connections/meta/authorize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "connections",
+                "meta",
+                "authorize"
+              ]
+            },
+            "description": "Returns the Meta login URL. The user who calls this must finish the login in their own browser session: the callback checks that the same user came back. An ad connection fills a connected-account slot, so past the free allowance a saved card is required.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `method`: `business` | `user` — `business` for Facebook Login for Business, `user` for a personal login\n- `returnTo`: string — Dashboard path to land on after Meta redirects back",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove a Meta Ads connection",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/connections/:id?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "connections",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Connection id"
+                }
+              ]
+            },
+            "description": "Also deletes every ad record FoPost created through it.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List ad accounts and Pages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/sources",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "sources"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Every Meta Ads connection with the ad accounts and Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List custom audiences and pixels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences?connection_id=&ad_account_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "ad_account_id",
+                  "value": "",
+                  "description": "`act_…`",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a custom audience",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences"
+              ]
+            },
+            "description": "A customer list (`CUSTOM`, emails are hashed before they leave), a lookalike of an existing audience (`LOOKALIKE`), or website visitors from a pixel (`WEBSITE`).\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `description`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"spec\": {\n    \"subtype\": \"CUSTOM\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search the targeting catalogue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/targeting/search?connection_id=&type=country",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "targeting",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "type",
+                  "value": "country",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Locations, interests, behaviours and income brackets as Meta names them, for the `targeting` block of an ad. `income` ignores `q`.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Instant Forms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-forms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-forms"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Every Page a Meta Ads connection reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an Instant Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-forms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-forms"
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `followUpUrl`: string (uri)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"questions\": [\n    \"EMAIL\"\n  ],\n  \"privacyPolicyUrl\": \"https://example.com\",\n  \"thankYouMessage\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a form’s leads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "lead-forms",
+                ":formId",
+                "leads"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "page_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "after",
+                  "value": "",
+                  "description": "Cursor from the previous page",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "{{formId}}",
+                  "description": "Instant Form id"
+                }
+              ]
+            },
+            "description": "One page of leads; pass `nextCursor` back as `after` for the next.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Media",
       "description": "Upload and manage media files",
       "item": [
@@ -3659,6 +6869,95 @@
                   "        console.log('mediaId =', id);",
                   "    }",
                   "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign a direct upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/presign",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                "presign"
+              ]
+            },
+            "description": "Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"filename\": \"Example file\",\n  \"mimeType\": \"string\",\n  \"size\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Complete a direct upload",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/presign/:uploadId/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                "presign",
+                ":uploadId",
+                "complete"
+              ],
+              "variable": [
+                {
+                  "key": "uploadId",
+                  "value": "{{uploadId}}",
+                  "description": "Upload id from the presign step"
+                }
+              ]
+            },
+            "description": "Validates the object that was PUT to the signed URL (type, content, size, storage allowance) exactly like an upload and moves it into the media library. A refused object is deleted. Answers `409` if already completed and `410` once expired.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
                 ]
               }
             }
