@@ -4188,6 +4188,303 @@
         ]
       }
     },
+    "/v1/accounts/{id}/slack/channels": {
+      "get": {
+        "operationId": "listSlackChannels",
+        "summary": "List Slack channels",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SlackChannel"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account posts through a webhook (`webhook_connection`); reconnect with the Slack app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Slack did not answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Channels the Slack app can post to in the connected workspace: every public channel, and private ones the app was invited to.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Slack account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/slack/members": {
+      "get": {
+        "operationId": "listSlackMembers",
+        "summary": "List Slack members",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SlackMember"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account posts through a webhook (`webhook_connection`); reconnect with the Slack app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Slack did not answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "People in the connected Slack workspace, for addressing a DM.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Slack account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/slack/identity": {
+      "get": {
+        "operationId": "getSlackIdentity",
+        "summary": "Get the Slack posting identity",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SlackIdentity"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account posts through a webhook (`webhook_connection`); reconnect with the Slack app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Slack account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateSlackIdentity",
+        "summary": "Set the Slack posting identity",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SlackIdentity"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account posts through a webhook (`webhook_connection`); reconnect with the Slack app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The name and icon the account posts under. Omitted fields keep their value and `null` clears one. Set `icon_url` or `icon_emoji`, not both; setting one clears the other.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Slack account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlackIdentityRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/accounts/{id}/analytics": {
       "get": {
         "operationId": "getAccountAnalyticsHistory",
@@ -14024,6 +14321,34 @@
           "display_name"
         ]
       },
+      "SlackIdentityRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "icon_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "icon_emoji": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^:[a-z0-9_+'-]+:$"
+          }
+        }
+      },
       "MoveAccountRequest": {
         "type": "object",
         "properties": {
@@ -22246,6 +22571,88 @@
           "workspaceId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "SlackChannel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Slack channel id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "is_member": {
+            "type": "boolean",
+            "description": "Whether the bot is in the channel"
+          },
+          "is_current": {
+            "type": "boolean",
+            "description": "The channel this account posts to"
+          }
+        }
+      },
+      "SlackMember": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Slack user id; pass it as the handle to start a DM"
+          },
+          "name": {
+            "type": "string"
+          },
+          "real_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "avatar": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_bot": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SlackIdentity": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Name posts appear under, or null for the app name"
+          },
+          "icon_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Image posts appear with"
+          },
+          "icon_emoji": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Emoji code posts appear with, e.g. `:rocket:`"
           }
         }
       },

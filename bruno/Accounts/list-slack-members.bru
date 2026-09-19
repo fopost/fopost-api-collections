@@ -1,0 +1,29 @@
+meta {
+  name: List Slack members
+  type: http
+  seq: 26
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/slack/members
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  People in the connected Slack workspace, for addressing a DM.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

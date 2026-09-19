@@ -1,0 +1,27 @@
+meta {
+  name: Get the Slack posting identity
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/slack/identity
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
