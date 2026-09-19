@@ -1,11 +1,11 @@
 meta {
-  name: Create an ad
+  name: Create a creative
   type: http
-  seq: 2
+  seq: 41
 }
 
 post {
-  url: {{baseUrl}}/v1/ads
+  url: {{baseUrl}}/v1/ads/creatives
   body: json
   auth: inherit
 }
@@ -19,21 +19,9 @@ body:json {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
     "adAccountId": "string",
-    "name": "Example name",
-    "goal": "engagement",
-    "budget": {
-      "minor": 1,
-      "type": "daily"
-    },
-    "targeting": {
-      "countries": [
-        "xx"
-      ],
-      "ageMin": 13,
-      "ageMax": 13,
-      "gender": "all"
-    },
     "pageId": "string",
+    "name": "Example name",
+    "format": "image",
     "text": "Hello from FoPost."
   }
 }
@@ -45,16 +33,18 @@ tests {
 }
 
 docs {
-  Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.
+  An image, video or carousel creative from library media. Nothing runs until an ad uses it.
 
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
-  - `paused`: boolean — Create the ad paused; set to false to go live at once
   - `headline`: string
   - `destinationUrl`: string (uri)
-  - `mediaUrl`: string — A media library asset url
+  - `callToAction`: `LEARN_MORE` | `SHOP_NOW` | `SIGN_UP` | `SUBSCRIBE` | `CONTACT_US` | `DOWNLOAD` | `GET_OFFER` | `BOOK_NOW` | `APPLY_NOW` | `WATCH_MORE` — Defaults to `LEARN_MORE`
   - `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`
+  - `mediaUrl`: string — A media library asset url: the image, or the video. Required for `video`
+  - `thumbnailMediaUrl`: string — A video's poster frame, as a library image; Meta's own frame when omitted
+  - `cards`: object[] — Carousel cards; required for `carousel`
 }

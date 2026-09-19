@@ -1,0 +1,47 @@
+meta {
+  name: Rename or describe a custom audience
+  type: http
+  seq: 45
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/audiences/:id?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "description": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `description`: string
+}

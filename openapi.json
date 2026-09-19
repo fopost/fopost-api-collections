@@ -9864,6 +9864,2657 @@
         ]
       }
     },
+    "/v1/ads/{id}/insights": {
+      "get": {
+        "operationId": "getAdInsights",
+        "summary": "Get an ad’s insights over a date range",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdInsightsReport"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "For an ad created through FoPost. Same report as `GET /v1/ads/insights`.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Ad id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD, inclusive"
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD, inclusive"
+          },
+          {
+            "name": "breakdown",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "age",
+                "gender",
+                "placement",
+                "country"
+              ]
+            }
+          },
+          {
+            "name": "daily",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Add a day-by-day timeline"
+          }
+        ]
+      }
+    },
+    "/v1/ads/insights": {
+      "get": {
+        "operationId": "getInsights",
+        "summary": "Get insights over a date range",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdInsightsReport"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Totals for an ad account (`act_…`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "object_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "`act_…` or a Meta object id"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD, inclusive"
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD, inclusive"
+          },
+          {
+            "name": "breakdown",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "age",
+                "gender",
+                "placement",
+                "country"
+              ]
+            }
+          },
+          {
+            "name": "daily",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Add a day-by-day timeline"
+          }
+        ]
+      }
+    },
+    "/v1/ads/reach-estimate": {
+      "post": {
+        "operationId": "estimateReach",
+        "summary": "Estimate audience size",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ReachEstimate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "How many people the targeting reaches on the Page’s placements.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReachEstimateRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/accounts/{adAccountId}/tree": {
+      "get": {
+        "operationId": "getAdAccountTree",
+        "summary": "Get an ad account’s campaign tree",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdAccountTree"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Every campaign on the ad account with its ad sets and ads, whoever made them. Read live from Meta and never stored.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "adAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "`act_…`"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/campaigns": {
+      "post": {
+        "operationId": "createAdCampaign",
+        "summary": "Create a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdCampaign"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdCampaignRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/campaigns/{id}": {
+      "get": {
+        "operationId": "getAdCampaign",
+        "summary": "Get a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdCampaign"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta campaign id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateAdCampaign",
+        "summary": "Update a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdCampaign"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta campaign id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAdCampaignRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAdCampaign",
+        "summary": "Delete a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta campaign id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/campaigns/{id}/duplicate": {
+      "post": {
+        "operationId": "duplicateAdCampaign",
+        "summary": "Duplicate a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The copy's Meta id"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta campaign id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateAdObjectRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/ad-sets": {
+      "post": {
+        "operationId": "createAdSet",
+        "summary": "Create an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdSet"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdSetRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/ad-sets/{id}": {
+      "get": {
+        "operationId": "getAdSet",
+        "summary": "Get an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdSet"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad set id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateAdSet",
+        "summary": "Update an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdSet"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad set id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAdSetRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAdSet",
+        "summary": "Delete an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad set id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/ad-sets/{id}/duplicate": {
+      "post": {
+        "operationId": "duplicateAdSet",
+        "summary": "Duplicate an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The copy's Meta id"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad set id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateAdObjectRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/ads": {
+      "post": {
+        "operationId": "createNetworkAd",
+        "summary": "Create an ad in an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/NetworkAd"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Joins an ad set and a creative. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNetworkAdRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/ads/{id}": {
+      "get": {
+        "operationId": "getNetworkAd",
+        "summary": "Get an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/NetworkAd"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateNetworkAd",
+        "summary": "Update an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/NetworkAd"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Setting `status` to `active` starts spend. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNetworkAdRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteNetworkAd",
+        "summary": "Delete an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Deletes it on Meta with everything beneath it. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/ads/{id}/duplicate": {
+      "post": {
+        "operationId": "duplicateNetworkAd",
+        "summary": "Duplicate an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The copy's Meta id"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Copies it with everything beneath it. The copy starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta ad id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateAdObjectRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/status": {
+      "post": {
+        "operationId": "bulkSetAdStatus",
+        "summary": "Pause or resume many objects",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BulkAdStatusResult"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkAdStatusRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/creatives": {
+      "get": {
+        "operationId": "listAdCreatives",
+        "summary": "List the creative library",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "creatives": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdCreative"
+                          }
+                        },
+                        "workspaceId": {
+                          "type": "string",
+                          "format": "uuid"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "`act_…`"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createAdCreative",
+        "summary": "Create a creative",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdCreative"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "An image, video or carousel creative from library media. Nothing runs until an ad uses it.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdCreativeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/creatives/{id}": {
+      "get": {
+        "operationId": "getAdCreative",
+        "summary": "Get a creative",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdCreative"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta creative id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "deleteAdCreative",
+        "summary": "Delete a creative",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta creative id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/audiences/{id}": {
+      "get": {
+        "operationId": "getAudience",
+        "summary": "Get a custom audience",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Audience"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta audience id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateAudience",
+        "summary": "Rename or describe a custom audience",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Audience"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta audience id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAudienceRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAudience",
+        "summary": "Delete a custom audience",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta audience id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/audiences/{id}/users": {
+      "post": {
+        "operationId": "addAudienceUsers",
+        "summary": "Add people to a customer-list audience",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "added": {
+                          "type": "integer",
+                          "description": "Emails sent to Meta"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Meta audience id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAudienceUsersRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/lead-forms/{formId}": {
+      "get": {
+        "operationId": "getLeadForm",
+        "summary": "Get an Instant Form",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/LeadFormDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "formId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Instant Form id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "page_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/lead-forms/{formId}/archive": {
+      "post": {
+        "operationId": "archiveLeadForm",
+        "summary": "Archive an Instant Form",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/LeadFormDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The form stops collecting; its leads stay readable.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "formId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Instant Form id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchiveLeadFormRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/leads": {
+      "get": {
+        "operationId": "listLeadsFeed",
+        "summary": "List the leads feed",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "leads": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/FeedLead"
+                          }
+                        },
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Every lead collected from subscribed Pages across the team, newest first. Pass `nextCursor` back as `cursor` for the next page.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "form_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/lead-pages": {
+      "get": {
+        "operationId": "listLeadPages",
+        "summary": "List Pages feeding the leads feed",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LeadPage"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "subscribeLeadPage",
+        "summary": "Collect a Page’s leads",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "pageId": {
+                          "type": "string"
+                        },
+                        "backfilled": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Turns on new-lead notifications for the Page and backfills its most recent leads into the feed.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribeLeadPageRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/lead-pages/{pageId}": {
+      "delete": {
+        "operationId": "unsubscribeLeadPage",
+        "summary": "Stop collecting a Page’s leads",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Unsubscribed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Leads already in the feed stay.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "pageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Facebook Page id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
     "/v1/media": {
       "get": {
         "operationId": "listMedia",
@@ -12578,6 +15229,12 @@
             "type": "string",
             "maxLength": 2048,
             "description": "A media library asset url"
+          },
+          "urlTags": {
+            "type": "string",
+            "maxLength": 1000,
+            "pattern": "^[^\\s<>\"'`]*$",
+            "description": "Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`"
           }
         },
         "required": [
@@ -12816,6 +15473,996 @@
         },
         "required": [
           "workspaceId"
+        ]
+      },
+      "CreateAdCampaignRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "pattern": "^act_\\d+$",
+            "description": "Meta ad account id, `act_…`"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "engagement",
+              "traffic",
+              "awareness",
+              "video_views"
+            ]
+          },
+          "paused": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create it paused; set to false to go live at once"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "name",
+          "goal"
+        ]
+      },
+      "UpdateAdCampaignRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          }
+        }
+      },
+      "CreateAdSetRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "campaignId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "The Page the ads in this set run as"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "engagement",
+              "traffic",
+              "awareness",
+              "video_views"
+            ]
+          },
+          "budget": {
+            "type": "object",
+            "properties": {
+              "minor": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 100000000,
+                "description": "Amount in the ad account currency, minor units"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "daily",
+                  "lifetime"
+                ]
+              },
+              "endAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "minor",
+              "type"
+            ]
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                "maxItems": 50,
+                "description": "ISO 3166-1 alpha-2 codes. At least one country or one location is required."
+              },
+              "ageMin": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "ageMax": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "male",
+                  "female"
+                ]
+              },
+              "audienceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "maxItems": 20
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "region",
+                        "city",
+                        "zip",
+                        "geo_market"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name",
+                    "type"
+                  ]
+                },
+                "maxItems": 200,
+                "description": "Locations below country level, from `GET /v1/ads/targeting/search`"
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "behaviors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "income": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 10
+              }
+            },
+            "required": [
+              "countries",
+              "ageMin",
+              "ageMax",
+              "gender"
+            ]
+          },
+          "paused": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create it paused; set to false to go live at once"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "campaignId",
+          "pageId",
+          "name",
+          "goal",
+          "budget",
+          "targeting"
+        ]
+      },
+      "UpdateAdSetRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "budgetMinor": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 100000000,
+            "description": "New budget in minor units; the budget type set at creation stays"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                "maxItems": 50,
+                "description": "ISO 3166-1 alpha-2 codes. At least one country or one location is required."
+              },
+              "ageMin": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "ageMax": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "male",
+                  "female"
+                ]
+              },
+              "audienceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "maxItems": 20
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "region",
+                        "city",
+                        "zip",
+                        "geo_market"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name",
+                    "type"
+                  ]
+                },
+                "maxItems": 200,
+                "description": "Locations below country level, from `GET /v1/ads/targeting/search`"
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "behaviors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "income": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 10
+              }
+            },
+            "required": [
+              "countries",
+              "ageMin",
+              "ageMax",
+              "gender"
+            ]
+          }
+        }
+      },
+      "CreateNetworkAdRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adSetId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          },
+          "creativeId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "From `POST /v1/ads/creatives` or the creative library"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "paused": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create it paused; set to false to go live at once"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adSetId",
+          "creativeId",
+          "name"
+        ]
+      },
+      "UpdateNetworkAdRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "creativeId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          }
+        }
+      },
+      "DuplicateAdObjectRequest": {
+        "type": "object",
+        "properties": {
+          "paused": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create it paused; set to false to go live at once"
+          }
+        }
+      },
+      "BulkAdStatusRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64,
+                  "description": "Meta object id"
+                },
+                "level": {
+                  "type": "string",
+                  "enum": [
+                    "campaign",
+                    "ad_set",
+                    "ad"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "level"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 50
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "status",
+          "objects"
+        ]
+      },
+      "CreateAdCreativeRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "pattern": "^act_\\d+$",
+            "description": "Meta ad account id, `act_…`"
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "Facebook Page id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "carousel"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Primary text"
+          },
+          "headline": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "destinationUrl": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "callToAction": {
+            "type": "string",
+            "enum": [
+              "LEARN_MORE",
+              "SHOP_NOW",
+              "SIGN_UP",
+              "SUBSCRIBE",
+              "CONTACT_US",
+              "DOWNLOAD",
+              "GET_OFFER",
+              "BOOK_NOW",
+              "APPLY_NOW",
+              "WATCH_MORE"
+            ],
+            "description": "Defaults to `LEARN_MORE`"
+          },
+          "urlTags": {
+            "type": "string",
+            "maxLength": 1000,
+            "pattern": "^[^\\s<>\"'`]*$",
+            "description": "Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`"
+          },
+          "mediaUrl": {
+            "type": "string",
+            "maxLength": 2048,
+            "description": "A media library asset url: the image, or the video. Required for `video`"
+          },
+          "thumbnailMediaUrl": {
+            "type": "string",
+            "maxLength": 2048,
+            "description": "A video's poster frame, as a library image; Meta's own frame when omitted"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "mediaUrl": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048,
+                  "description": "A library image"
+                },
+                "destinationUrl": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "format": "uri"
+                },
+                "headline": {
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 255
+                }
+              },
+              "required": [
+                "mediaUrl"
+              ]
+            },
+            "minItems": 2,
+            "maxItems": 10,
+            "description": "Carousel cards; required for `carousel`"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "pageId",
+          "name",
+          "format",
+          "text"
+        ]
+      },
+      "UpdateAudienceRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "AddAudienceUsersRequest": {
+        "type": "object",
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "minItems": 1,
+            "maxItems": 10000,
+            "description": "Hashed before they leave the API"
+          }
+        },
+        "required": [
+          "emails"
+        ]
+      },
+      "ReachEstimateRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "pattern": "^act_\\d+$",
+            "description": "Meta ad account id, `act_…`"
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "Facebook Page id"
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                "maxItems": 50,
+                "description": "ISO 3166-1 alpha-2 codes. At least one country or one location is required."
+              },
+              "ageMin": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "ageMax": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "male",
+                  "female"
+                ]
+              },
+              "audienceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "maxItems": 20
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "region",
+                        "city",
+                        "zip",
+                        "geo_market"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name",
+                    "type"
+                  ]
+                },
+                "maxItems": 200,
+                "description": "Locations below country level, from `GET /v1/ads/targeting/search`"
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "behaviors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "income": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 10
+              }
+            },
+            "required": [
+              "countries",
+              "ageMin",
+              "ageMax",
+              "gender"
+            ]
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "pageId",
+          "targeting"
+        ]
+      },
+      "ArchiveLeadFormRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "Facebook Page id"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "pageId"
+        ]
+      },
+      "SubscribeLeadPageRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "Facebook Page id"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "pageId"
         ]
       },
       "Error": {
@@ -18540,6 +22187,9 @@
               },
               "mediaUrl": {
                 "type": "string"
+              },
+              "urlTags": {
+                "type": "string"
               }
             }
           },
@@ -19082,6 +22732,571 @@
         "required": [
           "data"
         ]
+      },
+      "AdCampaign": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Meta's campaign id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "`ACTIVE`, `PAUSED`, `DELETED` or `ARCHIVED`"
+          },
+          "effectiveStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "objective": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "budgetMinor": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Null when the budget lives on the ad sets"
+          },
+          "budgetType": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "daily",
+              "lifetime",
+              null
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "AdSet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Meta's ad set id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "effectiveStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "budgetMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "budgetType": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "daily",
+              "lifetime",
+              null
+            ]
+          },
+          "endAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "optimizationGoal": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "NetworkAd": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Meta's ad id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adSetId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creativeId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "effectiveStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "AdAccountTree": {
+        "type": "object",
+        "properties": {
+          "adAccountId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "campaigns": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/AdCampaign"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "adSets": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/AdSet"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "ads": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#/components/schemas/NetworkAd"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "AdCreative": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "carousel",
+              "post",
+              "other"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "body": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "link": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "thumbnailUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "callToAction": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "urlTags": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "BulkAdStatusResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "campaign",
+              "ad_set",
+              "ad"
+            ]
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "InsightsMetrics": {
+        "type": "object",
+        "properties": {
+          "impressions": {
+            "type": "integer"
+          },
+          "reach": {
+            "type": "integer"
+          },
+          "clicks": {
+            "type": "integer"
+          },
+          "spendMinor": {
+            "type": "integer",
+            "description": "Account currency, minor units"
+          },
+          "ctr": {
+            "type": "number",
+            "description": "Clicks per impression, as a percentage"
+          },
+          "leads": {
+            "type": "integer"
+          }
+        }
+      },
+      "AdInsightsReport": {
+        "type": "object",
+        "properties": {
+          "objectId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "since": {
+            "type": "string"
+          },
+          "until": {
+            "type": "string"
+          },
+          "breakdownBy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "age",
+              "gender",
+              "placement",
+              "country",
+              null
+            ]
+          },
+          "totals": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InsightsMetrics"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "breakdown": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "metrics": {
+                  "$ref": "#/components/schemas/InsightsMetrics"
+                }
+              }
+            }
+          },
+          "timeline": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "metrics": {
+                  "$ref": "#/components/schemas/InsightsMetrics"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReachEstimate": {
+        "type": "object",
+        "properties": {
+          "lower": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "upper": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ready": {
+            "type": "boolean"
+          }
+        }
+      },
+      "LeadFormDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "leadsCount": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pageId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "privacyPolicyUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "FeedLead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "leadId": {
+            "type": "string",
+            "description": "Meta's lead id"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pageId": {
+            "type": "string"
+          },
+          "formId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "campaignName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "platform": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isOrganic": {
+            "type": "boolean"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "LeadPage": {
+        "type": "object",
+        "properties": {
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pageId": {
+            "type": "string"
+          },
+          "pageName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
       },
       "MediaLibraryItem": {
         "type": "object",

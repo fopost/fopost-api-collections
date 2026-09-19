@@ -1,0 +1,33 @@
+meta {
+  name: Get an Instant Form
+  type: http
+  seq: 48
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/lead-forms/:formId?connection_id=&page_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  page_id: 
+}
+
+params:path {
+  formId: {{formId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

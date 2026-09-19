@@ -1,0 +1,46 @@
+meta {
+  name: Estimate audience size
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/reach-estimate
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
+    "pageId": "string",
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  How many people the targeting reaches on the Page’s placements.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

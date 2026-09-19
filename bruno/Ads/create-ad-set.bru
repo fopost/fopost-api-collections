@@ -1,11 +1,11 @@
 meta {
-  name: Create an ad
+  name: Create an ad set
   type: http
-  seq: 2
+  seq: 29
 }
 
 post {
-  url: {{baseUrl}}/v1/ads
+  url: {{baseUrl}}/v1/ads/ad-sets
   body: json
   auth: inherit
 }
@@ -18,7 +18,8 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "adAccountId": "string",
+    "campaignId": "x",
+    "pageId": "string",
     "name": "Example name",
     "goal": "engagement",
     "budget": {
@@ -32,9 +33,7 @@ body:json {
       "ageMin": 13,
       "ageMax": 13,
       "gender": "all"
-    },
-    "pageId": "string",
-    "text": "Hello from FoPost."
+    }
   }
 }
 
@@ -45,16 +44,12 @@ tests {
 }
 
 docs {
-  Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.
+  Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
-  - `paused`: boolean — Create the ad paused; set to false to go live at once
-  - `headline`: string
-  - `destinationUrl`: string (uri)
-  - `mediaUrl`: string — A media library asset url
-  - `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`
+  - `paused`: boolean — Create it paused; set to false to go live at once
 }

@@ -1,0 +1,42 @@
+meta {
+  name: Create an ad in an ad set
+  type: http
+  seq: 34
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/ads
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adSetId": "x",
+    "creativeId": "x",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Joins an ad set and a creative. Starts paused unless `paused` is false. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `paused`: boolean — Create it paused; set to false to go live at once
+}

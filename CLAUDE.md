@@ -4,7 +4,7 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## What This Is
 
-The **published contract of the FoPost API**: `openapi.json` (OpenAPI 3.1, 121 paths / 151
+The **published contract of the FoPost API**: `openapi.json` (OpenAPI 3.1, 144 paths / 185
 operations across 16 groups) plus ready-to-run client collections generated from it — a Postman
 v2.1 collection with two environments, and a Bruno collection as one plain-text file per request.
 `ENDPOINTS.md` is the browsable index. No dependencies, no build step, Node >= 20, `private: true`

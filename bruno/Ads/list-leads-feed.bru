@@ -1,0 +1,33 @@
+meta {
+  name: List the leads feed
+  type: http
+  seq: 50
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/leads
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~form_id: 
+  ~page_id: 
+  ~cursor: 
+  ~limit: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Every lead collected from subscribed Pages across the team, newest first. Pass `nextCursor` back as `cursor` for the next page.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

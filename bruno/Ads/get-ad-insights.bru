@@ -1,0 +1,37 @@
+meta {
+  name: Get an ad’s insights over a date range
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/:id/insights?workspace_id=&since=&until=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  since: 
+  until: 
+  ~breakdown: age
+  ~daily: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  For an ad created through FoPost. Same report as `GET /v1/ads/insights`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

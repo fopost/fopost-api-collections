@@ -1,0 +1,34 @@
+meta {
+  name: Delete an ad set
+  type: http
+  seq: 32
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/ad-sets/:id?workspace_id=&connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Deletes it on Meta with everything beneath it. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

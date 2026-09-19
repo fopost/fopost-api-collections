@@ -1,0 +1,34 @@
+meta {
+  name: Stop collecting a Page’s leads
+  type: http
+  seq: 53
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/lead-pages/:pageId?workspace_id=&connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  pageId: {{pageId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Leads already in the feed stay.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,54 @@
+meta {
+  name: Update an ad set
+  type: http
+  seq: 31
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/ad-sets/:id?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "status": "active",
+    "budgetMinor": 1,
+    "endAt": "2026-01-01T12:00:00.000Z"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Setting `status` to `active` starts spend. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `status`: `active` | `paused`
+  - `budgetMinor`: integer — New budget in minor units; the budget type set at creation stays
+  - `endAt`: string (date-time)
+  - `targeting`: object
+}
