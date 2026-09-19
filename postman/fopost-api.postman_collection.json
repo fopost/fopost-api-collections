@@ -5905,6 +5905,95 @@
           ]
         },
         {
+          "name": "Sign a direct upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/presign",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                "presign"
+              ]
+            },
+            "description": "Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"filename\": \"Example file\",\n  \"mimeType\": \"string\",\n  \"size\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Complete a direct upload",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/presign/:uploadId/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                "presign",
+                ":uploadId",
+                "complete"
+              ],
+              "variable": [
+                {
+                  "key": "uploadId",
+                  "value": "{{uploadId}}",
+                  "description": "Upload id from the presign step"
+                }
+              ]
+            },
+            "description": "Validates the object that was PUT to the signed URL (type, content, size, storage allowance) exactly like an upload and moves it into the media library. A refused object is deleted. Answers `409` if already completed and `410` once expired.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Delete a media item",
           "request": {
             "method": "DELETE",
