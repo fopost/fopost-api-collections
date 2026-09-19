@@ -1,0 +1,21 @@
+meta {
+  name: Exchange a code or refresh token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/oauth/token
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  `grant_type=authorization_code` takes `code`, `redirect_uri`, `code_verifier` and `client_id`; `grant_type=refresh_token` takes `refresh_token` and `client_id`. A confidential client also sends `client_secret` (or HTTP Basic). Refresh tokens rotate on every use. Access tokens last one hour and go in `Authorization: Bearer`; they carry the approved scopes and are confined to the approved workspace.
+}

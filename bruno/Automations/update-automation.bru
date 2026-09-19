@@ -21,6 +21,8 @@ headers {
 body:json {
   {
     "name": "Example name",
+    "description": "Hello from FoPost.",
+    "triggerType": "content_created",
     "active": false
   }
 }
@@ -32,7 +34,7 @@ tests {
 }
 
 docs {
-  When `steps` is provided the full step list is replaced.
+  When `graph` or `steps` is provided the whole graph is replaced.
 
   Requires the `automations` scope when using an API key.
 
@@ -42,7 +44,10 @@ docs {
 
   **Optional fields** (not in the example body):
   - `name`: string
+  - `description`: string | null
+  - `triggerType`: `content_created` | `cross_post` | `rss_feed` | `api_webhook` | `schedule` | `competitor_post` | `post_outperformed` | `inbox_topic` | `inbox_message` | `radar_mention`
   - `triggerConfig`: object
   - `steps`: object[]
+  - `graph`: object — The canvas: every node including exactly one trigger, and the edges between them. Output handles: `out` on plain nodes, `success`/`error` on webhook, ai and send_message, `reply`/`timeout` on wait_for_reply, `a`/`b` on ab_split, `r0..rN`/`else` on condition.
   - `active`: boolean
 }

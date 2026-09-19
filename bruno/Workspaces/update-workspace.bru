@@ -21,11 +21,11 @@ headers {
 body:json {
   {
     "name": "Example name",
-    "slug": "x",
     "type": "PERSONAL",
     "logo": "string",
     "website": "string",
-    "timezone": "UTC"
+    "timezone": "UTC",
+    "country": "string"
   }
 }
 
@@ -46,7 +46,6 @@ docs {
 
   **Optional fields** (not in the example body):
   - `name`: string
-  - `slug`: string
   - `type`: `PERSONAL` | `TEAM` | `ORGANIZATION` | `CLIENT` | `PROJECT` | `DEPARTMENT` | `EVENT` | `TEMPORARY` | `COMMUNITY` | `BRAND` | `AGENCY`
   - `logo`: string | null
   - `website`: string | null
@@ -57,4 +56,5 @@ docs {
   - `requireApproval`: boolean
   - `aiAltTextEnabled`: boolean
   - `brandColor`: string | null
+  - `connectRedirectDomains`: string[]
 }

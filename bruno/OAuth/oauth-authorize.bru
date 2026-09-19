@@ -1,0 +1,31 @@
+meta {
+  name: Start an authorization
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/oauth/authorize?response_type=code&client_id=&redirect_uri=&scope=&code_challenge=&code_challenge_method=S256
+  body: none
+  auth: inherit
+}
+
+params:query {
+  response_type: code
+  client_id: 
+  redirect_uri: 
+  scope: 
+  ~state: 
+  code_challenge: 
+  code_challenge_method: S256
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Send the user here in a browser. After validating the client and redirect_uri the user signs in, picks a workspace and approves the scopes; the browser is then sent to `redirect_uri` with `code` and `state`, or with `error=access_denied`. PKCE with S256 is required. Errors about the client or redirect_uri answer 400 here instead of redirecting.
+}

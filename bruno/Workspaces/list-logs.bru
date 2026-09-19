@@ -1,0 +1,38 @@
+meta {
+  name: List request logs
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/logs?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  ~days: 7
+  ~status: success
+  ~method: 
+  ~status_code: 
+  ~platform: 
+  ~route: 
+  ~q: 
+  ~limit: 50
+  ~before: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Recent API activity for one workspace, newest first: every request its members made against it, with route, status code, duration and any error message. Rows are kept for 30 days.
+
+  Requires the `workspaces` scope when using an API key.
+
+  **Scope:** `workspaces`
+}

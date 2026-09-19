@@ -1,0 +1,44 @@
+meta {
+  name: Register a client
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/oauth/register
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "client_name": "Example client",
+    "redirect_uris": [
+      "https://example.com"
+    ],
+    "client_uri": "https://example.com"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  RFC 7591 registration for signed-in developers: use your API key. The client is owned by your account. `client_uri` is your site; every redirect URI must be https on that host or a subdomain of it (loopback http is allowed for native and local clients) and is matched exactly. The client name may not use the product name. `token_endpoint_auth_method` defaults to `none` (a public client, PKCE only); `client_secret_basic` or `client_secret_post` issues a secret that is shown once.
+
+  MCP clients may register without a credential when every redirect URI is loopback or on a supported MCP client host; `client_uri` is then optional and the client has no owner.
+
+  Requires the `workspaces` scope when using an API key.
+
+  **Scope:** `workspaces`
+
+  **Optional fields** (not in the example body):
+  - `token_endpoint_auth_method`: `none` | `client_secret_basic` | `client_secret_post`
+}

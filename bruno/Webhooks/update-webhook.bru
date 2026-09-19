@@ -20,8 +20,10 @@ headers {
 
 body:json {
   {
+    "name": "Example name",
     "url": "https://example.com",
-    "active": false
+    "active": false,
+    "secret": "xxxxxxxxxxxxxxxx"
   }
 }
 
@@ -41,7 +43,10 @@ docs {
   **Scope:** `webhooks`
 
   **Optional fields** (not in the example body):
+  - `name`: string | null
   - `url`: string (uri)
-  - `events`: `post.published` | `post.failed` | `post.partially_failed` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.health_changed`[]
+  - `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `automation.triggered` | `automation.completed` | `automation.failed`[]
   - `active`: boolean
+  - `secret`: string — Rotates the signing secret; the new value is returned once in this response.
+  - `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.
 }
