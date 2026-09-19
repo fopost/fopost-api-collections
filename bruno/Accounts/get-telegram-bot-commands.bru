@@ -1,11 +1,11 @@
 meta {
-  name: Get an account
+  name: List Telegram bot commands
   type: http
-  seq: 11
+  seq: 7
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id
+  url: {{baseUrl}}/v1/accounts/:id/telegram/commands
   body: none
   auth: inherit
 }
@@ -21,6 +21,8 @@ tests {
 }
 
 docs {
+  The command menu the bot shows in this chat. Commands are scoped to the connected chat; channels, and chats not connected with a code, answer 400.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

@@ -1,0 +1,44 @@
+meta {
+  name: Set Telegram bot commands
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/telegram/commands
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "commands": [
+      {
+        "command": "string",
+        "description": "Hello from FoPost."
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replaces the command menu for this chat. Up to 100 commands, each 1-32 lowercase letters, digits or underscores with a 1-256 character description.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

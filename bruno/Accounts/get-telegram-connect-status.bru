@@ -1,0 +1,29 @@
+meta {
+  name: Get a Telegram connect code status
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/telegram/connect-code/status?code=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  code: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  `status` moves from `pending` to `connected` (with `account_id`) or `failed` (with `reason`), or reads `expired` once the code lapses unused. A code minted by another user answers 404.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
