@@ -1,0 +1,36 @@
+meta {
+  name: List articles on a blog
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~limit: 
+  ~status: published
+  ~q: 
+}
+
+params:path {
+  id: {{accountId}}
+  blogId: {{blogId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

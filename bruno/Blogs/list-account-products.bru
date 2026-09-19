@@ -1,0 +1,35 @@
+meta {
+  name: List the store's products
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/products
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~limit: 
+  ~status: active
+  ~q: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

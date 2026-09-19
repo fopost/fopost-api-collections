@@ -1,0 +1,48 @@
+meta {
+  name: Create an article on a blog
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  blogId: {{blogId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "x",
+    "body": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `excerpt`: string
+  - `status`: `published` | `draft` | `pending` | `scheduled`
+  - `tags`: string[]
+  - `author_name`: string
+  - `image_url`: string (uri)
+}
