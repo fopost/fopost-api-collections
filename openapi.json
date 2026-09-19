@@ -8365,6 +8365,193 @@
         }
       }
     },
+    "/v1/media/presign": {
+      "post": {
+        "operationId": "presignMediaUpload",
+        "summary": "Sign a direct upload",
+        "tags": [
+          "Media"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PresignedUpload"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "413": {
+            "description": "The file would exceed the free storage allowance (`storage_limit_reached`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "x-fopost-scope": "posts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "mimeType": {
+                    "type": "string",
+                    "description": "One of: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv"
+                  },
+                  "size": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 52428800,
+                    "description": "Bytes"
+                  }
+                },
+                "required": [
+                  "workspaceId",
+                  "filename",
+                  "mimeType",
+                  "size"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/media/presign/{uploadId}/complete": {
+      "post": {
+        "operationId": "completeMediaUpload",
+        "summary": "Complete a direct upload",
+        "tags": [
+          "Media"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UploadedMedia"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Nothing was uploaded (`upload_missing`), the content does not match the declared type, or the object is over 50 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Already completed (`upload_already_completed`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "The upload expired (`upload_expired`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The file would exceed the free storage allowance (`storage_limit_reached`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Validates the object that was PUT to the signed URL (type, content, size, storage allowance) exactly like an upload and moves it into the media library. A refused object is deleted. Answers `409` if already completed and `410` once expired.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "uploadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Upload id from the presign step"
+          }
+        ]
+      }
+    },
     "/v1/media/{id}": {
       "delete": {
         "operationId": "deleteMedia",
@@ -16430,6 +16617,11 @@
             "type": "string",
             "format": "uri"
           },
+          "previewUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Permanent, membership-checked read URL"
+          },
           "size": {
             "type": "integer"
           }
@@ -16439,6 +16631,46 @@
           "name",
           "url",
           "size"
+        ]
+      },
+      "PresignedUpload": {
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Pass to the complete step"
+          },
+          "uploadUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "PUT the raw bytes here"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "PUT"
+            ]
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Headers the PUT must carry exactly (Content-Type)"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the signed URL stops accepting the PUT"
+          }
+        },
+        "required": [
+          "uploadId",
+          "uploadUrl",
+          "method",
+          "headers",
+          "expiresAt"
         ]
       }
     },

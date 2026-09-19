@@ -1,0 +1,31 @@
+meta {
+  name: Complete a direct upload
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/media/presign/:uploadId/complete
+  body: none
+  auth: inherit
+}
+
+params:path {
+  uploadId: {{uploadId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Validates the object that was PUT to the signed URL (type, content, size, storage allowance) exactly like an upload and moves it into the media library. A refused object is deleted. Answers `409` if already completed and `410` once expired.
+
+  Requires the `posts` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `posts`
+}
