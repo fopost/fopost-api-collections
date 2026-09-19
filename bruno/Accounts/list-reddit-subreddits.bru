@@ -1,0 +1,29 @@
+meta {
+  name: List the account's subreddits
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/reddit/subreddits
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Subreddits this Reddit account is subscribed to, busiest first, plus its own profile page. `isDefault` marks where a post goes when it names no subreddit. An account connected before we asked for the subreddit permission answers 409 `reconnect_required`.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

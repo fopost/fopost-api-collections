@@ -1,0 +1,39 @@
+meta {
+  name: Set the account's default subreddit
+  type: http
+  seq: 32
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/reddit/default-subreddit
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "subreddit": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Where posts from this account go when they name no subreddit. `null` falls back to the account's own profile page, which always accepts a post.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

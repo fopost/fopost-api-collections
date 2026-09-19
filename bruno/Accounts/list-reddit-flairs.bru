@@ -1,0 +1,33 @@
+meta {
+  name: List a subreddit's post flairs
+  type: http
+  seq: 31
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/reddit/flairs?subreddit=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  subreddit: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Post flairs the subreddit offers this account. A flair id is valid only in the subreddit it came from, and preflight rejects one from anywhere else.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

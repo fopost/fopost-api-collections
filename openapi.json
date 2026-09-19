@@ -1735,6 +1735,93 @@
         }
       }
     },
+    "/v1/validate/subreddit": {
+      "get": {
+        "operationId": "validateSubreddit",
+        "summary": "Check a subreddit",
+        "tags": [
+          "Validation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SubredditCheck"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Whether a subreddit exists and takes a post from a connected Reddit account. The check runs with that account's token, so `account_id` is required.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Reddit account to check as"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
     "/v1/validate/media": {
       "post": {
         "operationId": "validateMedia",
@@ -4479,6 +4566,346 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SlackIdentityRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/reddit/subreddits": {
+      "get": {
+        "operationId": "listRedditSubreddits",
+        "summary": "List the account's subreddits",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RedditSubreddit"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Subreddits this Reddit account is subscribed to, busiest first, plus its own profile page. `isDefault` marks where a post goes when it names no subreddit. An account connected before we asked for the subreddit permission answers 409 `reconnect_required`.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/subreddits/{name}/rules": {
+      "get": {
+        "operationId": "listRedditSubredditRules",
+        "summary": "List a subreddit's rules",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditSubredditRules"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The rules a subreddit posts, in its own order. Show them before publishing.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/flairs": {
+      "get": {
+        "operationId": "listRedditFlairs",
+        "summary": "List a subreddit's post flairs",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditFlairs"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Post flairs the subreddit offers this account. A flair id is valid only in the subreddit it came from, and preflight rejects one from anywhere else.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          },
+          {
+            "name": "subreddit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/default-subreddit": {
+      "put": {
+        "operationId": "setRedditDefaultSubreddit",
+        "summary": "Set the account's default subreddit",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditDefaultSubreddit"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Where posts from this account go when they name no subreddit. `null` falls back to the account's own profile page, which always accepts a post.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedditDefaultSubredditRequest"
               }
             }
           }
@@ -8622,6 +9049,80 @@
             "description": "Inbox item id"
           }
         ]
+      }
+    },
+    "/v1/inbox/{id}/vote": {
+      "post": {
+        "operationId": "voteInboxItem",
+        "summary": "Vote on an item",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InboxItem"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot vote"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason"
+          }
+        },
+        "description": "An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InboxVoteRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/inbox/{id}/pin": {
@@ -14348,6 +14849,39 @@
             "pattern": "^:[a-z0-9_+'-]+:$"
           }
         }
+      },
+      "RedditDefaultSubredditRequest": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_]{2,20}$"
+          }
+        },
+        "required": [
+          "subreddit"
+        ],
+        "additionalProperties": false
+      },
+      "InboxVoteRequest": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "none"
+            ]
+          }
+        },
+        "required": [
+          "direction"
+        ],
+        "additionalProperties": false
       },
       "MoveAccountRequest": {
         "type": "object",
@@ -21777,6 +22311,18 @@
           "liked": {
             "type": "boolean"
           },
+          "vote": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "up",
+              "down",
+              null
+            ],
+            "description": "How the account voted where the network ranks by votes"
+          },
           "pinned": {
             "type": "boolean"
           },
@@ -21803,6 +22349,10 @@
           },
           "canLike": {
             "type": "boolean"
+          },
+          "canVote": {
+            "type": "boolean",
+            "description": "The network ranks by votes, so a down vote exists"
           },
           "canPin": {
             "type": "boolean",
@@ -22653,6 +23203,146 @@
               "null"
             ],
             "description": "Emoji code posts appear with, e.g. `:rocket:`"
+          }
+        }
+      },
+      "RedditSubreddit": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Subreddit name without the `r/` prefix"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscribers": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "over18": {
+            "type": "boolean"
+          },
+          "canPost": {
+            "type": "boolean",
+            "description": "Whether this account may submit here"
+          },
+          "flairEnabled": {
+            "type": "boolean",
+            "description": "Whether the subreddit offers post flairs"
+          },
+          "iconUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "The account's default subreddit"
+          }
+        }
+      },
+      "RedditSubredditRule": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "appliesTo": {
+            "type": "string",
+            "description": "What the rule covers: `link`, `comment` or `all`"
+          }
+        }
+      },
+      "RedditSubredditRules": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RedditSubredditRule"
+            }
+          }
+        }
+      },
+      "RedditFlair": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Flair id, valid only in its own subreddit"
+          },
+          "text": {
+            "type": "string"
+          },
+          "editable": {
+            "type": "boolean",
+            "description": "Whether `flair_text` may replace the label"
+          }
+        }
+      },
+      "RedditFlairs": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "flairs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RedditFlair"
+            }
+          }
+        }
+      },
+      "RedditDefaultSubreddit": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Where posts go when a post names no subreddit"
+          }
+        }
+      },
+      "SubredditCheck": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "can_post": {
+            "type": "boolean"
+          },
+          "over_18": {
+            "type": "boolean"
+          },
+          "flair_enabled": {
+            "type": "boolean"
+          },
+          "ok": {
+            "type": "boolean",
+            "description": "True when the subreddit exists and takes a post from this account"
           }
         }
       },

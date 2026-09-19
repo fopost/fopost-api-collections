@@ -1,0 +1,30 @@
+meta {
+  name: List a subreddit's rules
+  type: http
+  seq: 30
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/reddit/subreddits/:name/rules
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  name: {{name}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The rules a subreddit posts, in its own order. Show them before publishing.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

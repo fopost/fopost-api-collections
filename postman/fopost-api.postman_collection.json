@@ -1004,6 +1004,53 @@
           ]
         },
         {
+          "name": "Check a subreddit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/validate/subreddit?account_id=&name=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "validate",
+                "subreddit"
+              ],
+              "query": [
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "The Reddit account to check as",
+                  "disabled": false
+                },
+                {
+                  "key": "name",
+                  "value": "",
+                  "description": "Subreddit name without the `r/` prefix",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Whether a subreddit exists and takes a post from a connected Reddit account. The check runs with that account's token, so `account_id` is required.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Check a media file by URL",
           "request": {
             "method": "POST",
@@ -3016,6 +3063,203 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"Example user\",\n  \"icon_url\": \"https://example.com\",\n  \"icon_emoji\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List the account's subreddits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/subreddits",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "subreddits"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Subreddits this Reddit account is subscribed to, busiest first, plus its own profile page. `isDefault` marks where a post goes when it names no subreddit. An account connected before we asked for the subreddit permission answers 409 `reconnect_required`.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a subreddit's rules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/subreddits/:name/rules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "subreddits",
+                ":name",
+                "rules"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                },
+                {
+                  "key": "name",
+                  "value": "{{name}}",
+                  "description": "Subreddit name without the `r/` prefix"
+                }
+              ]
+            },
+            "description": "The rules a subreddit posts, in its own order. Show them before publishing.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a subreddit's post flairs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/flairs?subreddit=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "flairs"
+              ],
+              "query": [
+                {
+                  "key": "subreddit",
+                  "value": "",
+                  "description": "Subreddit name without the `r/` prefix",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Post flairs the subreddit offers this account. A flair id is valid only in the subreddit it came from, and preflight rejects one from anywhere else.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Set the account's default subreddit",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/default-subreddit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "default-subreddit"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Where posts from this account go when they name no subreddit. `null` falls back to the account's own profile page, which always accepts a post.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subreddit\": \"string\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -6034,6 +6278,61 @@
               ]
             },
             "description": "Only where `canLike` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Vote on an item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/vote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "vote"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"up\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           },
           "response": [],
           "event": [

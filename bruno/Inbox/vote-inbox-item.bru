@@ -1,11 +1,11 @@
 meta {
-  name: Show the typing indicator
+  name: Vote on an item
   type: http
-  seq: 24
+  seq: 20
 }
 
 post {
-  url: {{baseUrl}}/v1/inbox/conversations/:id/typing
+  url: {{baseUrl}}/v1/inbox/:id/vote
   body: json
   auth: inherit
 }
@@ -20,7 +20,7 @@ headers {
 
 body:json {
   {
-    "account_id": "string"
+    "direction": "up"
   }
 }
 
@@ -31,12 +31,9 @@ tests {
 }
 
 docs {
-  Shows or clears the typing indicator in a DM thread. Also requires the `publish` scope.
+  An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.
 
   Requires the `inbox` scope when using an API key.
 
   **Scope:** `inbox`
-
-  **Optional fields** (not in the example body):
-  - `on`: boolean — Default true; false clears the indicator
 }
