@@ -2945,6 +2945,302 @@
         ]
       }
     },
+    "/v1/accounts/telegram/connect-code": {
+      "post": {
+        "operationId": "createTelegramConnectCode",
+        "summary": "Create a Telegram connect code",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TelegramConnectCode"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Mints a one-time code, valid for 15 minutes. Sending `/connect <code>` to the publishing bot in a private chat, a group, or a channel where the bot is an admin connects that chat to the workspace, with no chat id to paste. `deep_link` and `group_link` carry the code for you. Poll `GET /v1/accounts/telegram/connect-code/status` for the outcome. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/telegram/connect-code/status": {
+      "get": {
+        "operationId": "getTelegramConnectStatus",
+        "summary": "Get a Telegram connect code status",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TelegramConnectStatus"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "`status` moves from `pending` to `connected` (with `account_id`) or `failed` (with `reason`), or reads `expired` once the code lapses unused. A code minted by another user answers 404.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The connect code"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/telegram/commands": {
+      "get": {
+        "operationId": "getTelegramBotCommands",
+        "summary": "List Telegram bot commands",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TelegramBotCommands"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The command menu the bot shows in this chat. Commands are scoped to the connected chat; channels, and chats not connected with a code, answer 400.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setTelegramBotCommands",
+        "summary": "Set Telegram bot commands",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TelegramBotCommands"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Replaces the command menu for this chat. Up to 100 commands, each 1-32 lowercase letters, digits or underscores with a 1-256 character description.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetTelegramBotCommandsRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTelegramBotCommands",
+        "summary": "Clear Telegram bot commands",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TelegramBotCommands"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
     "/v1/accounts/health": {
       "get": {
         "operationId": "getAccountsHealthSummary",
@@ -13433,6 +13729,39 @@
           "name"
         ]
       },
+      "SetTelegramBotCommandsRequest": {
+        "type": "object",
+        "properties": {
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_]{1,32}$"
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "command",
+                "description"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "commands"
+        ],
+        "additionalProperties": false
+      },
       "CreateWorkspaceRequest": {
         "type": "object",
         "properties": {
@@ -18190,6 +18519,115 @@
           "platforms",
           "expiresAt",
           "createdAt"
+        ]
+      },
+      "TelegramConnectCode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "One-time code, valid for 15 minutes"
+          },
+          "command": {
+            "type": "string",
+            "description": "What to send in the chat: `/connect <code>`"
+          },
+          "bot_username": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The publishing bot, without the @"
+          },
+          "deep_link": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Opens a private chat with the bot, code included"
+          },
+          "group_link": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Adds the bot to a group, code included"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "code",
+          "command",
+          "expires_at"
+        ]
+      },
+      "TelegramConnectStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "connected",
+              "failed",
+              "expired"
+            ]
+          },
+          "account_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The connected account, once `connected`"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "card_required",
+              "slot_taken",
+              "workspace_unavailable",
+              null
+            ],
+            "description": "Why the connection failed, when `failed`"
+          }
+        },
+        "required": [
+          "status",
+          "account_id",
+          "reason"
+        ]
+      },
+      "TelegramBotCommands": {
+        "type": "object",
+        "properties": {
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "command",
+                "description"
+              ]
+            }
+          }
+        },
+        "required": [
+          "commands"
         ]
       },
       "AccountCreated": {
