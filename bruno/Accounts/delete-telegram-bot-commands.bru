@@ -1,27 +1,17 @@
 meta {
-  name: Rename an account group
+  name: Clear Telegram bot commands
   type: http
-  seq: 18
+  seq: 9
 }
 
-patch {
-  url: {{baseUrl}}/v1/account-groups/:id
-  body: json
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/telegram/commands
+  body: none
   auth: inherit
 }
 
 params:path {
-  id: {{id}}
-}
-
-headers {
-  Content-Type: application/json
-}
-
-body:json {
-  {
-    "name": "Example name"
-  }
+  id: {{accountId}}
 }
 
 tests {

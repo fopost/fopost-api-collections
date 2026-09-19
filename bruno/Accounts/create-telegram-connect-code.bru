@@ -1,0 +1,38 @@
+meta {
+  name: Create a Telegram connect code
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/telegram/connect-code
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Mints a one-time code, valid for 15 minutes. Sending `/connect <code>` to the publishing bot in a private chat, a group, or a channel where the bot is an admin connects that chat to the workspace, with no chat id to paste. `deep_link` and `group_link` carry the code for you. Poll `GET /v1/accounts/telegram/connect-code/status` for the outcome. `workspaceId` may be omitted for a key bound to one workspace.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `workspaceId`: string (uuid)
+}
