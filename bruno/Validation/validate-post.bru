@@ -1,0 +1,41 @@
+meta {
+  name: Validate content for a set of platforms
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/validate/post
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "platforms": [
+      "twitter"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The same checks as preflight, for content that has not been saved as a post. Returns hard blockers (`issues`) and advisory content quality signals per platform. Nothing is stored.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `content`: string — The post text
+  - `media`: object[]
+}

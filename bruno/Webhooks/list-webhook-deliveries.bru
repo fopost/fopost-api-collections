@@ -1,0 +1,34 @@
+meta {
+  name: List deliveries
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/webhooks/:id/deliveries
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~status: success
+  ~limit: 50
+}
+
+params:path {
+  id: {{webhookId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Every delivery attempt to this webhook, newest first, with the response it got. Attempts are kept for 30 days.
+
+  Requires the `webhooks` scope when using an API key.
+
+  **Scope:** `webhooks`
+}

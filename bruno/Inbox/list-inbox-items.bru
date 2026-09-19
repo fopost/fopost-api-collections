@@ -1,0 +1,41 @@
+meta {
+  name: List inbox items
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~type: comment
+  ~state: unread
+  ~platform: 
+  ~account_id: 
+  ~post_id: 
+  ~post_external_id: 
+  ~conversation_id: 
+  ~direction: inbound
+  ~q: 
+  ~sort: newest
+  ~page: 1
+  ~per_page: 25
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Comments, mentions and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

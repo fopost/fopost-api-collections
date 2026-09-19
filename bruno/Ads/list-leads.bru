@@ -1,0 +1,36 @@
+meta {
+  name: List a form’s leads
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/lead-forms/:formId/leads?connection_id=&page_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  page_id: 
+  ~after: 
+}
+
+params:path {
+  formId: {{formId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One page of leads; pass `nextCursor` back as `after` for the next.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

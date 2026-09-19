@@ -1,0 +1,39 @@
+meta {
+  name: Rename an account
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "display_name": "Example display"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sets a display name shown instead of the platform name. `null` or an empty string restores the platform name.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

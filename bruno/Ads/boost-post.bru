@@ -1,0 +1,56 @@
+meta {
+  name: Boost a published post
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/boost
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
+    "name": "Example name",
+    "goal": "engagement",
+    "budget": {
+      "minor": 1,
+      "type": "daily"
+    },
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    },
+    "postId": "{{postId}}",
+    "accountId": "{{accountId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Promotes a post FoPost already published to the given account. Candidates come from `GET /v1/ads/boostable`. The boost starts paused unless `paused` is false. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `paused`: boolean — Create the ad paused; set to false to go live at once
+}

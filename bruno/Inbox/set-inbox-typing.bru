@@ -1,0 +1,42 @@
+meta {
+  name: Show the typing indicator
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/conversations/:id/typing
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "account_id": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Shows or clears the typing indicator in a DM thread. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `on`: boolean — Default true; false clears the indicator
+}

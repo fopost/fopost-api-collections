@@ -24,8 +24,8 @@ body:json {
     "artifact_type": "text_post",
     "status": "draft",
     "schedule_at": "2026-01-01T12:00:00.000Z",
-    "repeatable": false,
-    "repeatable_times": 1
+    "schedule": "queue",
+    "repeatable": false
   }
 }
 
@@ -36,7 +36,7 @@ tests {
 }
 
 docs {
-  Only draft or scheduled posts can be updated. Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided.
+  Arrays (`content`, `accounts`, `labels`, `settings`) are replaced wholesale when provided. A draft, scheduled or pending-approval post takes any change. A published post takes a content change only (`content`, `title`, `settings`, `labels`, `internal_title`, `summary`), and only when every network it is live on can edit in place (see `remote_edit` on the post accounts); the change is then pushed to each network and reported in `remote_edits`. Reaching a network needs the `publish` scope as well. A published post on a network that cannot edit answers 409 with `unsupported_platforms`.
 
   Requires the `posts` scope when using an API key.
 
@@ -51,6 +51,7 @@ docs {
   - `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`
   - `status`: `draft` | `scheduled`
   - `schedule_at`: string (date-time) | null
+  - `schedule`: `queue`
   - `repeatable`: boolean
   - `repeatable_times`: integer | null
   - `repeatable_gap`: integer | null

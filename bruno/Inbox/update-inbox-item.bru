@@ -1,0 +1,39 @@
+meta {
+  name: Change an item’s state, or edit our own comment
+  type: http
+  seq: 13
+}
+
+patch {
+  url: {{baseUrl}}/v1/inbox/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "state": "unread"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Mark it read, resolved, unread, or snoozed until a time. A body with `text` instead edits a comment the account wrote, on the platform, where `canEdit` is true; that also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}
