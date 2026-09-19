@@ -4,8 +4,8 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## What This Is
 
-The **published contract of the FoPost API**: `openapi.json` (OpenAPI 3.1, 54 paths / 70
-operations across 11 groups) plus ready-to-run client collections generated from it — a Postman
+The **published contract of the FoPost API**: `openapi.json` (OpenAPI 3.1, 100 paths / 123
+operations across 15 groups) plus ready-to-run client collections generated from it — a Postman
 v2.1 collection with two environments, and a Bruno collection as one plain-text file per request.
 `ENDPOINTS.md` is the browsable index. No dependencies, no build step, Node >= 20, `private: true`
 (nothing here is published to a registry). MIT.
@@ -92,7 +92,8 @@ string, silently breaking every chained request.
 
 **Auth** is set once on the collection and inherited: `X-API-Key`. Each request's docs name the
 scope it needs (`x-fopost-scope` in the spec): `posts` (covers publishing, deliveries, media),
-`workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`. Bodies carry the
+`workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`, `inbox`, `ads` (the
+four ad-spending requests also need `publish`). Bodies carry the
 **required** fields with realistic values so a request sends unedited; optional fields are
 documented, not pre-filled.
 
