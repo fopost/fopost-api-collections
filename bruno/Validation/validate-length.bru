@@ -1,0 +1,38 @@
+meta {
+  name: Check text length against platform limits
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/validate/length
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "text": "Hello from FoPost.",
+    "platforms": [
+      "twitter"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Counts the text the way each platform does (some bill every link at a flat rate, some count bytes) and compares it with the platform limit.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

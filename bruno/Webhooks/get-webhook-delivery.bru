@@ -1,0 +1,30 @@
+meta {
+  name: Get a delivery
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/webhooks/:id/deliveries/:deliveryId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{webhookId}}
+  deliveryId: {{deliveryId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One attempt, including the payload that was sent.
+
+  Requires the `webhooks` scope when using an API key.
+
+  **Scope:** `webhooks`
+}

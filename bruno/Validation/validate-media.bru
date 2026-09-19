@@ -1,0 +1,35 @@
+meta {
+  name: Check a media file by URL
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/validate/media
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "url": "https://example.com"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Fetches the file and runs the upload checks on it: allowed type, bytes that match the declared type, and the size ceiling. The file is not stored. A URL that cannot be fetched, including one that points at a private address, is a `400`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

@@ -1,0 +1,39 @@
+meta {
+  name: Move an account to another workspace
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/move
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Moves the account, its connection and its inbox and analytics history to another workspace in one step. The caller must own both workspaces; any other target answers 404. The move is refused with 409 `move_blocked` and the `blocking_tables` list when the account still has records that belong to its current workspace (posts, automations, ads and similar), or with 409 when the target already has an account on that network. The account leaves its account groups.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Preview upcoming slots
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/queue/preview?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  ~account_id: 
+  ~count: 5
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The next free occurrences in order, as a post-by-post preview of the queue.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

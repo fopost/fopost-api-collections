@@ -1,0 +1,32 @@
+meta {
+  name: Redeliver
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/v1/webhooks/:id/deliveries/:deliveryId/redeliver
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{webhookId}}
+  deliveryId: {{deliveryId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sends the delivery again with the identical body, so `X-FoPost-Signature` and `X-FoPost-Delivery` match the original; only the timestamp and `X-FoPost-Signature-256` are fresh. One attempt, logged as the next attempt of that delivery. A paused webhook answers 409.
+
+  Requires the `webhooks` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `webhooks`
+}

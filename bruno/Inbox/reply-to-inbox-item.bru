@@ -1,0 +1,44 @@
+meta {
+  name: Reply to an item
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/reply
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "text": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sends the reply on the platform as the connected account and settles the item. Only where `canReply` is true. A DM reply may carry `media_ids` (sent as short-lived signed links) and `quick_replies`; either also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `text`: string — Required unless `media_ids` is given
+  - `media_ids`: string[] — Media library ids to attach to a DM. Only where `canSendMedia` is true
+  - `quick_replies`: string[] — Answer buttons shown under a DM. Only where `canQuickReply` is true
+}

@@ -1,0 +1,39 @@
+meta {
+  name: React to a message
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/react
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "reaction": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only where `canReact` is true. Instagram has one reaction, a heart. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

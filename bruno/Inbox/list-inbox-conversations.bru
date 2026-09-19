@@ -1,0 +1,36 @@
+meta {
+  name: List DM conversations
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/conversations
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~platform: 
+  ~account_id: 
+  ~state: unread
+  ~q: 
+  ~sort: newest
+  ~page: 1
+  ~per_page: 25
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=…&conversation_id=…`.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}
