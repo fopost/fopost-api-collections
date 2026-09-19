@@ -4710,6 +4710,112 @@
         ]
       }
     },
+    "/v1/activity": {
+      "get": {
+        "operationId": "listActivity",
+        "summary": "List activity",
+        "tags": [
+          "Workspaces"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "publish",
+                "connection",
+                "webhook",
+                "inbox",
+                "automation",
+                "billing"
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only events at or after this time"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only events at or before this time"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "next_cursor from the previous page"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ]
+      }
+    },
     "/v1/webhooks": {
       "get": {
         "operationId": "listWebhooks",
@@ -14917,6 +15023,93 @@
               },
               "has_more": {
                 "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ActivityEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "publish",
+              "connection",
+              "webhook",
+              "inbox",
+              "automation",
+              "billing"
+            ]
+          },
+          "ref_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What the event is about, e.g. post"
+          },
+          "ref_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "user",
+                  "api_key",
+                  "agent",
+                  "system"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ActivityListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityEvent"
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Pass as cursor for the next page"
               }
             }
           }

@@ -1669,6 +1669,76 @@
               }
             }
           ]
+        },
+        {
+          "name": "List activity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "activity"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "kind",
+                  "value": "publish",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "description": "Only events at or after this time",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "description": "Only events at or before this time",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "next_cursor from the previous page",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },

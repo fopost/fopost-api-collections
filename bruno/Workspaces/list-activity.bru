@@ -1,0 +1,34 @@
+meta {
+  name: List activity
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/activity
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~kind: publish
+  ~from: 
+  ~to: 
+  ~cursor: 
+  ~limit: 50
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}
