@@ -1,0 +1,46 @@
+meta {
+  name: Set the Slack posting identity
+  type: http
+  seq: 28
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/slack/identity
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "Example user",
+    "icon_url": "https://example.com",
+    "icon_emoji": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The name and icon the account posts under. Omitted fields keep their value and `null` clears one. Set `icon_url` or `icon_emoji`, not both; setting one clears the other.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `username`: string | null
+  - `icon_url`: string (uri) | null
+  - `icon_emoji`: string | null
+}
