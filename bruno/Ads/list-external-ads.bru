@@ -1,0 +1,29 @@
+meta {
+  name: List ads made outside FoPost
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/external
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Ads that live on the connected ad accounts but were not created here. Read live from Meta on every call and never stored.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

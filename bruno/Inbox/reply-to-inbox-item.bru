@@ -1,0 +1,39 @@
+meta {
+  name: Reply to an item
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/reply
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "text": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sends the reply on the platform as the connected account and settles the item. Only where `canReply` is true.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

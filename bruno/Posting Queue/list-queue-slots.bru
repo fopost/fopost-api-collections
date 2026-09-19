@@ -1,0 +1,29 @@
+meta {
+  name: List posting slots
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/queue/slots?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The recurring weekly slots of a workspace, ordered by weekday and time.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

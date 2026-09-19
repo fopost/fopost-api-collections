@@ -1,0 +1,42 @@
+meta {
+  name: Change an item’s state
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{baseUrl}}/v1/inbox/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "state": "unread"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Mark it read, resolved, unread, or snoozed until a time.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `snoozedUntil`: string (date-time) — Required when state is `snoozed`; must be in the future
+}

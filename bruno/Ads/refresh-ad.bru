@@ -1,0 +1,33 @@
+meta {
+  name: Refresh an ad’s status and insights
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/:id/refresh?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Reads the delivery status and lifetime insights from Meta and stores them.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

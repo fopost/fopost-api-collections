@@ -1,0 +1,29 @@
+meta {
+  name: Delete a comment on the platform
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/v1/inbox/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes the comment from the platform where it was left. Only where `canDelete` is true.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

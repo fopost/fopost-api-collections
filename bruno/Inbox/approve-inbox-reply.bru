@@ -1,0 +1,40 @@
+meta {
+  name: Approve and send a drafted reply
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/approvals/:id/approve
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "text": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `text`: string — Edited reply text; omit to send the draft as it stands
+}

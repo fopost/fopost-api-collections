@@ -1,0 +1,25 @@
+meta {
+  name: List inbox-capable platforms
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/inbox/platforms
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Which networks feed the inbox today, and which are coming. Not tenant data.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -24,8 +24,8 @@ body:json {
     "artifact_type": "text_post",
     "status": "draft",
     "schedule_at": "2026-01-01T12:00:00.000Z",
-    "repeatable": false,
-    "repeatable_times": 1
+    "schedule": "queue",
+    "repeatable": false
   }
 }
 
@@ -51,6 +51,7 @@ docs {
   - `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`
   - `status`: `draft` | `scheduled`
   - `schedule_at`: string (date-time) | null
+  - `schedule`: `queue`
   - `repeatable`: boolean
   - `repeatable_times`: integer | null
   - `repeatable_gap`: integer | null

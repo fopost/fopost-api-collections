@@ -1,0 +1,40 @@
+meta {
+  name: Mark a thread read
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/read
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "x",
+    "account_id": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Reads every item in one comment thread (`post_external_id`) or DM thread (`conversation_id`) on the account, the way opening a chat does.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `post_external_id`: string — The platform post id whose thread to settle
+  - `conversation_id`: string — The DM thread to settle
+}

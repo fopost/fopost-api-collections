@@ -1,0 +1,35 @@
+meta {
+  name: Poll the inbox now
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/refresh
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Fetches new comments and messages for every inbox-capable account in the workspace instead of waiting for the next scheduled poll. Platforms that bill per read are read on this call.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

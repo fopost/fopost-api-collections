@@ -1,0 +1,29 @@
+meta {
+  name: Remove a posting slot
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/v1/queue/slots/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes a slot. Queued posts that sat on it move to the next free occurrence and are listed in `moved`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}
