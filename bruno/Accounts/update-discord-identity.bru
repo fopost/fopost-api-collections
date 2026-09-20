@@ -1,0 +1,44 @@
+meta {
+  name: Set the Discord posting identity
+  type: http
+  seq: 43
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/discord/identity
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "Example user",
+    "avatar_url": "https://example.com"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The nickname and avatar the bot wears in this server. Omitted fields keep their value and `null` clears one.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `username`: string | null
+  - `avatar_url`: string (uri) | null
+}
