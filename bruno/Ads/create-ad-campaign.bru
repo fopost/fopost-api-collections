@@ -1,7 +1,7 @@
 meta {
   name: Create a campaign
   type: http
-  seq: 24
+  seq: 32
 }
 
 post {
@@ -39,4 +39,5 @@ docs {
 
   **Optional fields** (not in the example body):
   - `paused`: boolean — Create it paused; set to false to go live at once
+  - `smartPlus`: boolean — Hands targeting and creative rotation to the network. Only on a network whose `capabilities.smartPlus` is true; 400 otherwise.
 }

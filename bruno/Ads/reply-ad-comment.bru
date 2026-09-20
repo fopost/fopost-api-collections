@@ -1,17 +1,17 @@
 meta {
-  name: Archive an Instant Form
+  name: Reply to a comment on an ad
   type: http
-  seq: 57
+  seq: 28
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/archive
+  url: {{baseUrl}}/v1/ads/comments/:id/reply
   body: json
   auth: inherit
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 headers {
@@ -22,18 +22,19 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "string"
+    "adId": "x",
+    "text": "Hello from FoPost."
   }
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([201]);
   });
 }
 
 docs {
-  The form stops collecting; its leads stay readable.
+  Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

@@ -1,17 +1,17 @@
 meta {
-  name: Archive an Instant Form
+  name: Delete a comment on an ad
   type: http
-  seq: 57
+  seq: 30
 }
 
-post {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/archive
+delete {
+  url: {{baseUrl}}/v1/ads/comments/:id
   body: json
   auth: inherit
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 headers {
@@ -22,7 +22,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "string"
+    "adId": "x"
   }
 }
 
@@ -33,7 +33,7 @@ tests {
 }
 
 docs {
-  The form stops collecting; its leads stay readable.
+  A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

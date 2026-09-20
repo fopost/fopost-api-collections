@@ -10453,6 +10453,595 @@
         }
       }
     },
+    "/v1/ads/tiktok/business-centers": {
+      "get": {
+        "operationId": "listTikTokBusinessCenters",
+        "summary": "List TikTok Business Centers",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AdBusinessCenter"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "TikTok groups ad accounts into Business Centers, which no other network has an equivalent for — hence the only network-named routes in this section. `unsupported` on any other connection.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/tiktok/identities": {
+      "get": {
+        "operationId": "listTikTokIdentities",
+        "summary": "List TikTok identities",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AdIdentity"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The accounts an ad can run as on one ad account. An identity id is what a Spark ad and an ad group take as `pageId`.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/spark-posts": {
+      "get": {
+        "operationId": "listSparkPosts",
+        "summary": "List posts a Spark ad can promote",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SparkPost"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Posts already live under an identity. Pass one as `platformPostId` on a creative to run it as an ad without re-uploading it. `unsupported` on a network without Spark ads.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identity_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/conversions": {
+      "post": {
+        "operationId": "uploadConversions",
+        "summary": "Upload offline conversions",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted by the network",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Events that happened away from the site, attributed to a pixel the ad account owns. Emails and phone numbers are hashed before anything leaves FoPost.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadConversionsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/comments": {
+      "get": {
+        "operationId": "listAdComments",
+        "summary": "List the comments on an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdCommentsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Read live from the network and never stored. Paged through `nextCursor`.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "ad_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The previous page’s `nextCursor`"
+          }
+        ]
+      }
+    },
+    "/v1/ads/comments/{id}/reply": {
+      "post": {
+        "operationId": "replyAdComment",
+        "summary": "Reply to a comment on an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "replyId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The comment id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyAdCommentRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/comments/{id}/hide": {
+      "post": {
+        "operationId": "hideAdComment",
+        "summary": "Hide or show a comment on an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The comment id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HideAdCommentRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/comments/{id}": {
+      "delete": {
+        "operationId": "deleteAdComment",
+        "summary": "Delete a comment on an ad",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The comment id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAdCommentRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/ads/accounts/{adAccountId}/tree": {
       "get": {
         "operationId": "getAdAccountTree",
@@ -15538,8 +16127,15 @@
           },
           "text": {
             "type": "string",
+            "maxLength": 125,
+            "default": "",
+            "description": "Required unless `sparkPostId` is set, which carries the post’s own caption"
+          },
+          "sparkPostId": {
+            "type": "string",
             "minLength": 1,
-            "maxLength": 125
+            "maxLength": 128,
+            "description": "A post already live on the network, from `GET /v1/ads/spark-posts`. Runs it as a Spark ad, so `text` and `mediaUrl` are ignored. Needs `capabilities.sparkAds`."
           },
           "headline": {
             "type": "string",
@@ -15570,8 +16166,7 @@
           "goal",
           "budget",
           "targeting",
-          "pageId",
-          "text"
+          "pageId"
         ]
       },
       "SetAdStatusRequest": {
@@ -15800,6 +16395,173 @@
           "workspaceId"
         ]
       },
+      "UploadConversionsRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "pattern": "^act_\\d+$",
+            "description": "Meta ad account id, `act_…`"
+          },
+          "pixelId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "From `GET /v1/ads/audiences`"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "eventName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "occurredAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "Hashed before it leaves FoPost"
+                },
+                "phone": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 32,
+                  "description": "Hashed before it leaves FoPost"
+                },
+                "valueMinor": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100000000
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3
+                },
+                "orderId": {
+                  "type": "string",
+                  "maxLength": 128
+                }
+              },
+              "required": [
+                "eventName",
+                "occurredAt"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 1000
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "pixelId",
+          "events"
+        ]
+      },
+      "ReplyAdCommentRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adId",
+          "text"
+        ]
+      },
+      "HideAdCommentRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          },
+          "hidden": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adId",
+          "hidden"
+        ]
+      },
+      "DeleteAdCommentRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A Meta Ads connection in the workspace"
+          },
+          "adId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Meta object id"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adId"
+        ]
+      },
       "CreateAdCampaignRequest": {
         "type": "object",
         "properties": {
@@ -15835,6 +16597,11 @@
             "type": "boolean",
             "default": true,
             "description": "Create it paused; set to false to go live at once"
+          },
+          "smartPlus": {
+            "type": "boolean",
+            "default": false,
+            "description": "Hands targeting and creative rotation to the network. Only on a network whose `capabilities.smartPlus` is true; 400 otherwise."
           }
         },
         "required": [
@@ -22993,6 +23760,151 @@
             ]
           }
         }
+      },
+      "AdBusinessCenter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "AdIdentity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SparkPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "identityId": {
+            "type": "string"
+          },
+          "caption": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "thumbnailUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "views": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "AdComment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "adId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "authorAvatarUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "likes": {
+            "type": "integer"
+          },
+          "replyCount": {
+            "type": "integer"
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "parentId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "AdCommentsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "comments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AdComment"
+                }
+              },
+              "nextCursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "LeadForm": {
         "type": "object",

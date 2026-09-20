@@ -1,11 +1,11 @@
 meta {
-  name: Get an ad account’s campaign tree
+  name: List TikTok Business Centers
   type: http
-  seq: 31
+  seq: 23
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/accounts/:adAccountId/tree?connection_id=
+  url: {{baseUrl}}/v1/ads/tiktok/business-centers?connection_id=
   body: none
   auth: inherit
 }
@@ -15,10 +15,6 @@ params:query {
   connection_id: 
 }
 
-params:path {
-  adAccountId: {{adAccountId}}
-}
-
 tests {
   test('status is successful', function () {
     expect(res.getStatus()).to.be.oneOf([200]);
@@ -26,7 +22,7 @@ tests {
 }
 
 docs {
-  Every campaign on the ad account with its ad sets and ads, whoever made them. Read live from Meta and never stored.
+  TikTok groups ad accounts into Business Centers, which no other network has an equivalent for — hence the only network-named routes in this section. `unsupported` on any other connection.
 
   Requires the `ads` scope when using an API key.
 

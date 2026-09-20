@@ -1,22 +1,19 @@
 meta {
-  name: Delete an ad set
+  name: List TikTok identities
   type: http
-  seq: 40
+  seq: 24
 }
 
-delete {
-  url: {{baseUrl}}/v1/ads/ad-sets/:id?workspace_id=&connection_id=
+get {
+  url: {{baseUrl}}/v1/ads/tiktok/identities?connection_id=&ad_account_id=
   body: none
   auth: inherit
 }
 
 params:query {
-  workspace_id: 
+  ~workspace_id: 
   connection_id: 
-}
-
-params:path {
-  id: {{id}}
+  ad_account_id: 
 }
 
 tests {
@@ -26,7 +23,7 @@ tests {
 }
 
 docs {
-  Deletes it on Meta with everything beneath it. Also requires the `publish` scope.
+  The accounts an ad can run as on one ad account. An identity id is what a Spark ad and an ad group take as `pageId`.
 
   Requires the `ads` scope when using an API key.
 

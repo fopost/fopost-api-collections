@@ -1,0 +1,32 @@
+meta {
+  name: List posts a Spark ad can promote
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/spark-posts?connection_id=&ad_account_id=&identity_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+  identity_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Posts already live under an identity. Pass one as `platformPostId` on a creative to run it as an ad without re-uploading it. `unsupported` on a network without Spark ads.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
