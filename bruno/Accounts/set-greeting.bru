@@ -1,11 +1,11 @@
 meta {
-  name: Create a role
+  name: Set the greeting
   type: http
-  seq: 58
+  seq: 17
 }
 
-post {
-  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/greeting
   body: json
   auth: inherit
 }
@@ -20,24 +20,24 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "greeting": [
+      {
+        "text": "Hello from FoPost."
+      }
+    ]
   }
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([201]);
+    expect(res.getStatus()).to.be.oneOf([200]);
   });
 }
 
 docs {
+  Replaces the greeting, one entry per locale, each up to 160 characters.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
-
-  **Optional fields** (not in the example body):
-  - `color`: integer
-  - `hoist`: boolean
-  - `mentionable`: boolean
-  - `permissions`: string
 }

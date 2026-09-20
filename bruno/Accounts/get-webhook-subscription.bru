@@ -1,18 +1,17 @@
 meta {
-  name: Get a scheduled event
+  name: Get the webhook subscription
   type: http
-  seq: 52
+  seq: 19
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/events/:eventId
+  url: {{baseUrl}}/v1/accounts/:id/webhook-subscription
   body: none
   auth: inherit
 }
 
 params:path {
   id: {{accountId}}
-  eventId: {{eventId}}
 }
 
 tests {
@@ -22,6 +21,8 @@ tests {
 }
 
 docs {
+  What the network currently delivers to our webhook for this account. `subscribed` is false when the subscription lapsed or a required field is missing.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

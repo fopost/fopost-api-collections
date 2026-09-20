@@ -1,17 +1,17 @@
 meta {
-  name: Delete an account group
+  name: Get the greeting
   type: http
-  seq: 30
+  seq: 16
 }
 
-delete {
-  url: {{baseUrl}}/v1/account-groups/:id
+get {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/greeting
   body: none
   auth: inherit
 }
 
 params:path {
-  id: {{id}}
+  id: {{accountId}}
 }
 
 tests {
@@ -21,7 +21,7 @@ tests {
 }
 
 docs {
-  Deletes the group only; its accounts stay connected.
+  The text shown before a Messenger conversation starts. Facebook Pages only; other networks answer 400.
 
   Requires the `accounts` scope when using an API key.
 

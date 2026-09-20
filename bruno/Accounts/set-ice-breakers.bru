@@ -1,11 +1,11 @@
 meta {
-  name: Move the account to another channel
+  name: Set ice breakers
   type: http
-  seq: 41
+  seq: 11
 }
 
-patch {
-  url: {{baseUrl}}/v1/accounts/:id/discord/channels/current
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/ice-breakers
   body: json
   auth: inherit
 }
@@ -20,7 +20,12 @@ headers {
 
 body:json {
   {
-    "channel_id": "string"
+    "ice_breakers": [
+      {
+        "question": "x",
+        "payload": "x"
+      }
+    ]
   }
 }
 
@@ -31,7 +36,7 @@ tests {
 }
 
 docs {
-  The channel must be one the bot can post to in the same server.
+  Replaces the ice breakers for this account. Up to four, each an 80-character question with a payload your webhook receives.
 
   Requires the `accounts` scope when using an API key.
 
