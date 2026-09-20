@@ -1,0 +1,29 @@
+meta {
+  name: Send a broadcast
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/broadcasts/:id/send
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Freezes the recipient list and starts sending. Contacts a network’s messaging window has closed on are skipped with `window_closed` rather than attempted, so the number sent can be lower than the audience. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -1,0 +1,35 @@
+meta {
+  name: List a broadcast’s recipients
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/broadcasts/:id/recipients
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~status: pending
+  ~page: 1
+  ~per_page: 50
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One row per contact, with what became of their message. A skipped row carries the reason.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

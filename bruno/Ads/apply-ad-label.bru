@@ -1,0 +1,43 @@
+meta {
+  name: Put a label on a campaign, ad set or ad
+  type: http
+  seq: 45
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/account/labels/:id/apply
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
+    "objectId": "x",
+    "level": "campaign"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Keeps whatever labels the object already carries.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

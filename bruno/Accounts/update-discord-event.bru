@@ -1,0 +1,52 @@
+meta {
+  name: Update a scheduled event
+  type: http
+  seq: 53
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/discord/events/:eventId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  eventId: {{eventId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "description": "Hello from FoPost.",
+    "start_time": "2026-01-01T12:00:00.000Z",
+    "end_time": "2026-01-01T12:00:00.000Z",
+    "channel_id": "string",
+    "location": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `description`: string
+  - `start_time`: string (date-time)
+  - `end_time`: string (date-time)
+  - `channel_id`: string
+  - `location`: string
+  - `status`: `scheduled` | `active` | `completed` | `canceled`
+}

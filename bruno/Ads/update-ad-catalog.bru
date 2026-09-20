@@ -1,0 +1,39 @@
+meta {
+  name: Rename a product catalog
+  type: http
+  seq: 18
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/catalogs/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+}
