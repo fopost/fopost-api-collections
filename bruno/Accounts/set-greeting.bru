@@ -1,0 +1,43 @@
+meta {
+  name: Set the greeting
+  type: http
+  seq: 17
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/greeting
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "greeting": [
+      {
+        "text": "Hello from FoPost."
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replaces the greeting, one entry per locale, each up to 160 characters.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

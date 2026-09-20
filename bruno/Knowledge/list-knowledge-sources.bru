@@ -1,0 +1,29 @@
+meta {
+  name: List knowledge sources
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/knowledge/sources
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  What the workspace has told FoPost about itself. `available` is false when this deployment cannot index sources at all.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

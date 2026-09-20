@@ -1,0 +1,38 @@
+meta {
+  name: Send a direct message to a member
+  type: http
+  seq: 63
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/discord/dm
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "member_id": "string",
+    "content": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

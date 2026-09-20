@@ -1,0 +1,27 @@
+meta {
+  name: Clear the persistent menu
+  type: http
+  seq: 15
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/persistent-menu
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
