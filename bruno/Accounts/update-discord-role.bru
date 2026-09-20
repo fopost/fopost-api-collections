@@ -1,0 +1,49 @@
+meta {
+  name: Update a role
+  type: http
+  seq: 59
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/discord/roles/:roleId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  roleId: {{roleId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "permissions": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `color`: integer
+  - `hoist`: boolean
+  - `mentionable`: boolean
+  - `permissions`: string
+}
