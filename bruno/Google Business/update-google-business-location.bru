@@ -1,0 +1,52 @@
+meta {
+  name: Update the Business Profile location
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/location
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "x",
+    "description": "Hello from FoPost.",
+    "website_uri": "https://example.com",
+    "primary_phone": "string",
+    "store_code": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only the fields present in the body change; omitted fields are left alone.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `description`: string | null
+  - `website_uri`: string (uri) | null
+  - `primary_phone`: string | null
+  - `additional_phones`: string[]
+  - `store_code`: string | null
+  - `regular_hours`: object[]
+}
