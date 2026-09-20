@@ -1,0 +1,43 @@
+meta {
+  name: Upload click conversions
+  type: http
+  seq: 40
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/google/conversions/upload
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string",
+    "conversions": [
+      {
+        "conversionActionId": "string",
+        "conversionDateTime": "string"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Offline conversions, matched to a click by `gclid`, `gbraid` or `wbraid`.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

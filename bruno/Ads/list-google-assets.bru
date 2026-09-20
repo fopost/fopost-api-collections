@@ -1,0 +1,31 @@
+meta {
+  name: List account assets
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/assets?connection_id=&customer_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sitelinks, callouts and structured snippets, with where each one is attached.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
