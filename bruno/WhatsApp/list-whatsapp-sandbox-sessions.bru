@@ -1,0 +1,25 @@
+meta {
+  name: List WhatsApp sandbox sessions
+  type: http
+  seq: 38
+}
+
+get {
+  url: {{baseUrl}}/v1/whatsapp/sandbox/sessions
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Sandbox invitations for a workspace. `meta.configured` says whether the sandbox number is set up at all.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

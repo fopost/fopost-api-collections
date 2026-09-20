@@ -1,0 +1,42 @@
+meta {
+  name: Create a WhatsApp group
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/groups
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "subject": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates a group on the business number. Participation is invite-only: send the invite link, because no endpoint adds someone.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `description`: string
+}

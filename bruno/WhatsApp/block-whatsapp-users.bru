@@ -1,0 +1,41 @@
+meta {
+  name: Block WhatsApp users
+  type: http
+  seq: 21
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/block
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "users": [
+      "xxxxx"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Blocks up to 100 numbers, and names the ones the platform refused.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

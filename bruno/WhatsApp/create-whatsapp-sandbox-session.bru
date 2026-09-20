@@ -1,0 +1,36 @@
+meta {
+  name: Invite a tester to the WhatsApp sandbox
+  type: http
+  seq: 39
+}
+
+post {
+  url: {{baseUrl}}/v1/whatsapp/sandbox/sessions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "x",
+    "phoneNumber": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Sends an approved template from the platform-owned test number to one tester. Their reply opens the messaging window and activates the session. This is a send, so it needs the publish scope.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

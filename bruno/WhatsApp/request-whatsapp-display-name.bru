@@ -1,0 +1,39 @@
+meta {
+  name: Request a new WhatsApp display name
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/profile/display-name
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "display_name": "Example display"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Files a display name change for platform review. The number keeps the old name until the review passes.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

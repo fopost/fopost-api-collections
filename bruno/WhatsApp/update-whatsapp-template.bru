@@ -1,0 +1,43 @@
+meta {
+  name: Update a WhatsApp message template
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "category": "MARKETING"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Edits the components or category. The name cannot change; create a new template instead.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `category`: `MARKETING` | `UTILITY` | `AUTHENTICATION`
+  - `components`: object[]
+}

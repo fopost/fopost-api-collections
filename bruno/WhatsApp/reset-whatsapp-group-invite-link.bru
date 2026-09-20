@@ -1,0 +1,29 @@
+meta {
+  name: Reset a WhatsApp group invite link
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/invite-link
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Issues a new link and invalidates the old one, which is how a leaked link is revoked.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

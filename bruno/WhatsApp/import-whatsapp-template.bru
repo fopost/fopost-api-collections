@@ -1,0 +1,45 @@
+meta {
+  name: Import a library template
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/templates/import
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "library_template_name": "Example library_template",
+    "name": "Example name",
+    "language": "xx",
+    "category": "MARKETING"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates a template from a library entry under a name of your own.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `library_template_button_inputs`: object[]
+}

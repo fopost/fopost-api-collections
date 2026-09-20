@@ -1,0 +1,41 @@
+meta {
+  name: Remove WhatsApp group participants
+  type: http
+  seq: 19
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/participants
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "users": [
+      "xxxxx"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes people from the group. There is no matching add: participants join through the invite link.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

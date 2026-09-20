@@ -1,0 +1,29 @@
+meta {
+  name: Publish a WhatsApp flow
+  type: http
+  seq: 35
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId/publish
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Makes the flow sendable. A published flow can no longer be deleted.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
