@@ -1,11 +1,11 @@
 meta {
-  name: Move the account to another channel
+  name: Resolve a TikTok video for repurposing
   type: http
-  seq: 60
+  seq: 54
 }
 
-patch {
-  url: {{baseUrl}}/v1/accounts/:id/discord/channels/current
+post {
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/video-download
   body: json
   auth: inherit
 }
@@ -20,7 +20,7 @@ headers {
 
 body:json {
   {
-    "channel_id": "string"
+    "url": "https://example.com"
   }
 }
 
@@ -31,7 +31,7 @@ tests {
 }
 
 docs {
-  The channel must be one the bot can post to in the same server.
+  Resolves a share link to one of the connected account's own videos and hands back the address a repurpose run reads. A link to someone else's video answers 404.
 
   Requires the `accounts` scope when using an API key.
 

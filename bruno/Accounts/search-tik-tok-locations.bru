@@ -1,13 +1,18 @@
 meta {
-  name: List pinned messages
+  name: Search TikTok places
   type: http
-  seq: 63
+  seq: 53
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/locations?q=
   body: none
   auth: inherit
+}
+
+params:query {
+  q: 
+  ~limit: 
 }
 
 params:path {
@@ -21,6 +26,8 @@ tests {
 }
 
 docs {
+  Places a post can be tagged with. Same Marketing API product as the music library.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

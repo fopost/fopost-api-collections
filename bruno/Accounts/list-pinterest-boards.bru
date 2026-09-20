@@ -1,11 +1,11 @@
 meta {
-  name: List pinned messages
+  name: List Pinterest boards
   type: http
-  seq: 63
+  seq: 36
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/pinterest/boards
   body: none
   auth: inherit
 }
@@ -21,6 +21,8 @@ tests {
 }
 
 docs {
+  Boards this connection can pin to, for the composer board picker.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

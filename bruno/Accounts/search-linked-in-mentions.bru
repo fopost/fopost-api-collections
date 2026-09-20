@@ -1,18 +1,17 @@
 meta {
-  name: List or search server members
+  name: Find a LinkedIn mention
   type: http
-  seq: 74
+  seq: 51
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/members
+  url: {{baseUrl}}/v1/accounts/:id/linkedin/mentions?q=
   body: none
   auth: inherit
 }
 
 params:query {
-  ~q: 
-  ~limit: 100
+  q: 
 }
 
 params:path {
@@ -26,6 +25,8 @@ tests {
 }
 
 docs {
+  Organizations a post can mention, with the URN that makes the text render as a link. People are not searchable: LinkedIn has no public person search, so a member mention needs a URN you already hold.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

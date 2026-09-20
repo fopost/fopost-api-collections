@@ -1,17 +1,18 @@
 meta {
-  name: List pinned messages
+  name: Read a transcript
   type: http
-  seq: 63
+  seq: 43
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/youtube/captions/:captionId
   body: none
   auth: inherit
 }
 
 params:path {
   id: {{accountId}}
+  captionId: {{captionId}}
 }
 
 tests {
@@ -21,6 +22,8 @@ tests {
 }
 
 docs {
+  The text of one caption track.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

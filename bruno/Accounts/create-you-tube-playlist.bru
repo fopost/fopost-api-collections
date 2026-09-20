@@ -1,11 +1,11 @@
 meta {
-  name: Create a role
+  name: Create a YouTube playlist
   type: http
-  seq: 77
+  seq: 39
 }
 
 post {
-  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+  url: {{baseUrl}}/v1/accounts/:id/youtube/playlists
   body: json
   auth: inherit
 }
@@ -20,7 +20,7 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "title": "x"
   }
 }
 
@@ -36,8 +36,6 @@ docs {
   **Scope:** `accounts`
 
   **Optional fields** (not in the example body):
-  - `color`: integer
-  - `hoist`: boolean
-  - `mentionable`: boolean
-  - `permissions`: string
+  - `description`: string
+  - `privacy`: `public` | `unlisted` | `private`
 }
