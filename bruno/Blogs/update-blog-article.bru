@@ -1,0 +1,55 @@
+meta {
+  name: Update an article in place
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  blogId: {{blogId}}
+  articleId: {{articleId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "x",
+    "body": "string",
+    "excerpt": "string",
+    "status": "published",
+    "author_name": "Example author",
+    "image_url": "https://example.com"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `body`: string
+  - `excerpt`: string
+  - `status`: `published` | `draft` | `pending` | `scheduled`
+  - `tags`: string[]
+  - `author_name`: string
+  - `image_url`: string (uri)
+}

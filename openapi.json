@@ -60,6 +60,10 @@
       "description": "X (Twitter) communities"
     },
     {
+      "name": "Blogs",
+      "description": "Articles and products that live on a connected site, not in FoPost"
+    },
+    {
       "name": "Labels",
       "description": "Tag and organize posts"
     },
@@ -3958,6 +3962,656 @@
             "description": "Account id"
           }
         ]
+      }
+    },
+    "/v1/accounts/{id}/blogs": {
+      "get": {
+        "operationId": "listAccountBlogs",
+        "summary": "List the blogs on a connected site",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteBlog"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/blogs/{blogId}/articles": {
+      "get": {
+        "operationId": "listBlogArticles",
+        "summary": "List articles on a blog",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteArticle"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "How many to return, 1 to 50 (default 20)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "published",
+                "draft",
+                "pending",
+                "scheduled"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Match the article title"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createBlogArticle",
+        "summary": "Create an article on a blog",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RemoteArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemoteArticleRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/blogs/{blogId}/articles/{articleId}": {
+      "get": {
+        "operationId": "getBlogArticle",
+        "summary": "Read one article",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RemoteArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateBlogArticle",
+        "summary": "Update an article in place",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RemoteArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRemoteArticleRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteBlogArticle",
+        "summary": "Delete an article",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Removes the article from the connected site. This cannot be undone.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/products": {
+      "get": {
+        "operationId": "listAccountProducts",
+        "summary": "List the store's products",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteProduct"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "How many to return, 1 to 50 (default 20)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "draft",
+                "archived"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Match the product title"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/products/{productId}": {
+      "patch": {
+        "operationId": "updateAccountProduct",
+        "summary": "Update a product",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RemoteProduct"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Changes the product on the store. Only the fields sent are touched.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Product id on the platform"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRemoteProductRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/accounts/{id}/validate": {
@@ -13809,6 +14463,7 @@
                 "kick",
                 "listmonk",
                 "wordpress",
+                "shopify",
                 "nostr",
                 "whop",
                 "skool"
@@ -13863,6 +14518,7 @@
                 "kick",
                 "listmonk",
                 "wordpress",
+                "shopify",
                 "nostr",
                 "whop",
                 "skool"
@@ -13926,6 +14582,139 @@
           "time",
           "timezone"
         ]
+      },
+      "CreateRemoteArticleRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "author_name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "image_url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          }
+        },
+        "required": [
+          "title",
+          "body"
+        ]
+      },
+      "UpdateRemoteArticleRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "author_name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "image_url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          }
+        }
+      },
+      "UpdateRemoteProductRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "draft",
+              "archived"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "product_type": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "vendor": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
       },
       "UpdateQueueSlotRequest": {
         "type": "object",
@@ -13992,6 +14781,7 @@
               "kick",
               "listmonk",
               "wordpress",
+              "shopify",
               "nostr",
               "whop",
               "skool"
@@ -17293,6 +18083,224 @@
         "required": [
           "data",
           "meta"
+        ]
+      },
+      "RemoteBlog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own blog id"
+          },
+          "title": {
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "handle",
+          "url"
+        ]
+      },
+      "RemoteArticle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own article id"
+          },
+          "blog_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "excerpt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "author_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "blog_id",
+          "title",
+          "body_html",
+          "excerpt",
+          "status",
+          "author_name",
+          "tags",
+          "image_url",
+          "url",
+          "published_at",
+          "updated_at"
+        ]
+      },
+      "RemoteProduct": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own product id"
+          },
+          "title": {
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "draft",
+              "archived"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vendor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Lowest variant price, as a decimal string"
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "handle",
+          "status",
+          "description",
+          "vendor",
+          "product_type",
+          "tags",
+          "image_url",
+          "url",
+          "price",
+          "currency",
+          "updated_at"
         ]
       },
       "QueueSlot": {
