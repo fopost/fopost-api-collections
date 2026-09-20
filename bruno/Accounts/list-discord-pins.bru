@@ -1,0 +1,27 @@
+meta {
+  name: List pinned messages
+  type: http
+  seq: 44
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,46 @@
+meta {
+  name: Create a sequence
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/v1/sequences
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "account_id": "{{accountId}}",
+    "name": "Example name",
+    "steps": [
+      {
+        "delay_hours": 1,
+        "text": "Hello from FoPost."
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  A series of messages, each a delay after the one before. Nobody is enrolled until you enroll them.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `status`: `active` | `paused`
+}

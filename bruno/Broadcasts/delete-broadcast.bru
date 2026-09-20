@@ -1,0 +1,29 @@
+meta {
+  name: Delete a broadcast
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/v1/broadcasts/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes the broadcast and its recipient records. Messages already sent stay in the conversations they went to. This cannot be undone.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

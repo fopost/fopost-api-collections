@@ -1,0 +1,43 @@
+meta {
+  name: Hand over a Messenger thread
+  type: http
+  seq: 24
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/conversations/:id/handover
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "account_id": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Passes the thread to another Meta app, or takes it back when no `app_id` is given. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `app_id`: string
+  - `metadata`: string
+}
