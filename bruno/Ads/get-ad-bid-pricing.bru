@@ -1,11 +1,11 @@
 meta {
-  name: Create an ad set
+  name: Quote what an audience costs at auction
   type: http
-  seq: 29
+  seq: 50
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/ad-sets
+  url: {{baseUrl}}/v1/ads/linkedin/bid-pricing
   body: json
   auth: inherit
 }
@@ -18,14 +18,8 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "campaignId": "x",
-    "pageId": "x",
-    "name": "Example name",
+    "adAccountId": "x",
     "goal": "engagement",
-    "budget": {
-      "minor": 1,
-      "type": "daily"
-    },
     "targeting": {
       "countries": [
         "xx"
@@ -39,17 +33,18 @@ body:json {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([201]);
+    expect(res.getStatus()).to.be.oneOf([200]);
   });
 }
 
 docs {
-  Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.
+  Named for the network that introduced it; any connection whose `capabilities.forecasts` is true answers it.
 
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
-  - `paused`: boolean — Create it paused; set to false to go live at once
+  - `placements`: string[]
+  - `bidType`: `CPC` | `CPM` | `CPV`
 }

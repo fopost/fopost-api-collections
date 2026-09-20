@@ -1,11 +1,11 @@
 meta {
-  name: Create an Instant Form
+  name: Create a conversion rule
   type: http
-  seq: 18
+  seq: 53
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/lead-forms
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules
   body: json
   auth: inherit
 }
@@ -18,13 +18,10 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "x",
+    "adAccountId": "x",
     "name": "Example name",
-    "questions": [
-      "EMAIL"
-    ],
-    "privacyPolicyUrl": "https://example.com",
-    "thankYouMessage": "Hello from FoPost."
+    "type": "purchase",
+    "attribution": "last_touch"
   }
 }
 
@@ -40,5 +37,8 @@ docs {
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
-  - `followUpUrl`: string (uri)
+  - `postClickWindowDays`: integer
+  - `viewThroughWindowDays`: integer
+  - `valueMinor`: integer — Default value of one conversion, ad account currency, minor units
+  - `currency`: string
 }

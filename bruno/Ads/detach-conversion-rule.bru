@@ -1,17 +1,22 @@
 meta {
-  name: Archive an Instant Form
+  name: Detach a conversion rule from an ad set
   type: http
-  seq: 62
+  seq: 58
 }
 
-post {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId/archive
+delete {
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/associations?workspace_id=&connection_id=
   body: json
   auth: inherit
 }
 
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 headers {
@@ -20,9 +25,7 @@ headers {
 
 body:json {
   {
-    "workspaceId": "{{workspaceId}}",
-    "connectionId": "00000000-0000-0000-0000-000000000000",
-    "pageId": "x"
+    "campaignId": "x"
   }
 }
 
@@ -33,8 +36,6 @@ tests {
 }
 
 docs {
-  The form stops collecting; its leads stay readable.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`

@@ -1,11 +1,11 @@
 meta {
-  name: Get an Instant Form
+  name: Read what a conversion rule recorded
   type: http
-  seq: 61
+  seq: 59
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/lead-forms/:formId?connection_id=&page_id=
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/metrics?connection_id=&since=&until=
   body: none
   auth: inherit
 }
@@ -13,11 +13,12 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  page_id: 
+  since: 
+  until: 
 }
 
 params:path {
-  formId: {{formId}}
+  id: {{id}}
 }
 
 tests {

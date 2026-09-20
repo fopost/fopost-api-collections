@@ -1,11 +1,11 @@
 meta {
-  name: Stop collecting a Page’s leads
+  name: Turn a conversion rule off
   type: http
-  seq: 66
+  seq: 56
 }
 
 delete {
-  url: {{baseUrl}}/v1/ads/lead-pages/:pageId?workspace_id=&connection_id=
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?workspace_id=&connection_id=
   body: none
   auth: inherit
 }
@@ -16,17 +16,17 @@ params:query {
 }
 
 params:path {
-  pageId: {{pageId}}
+  id: {{id}}
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([204]);
   });
 }
 
 docs {
-  Leads already in the feed stay.
+  The network keeps the history, so the rule stops counting rather than going away.
 
   Requires the `ads` scope when using an API key.
 

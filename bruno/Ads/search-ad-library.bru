@@ -1,0 +1,36 @@
+meta {
+  name: Search the network's public ad library
+  type: http
+  seq: 49
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/ad-library?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ~keyword: 
+  ~advertiser: 
+  ~countries: 
+  ~since: 
+  ~until: 
+  ~cursor: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Ads the network publishes for everyone, not the connection’s own ads. Available only on networks whose `capabilities.adLibrary` is true.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

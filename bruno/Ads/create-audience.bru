@@ -18,7 +18,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "adAccountId": "string",
+    "adAccountId": "x",
     "name": "Example name",
     "spec": {
       "subtype": "CUSTOM"
@@ -33,7 +33,7 @@ tests {
 }
 
 docs {
-  A customer list (`CUSTOM`, emails are hashed before they leave), a lookalike of an existing audience (`LOOKALIKE`), or website visitors from a pixel (`WEBSITE`).
+  A customer list (`CUSTOM`, emails are hashed before they leave), a lookalike of an existing audience (`LOOKALIKE`), website visitors from a pixel (`WEBSITE`), a list of companies (`COMPANY_LIST`) or people who engaged with a page, ad, form or video (`ENGAGEMENT`). Which subtypes a network takes follows its capabilities.
 
   Requires the `ads` scope when using an API key.
 

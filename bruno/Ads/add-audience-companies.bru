@@ -1,0 +1,52 @@
+meta {
+  name: Add companies to a company-list audience
+  type: http
+  seq: 48
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/audiences/:id/companies?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "companies": [
+      {
+        "name": "Example name",
+        "domain": "string",
+        "pageUrl": "https://example.com",
+        "ticker": "string",
+        "country": "xx"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Business-to-business networks match on companies rather than people. The rows travel with the request and are never stored.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

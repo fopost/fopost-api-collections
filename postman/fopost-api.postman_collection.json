@@ -6367,7 +6367,7 @@
             "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"pageId\": \"string\",\n  \"text\": \"Hello from FoPost.\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"pageId\": \"x\",\n  \"text\": \"Hello from FoPost.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -6414,7 +6414,7 @@
             "description": "Promotes a post FoPost already published to the given account. Candidates come from `GET /v1/ads/boostable`. The boost starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"postId\": \"{{postId}}\",\n  \"accountId\": \"{{accountId}}\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"postId\": \"{{postId}}\",\n  \"accountId\": \"{{accountId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -6965,10 +6965,10 @@
                 "audiences"
               ]
             },
-            "description": "A customer list (`CUSTOM`, emails are hashed before they leave), a lookalike of an existing audience (`LOOKALIKE`), or website visitors from a pixel (`WEBSITE`).\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `description`: string",
+            "description": "A customer list (`CUSTOM`, emails are hashed before they leave), a lookalike of an existing audience (`LOOKALIKE`), website visitors from a pixel (`WEBSITE`), a list of companies (`COMPANY_LIST`) or people who engaged with a page, ad, form or video (`ENGAGEMENT`). Which subtypes a network takes follows its capabilities.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `description`: string",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"spec\": {\n    \"subtype\": \"CUSTOM\"\n  }\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"spec\": {\n    \"subtype\": \"CUSTOM\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -7116,7 +7116,7 @@
             "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `followUpUrl`: string (uri)",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"questions\": [\n    \"EMAIL\"\n  ],\n  \"privacyPolicyUrl\": \"https://example.com\",\n  \"thankYouMessage\": \"Hello from FoPost.\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"x\",\n  \"name\": \"Example name\",\n  \"questions\": [\n    \"EMAIL\"\n  ],\n  \"privacyPolicyUrl\": \"https://example.com\",\n  \"thankYouMessage\": \"Hello from FoPost.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -7381,7 +7381,7 @@
             "description": "How many people the targeting reaches on the Page’s placements.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"pageId\": \"string\",\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"pageId\": \"x\",\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -7484,7 +7484,7 @@
             "description": "Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -7780,7 +7780,7 @@
             "description": "Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"campaignId\": \"x\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"campaignId\": \"x\",\n  \"pageId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -8472,7 +8472,7 @@
             "description": "An image, video or carousel creative from library media. Nothing runs until an ad uses it.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `callToAction`: `LEARN_MORE` | `SHOP_NOW` | `SIGN_UP` | `SUBSCRIBE` | `CONTACT_US` | `DOWNLOAD` | `GET_OFFER` | `BOOK_NOW` | `APPLY_NOW` | `WATCH_MORE` — Defaults to `LEARN_MORE`\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`\n- `mediaUrl`: string — A media library asset url: the image, or the video. Required for `video`\n- `thumbnailMediaUrl`: string — A video's poster frame, as a library image; Meta's own frame when omitted\n- `cards`: object[] — Carousel cards; required for `carousel`",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"string\",\n  \"pageId\": \"string\",\n  \"name\": \"Example name\",\n  \"format\": \"image\",\n  \"text\": \"Hello from FoPost.\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"pageId\": \"x\",\n  \"name\": \"Example name\",\n  \"format\": \"image\",\n  \"text\": \"Hello from FoPost.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -8639,7 +8639,7 @@
                 {
                   "key": "id",
                   "value": "{{id}}",
-                  "description": "Meta audience id"
+                  "description": "Audience id as the network addresses it"
                 }
               ]
             },
@@ -8699,7 +8699,7 @@
                 {
                   "key": "id",
                   "value": "{{id}}",
-                  "description": "Meta audience id"
+                  "description": "Audience id as the network addresses it"
                 }
               ]
             },
@@ -8763,7 +8763,7 @@
                 {
                   "key": "id",
                   "value": "{{id}}",
-                  "description": "Meta audience id"
+                  "description": "Audience id as the network addresses it"
                 }
               ]
             },
@@ -8824,7 +8824,7 @@
                 {
                   "key": "id",
                   "value": "{{id}}",
-                  "description": "Meta audience id"
+                  "description": "Audience id as the network addresses it"
                 }
               ]
             },
@@ -8832,6 +8832,821 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"emails\": [\n    \"someone@example.com\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add companies to a company-list audience",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/audiences/:id/companies?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "audiences",
+                ":id",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Audience id as the network addresses it"
+                }
+              ]
+            },
+            "description": "Business-to-business networks match on companies rather than people. The rows travel with the request and are never stored.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companies\": [\n    {\n      \"name\": \"Example name\",\n      \"domain\": \"string\",\n      \"pageUrl\": \"https://example.com\",\n      \"ticker\": \"string\",\n      \"country\": \"xx\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search the network's public ad library",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/ad-library?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "ad-library"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "keyword",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "advertiser",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "countries",
+                  "value": "",
+                  "description": "Comma-separated ISO 3166-1 alpha-2 codes",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "YYYY-MM-DD",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "description": "YYYY-MM-DD",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "`nextCursor` from the previous page",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Ads the network publishes for everyone, not the connection’s own ads. Available only on networks whose `capabilities.adLibrary` is true.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Quote what an audience costs at auction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/bid-pricing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "bid-pricing"
+              ]
+            },
+            "description": "Named for the network that introduced it; any connection whose `capabilities.forecasts` is true answers it.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `placements`: string[]\n- `bidType`: `CPC` | `CPM` | `CPV`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"goal\": \"engagement\",\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Forecast what a budget would deliver",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/supply-forecast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "supply-forecast"
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `placements`: string[]\n- `budgetMinor`: integer — Budget for the forecast window, ad account currency, minor units",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"goal\": \"engagement\",\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List conversion rules on an ad account",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules?connection_id=&ad_account_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "ad_account_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a conversion rule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules"
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `postClickWindowDays`: integer\n- `viewThroughWindowDays`: integer\n- `valueMinor`: integer — Default value of one conversion, ad account currency, minor units\n- `currency`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"type\": \"purchase\",\n  \"attribution\": \"last_touch\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a conversion rule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change a conversion rule",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `type`: `purchase` | `lead` | `sign_up` | `add_to_cart` | `download` | `install` | `key_page_view` | `other`\n- `attribution`: `last_touch` | `each_campaign`\n- `postClickWindowDays`: integer\n- `viewThroughWindowDays`: integer\n- `valueMinor`: integer — Default value of one conversion, ad account currency, minor units\n- `currency`: string\n- `enabled`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"type\": \"purchase\",\n  \"attribution\": \"last_touch\",\n  \"postClickWindowDays\": 1,\n  \"viewThroughWindowDays\": 1,\n  \"valueMinor\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Turn a conversion rule off",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "The network keeps the history, so the rule stops counting rather than going away.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Attach a conversion rule to an ad set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/associations?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id",
+                "associations"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignId\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detach a conversion rule from an ad set",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/associations?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id",
+                "associations"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignId\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read what a conversion rule recorded",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/metrics?connection_id=&since=&until=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id",
+                "metrics"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "YYYY-MM-DD",
+                  "disabled": false
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "description": "YYYY-MM-DD",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "Requires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Send conversions back to the network",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/events?workspace_id=&connection_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "linkedin",
+                "conversion-rules",
+                ":id",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": false
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "The Meta Ads connection to act through",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Conversion rule id"
+                }
+              ]
+            },
+            "description": "The identity on each event is hashed inside the API; the address itself never reaches the network and nothing about an event is stored.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"happenedAt\": 0\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -8948,7 +9763,7 @@
             "description": "The form stops collecting; its leads stay readable.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"x\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -9101,7 +9916,7 @@
             "description": "Turns on new-lead notifications for the Page and backfills its most recent leads into the feed.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"string\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"pageId\": \"x\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

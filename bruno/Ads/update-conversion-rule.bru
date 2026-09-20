@@ -1,0 +1,57 @@
+meta {
+  name: Change a conversion rule
+  type: http
+  seq: 55
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "type": "purchase",
+    "attribution": "last_touch",
+    "postClickWindowDays": 1,
+    "viewThroughWindowDays": 1,
+    "valueMinor": 0
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `type`: `purchase` | `lead` | `sign_up` | `add_to_cart` | `download` | `install` | `key_page_view` | `other`
+  - `attribution`: `last_touch` | `each_campaign`
+  - `postClickWindowDays`: integer
+  - `viewThroughWindowDays`: integer
+  - `valueMinor`: integer — Default value of one conversion, ad account currency, minor units
+  - `currency`: string
+  - `enabled`: boolean
+}

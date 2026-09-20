@@ -1,0 +1,48 @@
+meta {
+  name: Send conversions back to the network
+  type: http
+  seq: 60
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/events?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "events": [
+      {
+        "happenedAt": 0
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The identity on each event is hashed inside the API; the address itself never reaches the network and nothing about an event is stored.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
