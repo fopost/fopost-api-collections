@@ -1,0 +1,31 @@
+meta {
+  name: Get content decay by post age
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/decay
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+  ~workspace_id: 
+  ~days: 30
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  How engagement accumulates as a post ages, from the repeated readings taken of each post. Each band reports where the average post had got to by that age and what share of its final engagement that was, so `halfLifeBucket` says how long a post keeps earning. Posts are counted by their publish time falling inside the range.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

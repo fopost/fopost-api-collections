@@ -1,0 +1,29 @@
+meta {
+  name: Get one post's readings over time
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/posts/:id/timeline
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Every reading held for one post, oldest first, each carrying what moved since the reading before it, with one timeline per delivery. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

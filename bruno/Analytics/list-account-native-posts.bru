@@ -1,0 +1,35 @@
+meta {
+  name: List posts made outside FoPost
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/native-posts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~page: 1
+  ~per_page: 20
+  ~days: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Posts that exist on the account but never went out through FoPost, newest first, with the freshest metrics held for each. An API key needs the `analytics` scope as well as `accounts`.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

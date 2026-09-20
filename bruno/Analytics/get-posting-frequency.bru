@@ -1,0 +1,31 @@
+meta {
+  name: Get posting cadence against engagement
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/frequency
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~accountId: 
+  ~workspace_id: 
+  ~days: 90
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Weekly posting cadence set against what each cadence earned per post. Weeks run Monday to Sunday in UTC and are filed under the band their own post count falls in; a week with no posts belongs to no band. `best` is the cadence with the highest engagement per post.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

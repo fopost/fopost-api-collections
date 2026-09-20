@@ -1,0 +1,32 @@
+meta {
+  name: Get metric readings since a timestamp
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/v1/analytics/changes
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~since: 
+  ~limit: 100
+  ~accountId: 
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Post metric readings recorded after `since`, oldest first, with a `cursor` to pass as the next `since`. This is how an external store mirrors our metrics without refetching the whole history. Defaults to the last 7 days.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

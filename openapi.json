@@ -2656,6 +2656,59 @@
         ]
       }
     },
+    "/v1/posts/{id}/analytics/collect": {
+      "post": {
+        "operationId": "collectPostAnalytics",
+        "summary": "Refresh one post's metrics now",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectPostResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "description": "Refreshed too often — retry after `retryAfter` seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Re-reads one post from the network instead of waiting for the next scheduled collection, and stores the reading so it joins that post's timeline. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network. One post is still a platform call, so this spends the same per-user budget as `POST /v1/analytics/collect`: over the limit, the `429` body carries `retryAfter` in seconds. An API key needs the `analytics` scope as well as `posts`.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "FoPost post id, or a URL-encoded platform permalink"
+          }
+        ]
+      }
+    },
     "/v1/workspaces/{id}/analytics": {
       "get": {
         "operationId": "getWorkspaceAnalytics",
@@ -4483,6 +4536,85 @@
             }
           }
         }
+      }
+    },
+    "/v1/accounts/{id}/native-posts": {
+      "get": {
+        "operationId": "listAccountNativePosts",
+        "summary": "List posts made outside FoPost",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NativePostListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Posts that exist on the account but never went out through FoPost, newest first, with the freshest metrics held for each. An API key needs the `analytics` scope as well as `accounts`.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365
+            },
+            "description": "Only posts published in the last this many days"
+          }
+        ]
       }
     },
     "/v1/accounts/{id}/analytics": {
@@ -6550,6 +6682,261 @@
               "default": "UTC"
             },
             "description": "IANA time zone the heatmap is bucketed in"
+          }
+        ]
+      }
+    },
+    "/v1/analytics/decay": {
+      "get": {
+        "operationId": "getContentDecay",
+        "summary": "Get content decay by post age",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentDecayResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "How engagement accumulates as a post ages, from the repeated readings taken of each post. Each band reports where the average post had got to by that age and what share of its final engagement that was, so `halfLifeBucket` says how long a post keeps earning. Posts are counted by their publish time falling inside the range.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single connected account"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 30,
+              "minimum": 1,
+              "maximum": 365
+            },
+            "description": "Only posts published in the last this many days"
+          }
+        ]
+      }
+    },
+    "/v1/analytics/frequency": {
+      "get": {
+        "operationId": "getPostingFrequency",
+        "summary": "Get posting cadence against engagement",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostingFrequencyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Weekly posting cadence set against what each cadence earned per post. Weeks run Monday to Sunday in UTC and are filed under the band their own post count falls in; a week with no posts belongs to no band. `best` is the cadence with the highest engagement per post.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single connected account"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 90,
+              "minimum": 7,
+              "maximum": 365
+            }
+          }
+        ]
+      }
+    },
+    "/v1/analytics/changes": {
+      "get": {
+        "operationId": "getAnalyticsChanges",
+        "summary": "Get metric readings since a timestamp",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsChangesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Post metric readings recorded after `since`, oldest first, with a `cursor` to pass as the next `since`. This is how an external store mirrors our metrics without refetching the whole history. Defaults to the last 7 days.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Return readings recorded after this instant"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single connected account"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/analytics/posts/{id}/timeline": {
+      "get": {
+        "operationId": "getPostMetricTimeline",
+        "summary": "Get one post's readings over time",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostTimelineResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Every reading held for one post, oldest first, each carrying what moved since the reading before it, with one timeline per delivery. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "FoPost post id, or a URL-encoded platform permalink"
           }
         ]
       }
@@ -20807,6 +21194,568 @@
                 }
               }
             }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ContentDecayResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "days": {
+                "type": "integer"
+              },
+              "postsMeasured": {
+                "type": "integer",
+                "description": "Posts with a publish time and a later reading"
+              },
+              "halfLifeBucket": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "First age band where the average post had reached half its final engagement"
+              },
+              "bands": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "bucket": {
+                      "type": "string",
+                      "enum": [
+                        "under_1h",
+                        "1h_3h",
+                        "3h_6h",
+                        "6h_12h",
+                        "12h_24h",
+                        "1d_3d",
+                        "3d_7d",
+                        "over_7d"
+                      ]
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "integer",
+                      "description": "Posts with at least one reading in this band"
+                    },
+                    "avgEngagements": {
+                      "type": "number"
+                    },
+                    "avgImpressions": {
+                      "type": "number"
+                    },
+                    "shareOfFinal": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Mean share of the post's final engagement reached here (0-1)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PostingFrequencyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "days": {
+                "type": "integer"
+              },
+              "weeks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "weekStart": {
+                      "type": "string",
+                      "format": "date",
+                      "description": "Monday of the week, UTC"
+                    },
+                    "posts": {
+                      "type": "integer"
+                    },
+                    "engagements": {
+                      "type": "integer"
+                    },
+                    "avgEngagementsPerPost": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "bands": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "band": {
+                      "type": "string",
+                      "enum": [
+                        "under_3",
+                        "3_5",
+                        "6_10",
+                        "over_10"
+                      ]
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "weeks": {
+                      "type": "integer"
+                    },
+                    "posts": {
+                      "type": "integer"
+                    },
+                    "avgPostsPerWeek": {
+                      "type": "number"
+                    },
+                    "avgEngagementsPerPost": {
+                      "type": "number"
+                    },
+                    "engagementRate": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Engagements over reach, impressions as the stand-in"
+                    }
+                  }
+                }
+              },
+              "best": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "The cadence that earned the most engagement per post",
+                "properties": {
+                  "band": {
+                    "type": "string",
+                    "enum": [
+                      "under_3",
+                      "3_5",
+                      "6_10",
+                      "over_10"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "avgEngagementsPerPost": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PostTimelineResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "postId": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uuid",
+                "description": "Null when the post was made natively on the network"
+              },
+              "deliveries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "accountId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "externalPostId": {
+                      "type": "string"
+                    },
+                    "postedAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "points": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "ageMinutes": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "impressions": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "reach": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "engagements": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "likes": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "comments": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "shares": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "videoViews": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "delta": {
+                            "type": "object",
+                            "properties": {
+                              "impressions": {
+                                "type": "integer"
+                              },
+                              "reach": {
+                                "type": "integer"
+                              },
+                              "engagements": {
+                                "type": "integer"
+                              },
+                              "likes": {
+                                "type": "integer"
+                              },
+                              "comments": {
+                                "type": "integer"
+                              },
+                              "shares": {
+                                "type": "integer"
+                              }
+                            },
+                            "description": "Movement since the previous point"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "AnalyticsChangesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "since": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time",
+                "description": "Feed back as `since` to continue; null when nothing changed"
+              },
+              "hasMore": {
+                "type": "boolean"
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "accountId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "externalPostId": {
+                      "type": "string"
+                    },
+                    "postId": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uuid",
+                      "description": "Null for a post made natively on the network"
+                    },
+                    "postedAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "fetchedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "impressions": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "reach": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "engagements": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "likes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "comments": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "shares": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CollectPostResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "collected": {
+                "type": "integer",
+                "description": "Deliveries whose metrics were refreshed"
+              },
+              "deliveries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "accountId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "externalPostId": {
+                      "type": "string"
+                    },
+                    "collected": {
+                      "type": "boolean"
+                    },
+                    "fetchedAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "message": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Why the refresh did not happen"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NativePost": {
+        "type": "object",
+        "properties": {
+          "externalPostId": {
+            "type": "string"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "permalink": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "thumbnailUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mediaType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "fetchedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metrics": {
+            "type": "object",
+            "properties": {
+              "impressions": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "reach": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "engagements": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "likes": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "comments": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "shares": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "videoViews": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "NativePostListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NativePost"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/InboxPageMeta"
           }
         },
         "required": [
