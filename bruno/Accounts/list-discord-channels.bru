@@ -1,0 +1,29 @@
+meta {
+  name: List Discord channels
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/discord/channels
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Text channels the bot can post to in the connected server.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

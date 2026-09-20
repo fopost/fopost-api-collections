@@ -1,0 +1,43 @@
+meta {
+  name: Create a role
+  type: http
+  seq: 47
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `color`: integer
+  - `hoist`: boolean
+  - `mentionable`: boolean
+  - `permissions`: string
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Delete a role
+  type: http
+  seq: 49
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/discord/roles/:roleId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  roleId: {{roleId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Delete a scheduled event
+  type: http
+  seq: 43
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/discord/events/:eventId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  eventId: {{eventId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

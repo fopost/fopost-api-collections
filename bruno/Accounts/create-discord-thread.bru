@@ -1,0 +1,41 @@
+meta {
+  name: Start a thread on a message
+  type: http
+  seq: 38
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/discord/messages/:messageId/thread
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  messageId: {{messageId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `auto_archive_duration`: any
+}

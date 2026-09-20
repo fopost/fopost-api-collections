@@ -1,0 +1,39 @@
+meta {
+  name: Move the account to another channel
+  type: http
+  seq: 30
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/discord/channels/current
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "channel_id": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The channel must be one the bot can post to in the same server.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

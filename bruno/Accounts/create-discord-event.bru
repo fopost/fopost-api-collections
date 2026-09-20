@@ -1,0 +1,46 @@
+meta {
+  name: Create a scheduled event
+  type: http
+  seq: 40
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/discord/events
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "start_time": "2026-01-01T12:00:00.000Z"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Give a `channel_id` for an event in a voice or stage channel, or a `location` and an `end_time` for one somewhere else.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `description`: string
+  - `end_time`: string (date-time)
+  - `channel_id`: string
+  - `location`: string
+}

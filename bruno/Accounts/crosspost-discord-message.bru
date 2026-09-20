@@ -1,0 +1,30 @@
+meta {
+  name: Publish a message to following servers
+  type: http
+  seq: 37
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/discord/messages/:messageId/crosspost
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  messageId: {{messageId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only a message in an announcement channel can be crossposted.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

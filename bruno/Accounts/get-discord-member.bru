@@ -1,0 +1,28 @@
+meta {
+  name: Get a server member
+  type: http
+  seq: 45
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/discord/members/:memberId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  memberId: {{memberId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
