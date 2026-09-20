@@ -1,11 +1,11 @@
 meta {
-  name: Move the account to another channel
+  name: Set the default YouTube playlist
   type: http
-  seq: 60
+  seq: 40
 }
 
-patch {
-  url: {{baseUrl}}/v1/accounts/:id/discord/channels/current
+put {
+  url: {{baseUrl}}/v1/accounts/:id/youtube/playlists/default
   body: json
   auth: inherit
 }
@@ -20,7 +20,7 @@ headers {
 
 body:json {
   {
-    "channel_id": "string"
+    "playlist_id": "x"
   }
 }
 
@@ -31,7 +31,7 @@ tests {
 }
 
 docs {
-  The channel must be one the bot can post to in the same server.
+  The playlist a new video joins when the post does not pick one. Stored on the connection, not on YouTube; `null` clears it.
 
   Requires the `accounts` scope when using an API key.
 

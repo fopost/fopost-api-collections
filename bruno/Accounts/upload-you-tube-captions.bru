@@ -1,17 +1,18 @@
 meta {
-  name: Create a role
+  name: Upload a caption track
   type: http
-  seq: 77
+  seq: 42
 }
 
 post {
-  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+  url: {{baseUrl}}/v1/accounts/:id/youtube/videos/:videoId/captions
   body: json
   auth: inherit
 }
 
 params:path {
   id: {{accountId}}
+  videoId: {{videoId}}
 }
 
 headers {
@@ -20,7 +21,8 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "language": "xx",
+    "body": "x"
   }
 }
 
@@ -31,13 +33,13 @@ tests {
 }
 
 docs {
+  Uploads a subtitle file. YouTube reads SRT and WebVTT and sniffs which one it is, so the format is not declared.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
 
   **Optional fields** (not in the example body):
-  - `color`: integer
-  - `hoist`: boolean
-  - `mentionable`: boolean
-  - `permissions`: string
+  - `name`: string
+  - `is_draft`: boolean
 }

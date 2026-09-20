@@ -1,11 +1,11 @@
 meta {
-  name: List pinned messages
+  name: Read the publishing limit
   type: http
-  seq: 63
+  seq: 48
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/instagram/publishing-limit
   body: none
   auth: inherit
 }
@@ -21,6 +21,8 @@ tests {
 }
 
 docs {
+  How many posts this account has published in the rolling window, and how many are left before Instagram refuses the next one.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

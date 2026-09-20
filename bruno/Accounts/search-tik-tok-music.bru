@@ -1,13 +1,18 @@
 meta {
-  name: List pinned messages
+  name: Search TikTok's Commercial Music Library
   type: http
-  seq: 63
+  seq: 52
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/music?q=
   body: none
   auth: inherit
+}
+
+params:query {
+  q: 
+  ~limit: 
 }
 
 params:path {
@@ -21,6 +26,8 @@ tests {
 }
 
 docs {
+  Tracks a post may use. Needs the Marketing API product on the TikTok app; without it the request answers 403 rather than an empty list.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

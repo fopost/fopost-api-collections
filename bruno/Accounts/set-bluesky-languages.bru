@@ -1,11 +1,11 @@
 meta {
-  name: Create a role
+  name: Set the default post languages
   type: http
-  seq: 77
+  seq: 45
 }
 
-post {
-  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+put {
+  url: {{baseUrl}}/v1/accounts/:id/bluesky/languages
   body: json
   auth: inherit
 }
@@ -20,24 +20,22 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "languages": [
+      "xx"
+    ]
   }
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([201]);
+    expect(res.getStatus()).to.be.oneOf([200]);
   });
 }
 
 docs {
+  BCP-47 tags, at most three. An empty list clears the default.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
-
-  **Optional fields** (not in the example body):
-  - `color`: integer
-  - `hoist`: boolean
-  - `mentionable`: boolean
-  - `permissions`: string
 }

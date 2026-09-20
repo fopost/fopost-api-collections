@@ -1,11 +1,11 @@
 meta {
-  name: List pinned messages
+  name: Read the default post languages
   type: http
-  seq: 63
+  seq: 44
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/bluesky/languages
   body: none
   auth: inherit
 }
@@ -21,6 +21,8 @@ tests {
 }
 
 docs {
+  What a post from this connection is written in when the post does not say. Bluesky filters the feed by language.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

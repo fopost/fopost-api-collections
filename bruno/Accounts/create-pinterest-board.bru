@@ -1,11 +1,11 @@
 meta {
-  name: Create a role
+  name: Create a Pinterest board
   type: http
-  seq: 77
+  seq: 37
 }
 
 post {
-  url: {{baseUrl}}/v1/accounts/:id/discord/roles
+  url: {{baseUrl}}/v1/accounts/:id/pinterest/boards
   body: json
   auth: inherit
 }
@@ -31,13 +31,13 @@ tests {
 }
 
 docs {
+  Creates a board on the connected account. Pass its id as the `board_id` platform setting to pin to it.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
 
   **Optional fields** (not in the example body):
-  - `color`: integer
-  - `hoist`: boolean
-  - `mentionable`: boolean
-  - `permissions`: string
+  - `description`: string
+  - `privacy`: `PUBLIC` | `PROTECTED` | `SECRET`
 }

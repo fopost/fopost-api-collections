@@ -1,11 +1,11 @@
 meta {
-  name: List pinned messages
+  name: List YouTube playlists
   type: http
-  seq: 63
+  seq: 38
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/youtube/playlists
   body: none
   auth: inherit
 }
@@ -21,6 +21,8 @@ tests {
 }
 
 docs {
+  The connected channel's own playlists, with the stored default marked.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

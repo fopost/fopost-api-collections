@@ -1,17 +1,18 @@
 meta {
-  name: List pinned messages
+  name: Read story insights
   type: http
-  seq: 63
+  seq: 50
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/instagram/stories/:storyId/insights
   body: none
   auth: inherit
 }
 
 params:path {
   id: {{accountId}}
+  storyId: {{storyId}}
 }
 
 tests {
@@ -21,6 +22,8 @@ tests {
 }
 
 docs {
+  Views, reach, replies and navigation for one story. Instagram withholds these for a story too young or too small to report, and answers empty.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

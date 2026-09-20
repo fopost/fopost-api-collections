@@ -1,13 +1,17 @@
 meta {
-  name: List pinned messages
+  name: List active stories
   type: http
-  seq: 63
+  seq: 49
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/instagram/stories
   body: none
   auth: inherit
+}
+
+params:query {
+  ~insights: 
 }
 
 params:path {
@@ -21,6 +25,8 @@ tests {
 }
 
 docs {
+  Stories still inside their 24 hours, whether or not they were posted through FoPost. Story media is not on the media edge.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

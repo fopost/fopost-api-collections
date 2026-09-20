@@ -1,17 +1,18 @@
 meta {
-  name: List pinned messages
+  name: List caption tracks
   type: http
-  seq: 63
+  seq: 41
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/discord/messages/pinned
+  url: {{baseUrl}}/v1/accounts/:id/youtube/videos/:videoId/captions
   body: none
   auth: inherit
 }
 
 params:path {
   id: {{accountId}}
+  videoId: {{videoId}}
 }
 
 tests {
@@ -21,6 +22,8 @@ tests {
 }
 
 docs {
+  Caption tracks on one of the channel's own videos.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
