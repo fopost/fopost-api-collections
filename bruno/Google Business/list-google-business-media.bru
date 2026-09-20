@@ -1,0 +1,32 @@
+meta {
+  name: List location photos
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/media
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~page_size: 50
+  ~page_token: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

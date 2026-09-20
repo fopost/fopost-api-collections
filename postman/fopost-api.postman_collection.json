@@ -5017,6 +5017,1092 @@
       ]
     },
     {
+      "name": "Google Business",
+      "description": "Manage a connected Google Business Profile location",
+      "item": [
+        {
+          "name": "Get the Business Profile location",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "location"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The location behind a connected Google Business account, in the Business Information API shape.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update the Business Profile location",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "location"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Only the fields present in the body change; omitted fields are left alone.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `title`: string\n- `description`: string | null\n- `website_uri`: string (uri) | null\n- `primary_phone`: string | null\n- `additional_phones`: string[]\n- `store_code`: string | null\n- `regular_hours`: object[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"x\",\n  \"description\": \"Hello from FoPost.\",\n  \"website_uri\": \"https://example.com\",\n  \"primary_phone\": \"string\",\n  \"store_code\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Business Profile attributes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/attributes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "attributes"
+              ],
+              "query": [
+                {
+                  "key": "available",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "category_name",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "region_code",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "language_code",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The attribute values set on the location. Pass `available=true` to list the attributes Google offers for its category and region instead.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Business Profile attributes",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/attributes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "attributes"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Only the named attributes change; every other attribute is left alone.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attributes\": [\n    {\n      \"name\": \"Example name\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get the food menus",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/menus",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "menus"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Replace the food menus",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/menus",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "menus"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Google has no per-section patch, so the whole menu set is replaced.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"menus\": [\n    {\n      \"labels\": [\n        {\n          \"display_name\": \"Example display\"\n        }\n      ],\n      \"sections\": [\n        {\n          \"labels\": [],\n          \"items\": []\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get the service list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "services"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Replace the service list",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "services"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_items\": [\n    {\n      \"structured_service_item\": {\n        \"service_type_id\": \"x\"\n      },\n      \"free_form_service_item\": {\n        \"category\": \"x\",\n        \"label\": {\n          \"display_name\": \"Example display\"\n        }\n      },\n      \"price\": {\n        \"currency_code\": \"xxx\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List location photos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page_token",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add a location photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "media"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The photo is a media-library asset in the same workspace, handed to Google as a short-lived signed URL. JPEG and PNG only.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `category`: `COVER` | `PROFILE` | `LOGO` | `EXTERIOR` | `INTERIOR` | `PRODUCT` | `AT_WORK` | `FOOD_AND_DRINK` | `MENU` | `COMMON_AREA` | `ROOMS` | `TEAMS` | `ADDITIONAL`\n- `description`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"media_id\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove a location photo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/media/:mediaKey",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "media",
+                ":mediaKey"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                },
+                {
+                  "key": "mediaKey",
+                  "value": "{{mediaKey}}",
+                  "description": "Google media key"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List place action links",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/place-actions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "place-actions"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The Book, Order and Reserve buttons shown on the profile.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add a place action link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/place-actions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "place-actions"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `is_preferred`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uri\": \"https://example.com\",\n  \"place_action_type\": \"APPOINTMENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a place action link",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/place-actions/:linkId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "place-actions",
+                ":linkId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                },
+                {
+                  "key": "linkId",
+                  "value": "{{linkId}}",
+                  "description": "Place action link id"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `uri`: string (uri)\n- `is_preferred`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uri\": \"https://example.com\",\n  \"is_preferred\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove a place action link",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/place-actions/:linkId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "place-actions",
+                ":linkId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                },
+                {
+                  "key": "linkId",
+                  "value": "{{linkId}}",
+                  "description": "Place action link id"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List verification options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/verification",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "verification"
+              ],
+              "query": [
+                {
+                  "key": "language_code",
+                  "value": "en",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The ways Google will let this location be verified.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/verification/start",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "verification",
+                "start"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "The response names the pending verification to complete with the PIN.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `language_code`: string\n- `phone_number`: string\n- `email_address`: string (email)\n- `mailer_contact_name`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"method\": \"ADDRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Complete verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/verification/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "verification",
+                "complete"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Requires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verification_name\": \"Example verification\",\n  \"pin\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Business Profile performance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/performance?start_date=&end_date=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "performance"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "daily_metrics",
+                  "value": "",
+                  "description": "Repeat the parameter for each metric, or send one comma-separated value. Defaults to the common set.",
+                  "disabled": true
+                },
+                {
+                  "key": "keywords",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page_token",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Daily impressions, calls, direction requests and website clicks for the date range. Pass `keywords=true` for the monthly search terms instead.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Assign the location to another workspace",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/gbp/assign",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "gbp",
+                "assign"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Google Business account id"
+                }
+              ]
+            },
+            "description": "Moves the connection and every row keyed to it in one transaction. The caller must own both workspaces.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Labels",
       "description": "Tag and organize posts",
       "item": [

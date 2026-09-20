@@ -1,0 +1,29 @@
+meta {
+  name: Get the Business Profile location
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/location
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The location behind a connected Google Business account, in the Business Information API shape.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

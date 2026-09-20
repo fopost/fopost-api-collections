@@ -1,0 +1,43 @@
+meta {
+  name: Update Business Profile attributes
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/attributes
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "attributes": [
+      {
+        "name": "Example name"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only the named attributes change; every other attribute is left alone.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

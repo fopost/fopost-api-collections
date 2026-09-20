@@ -1,0 +1,28 @@
+meta {
+  name: Remove a place action link
+  type: http
+  seq: 15
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/place-actions/:linkId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  linkId: {{linkId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

@@ -1,0 +1,41 @@
+meta {
+  name: Add a place action link
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/place-actions
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "uri": "https://example.com",
+    "place_action_type": "APPOINTMENT"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `is_preferred`: boolean
+}

@@ -60,6 +60,10 @@
       "description": "X (Twitter) communities"
     },
     {
+      "name": "Google Business",
+      "description": "Manage a connected Google Business Profile location"
+    },
+    {
       "name": "Labels",
       "description": "Tag and organize posts"
     },
@@ -7257,6 +7261,1606 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/DiscordDmRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/location": {
+      "get": {
+        "operationId": "getGoogleBusinessLocation",
+        "summary": "Get the Business Profile location",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The location behind a connected Google Business account, in the Business Information API shape.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateGoogleBusinessLocation",
+        "summary": "Update the Business Profile location",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Only the fields present in the body change; omitted fields are left alone.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessLocationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/attributes": {
+      "get": {
+        "operationId": "getGoogleBusinessAttributes",
+        "summary": "Get Business Profile attributes",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The attribute values set on the location. Pass `available=true` to list the attributes Google offers for its category and region instead.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "available",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "category_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateGoogleBusinessAttributes",
+        "summary": "Update Business Profile attributes",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Only the named attributes change; every other attribute is left alone.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessAttributesRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/menus": {
+      "get": {
+        "operationId": "getGoogleBusinessMenus",
+        "summary": "Get the food menus",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "replaceGoogleBusinessMenus",
+        "summary": "Replace the food menus",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Google has no per-section patch, so the whole menu set is replaced.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessMenusRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/services": {
+      "get": {
+        "operationId": "getGoogleBusinessServices",
+        "summary": "Get the service list",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "replaceGoogleBusinessServices",
+        "summary": "Replace the service list",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessServicesRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/media": {
+      "get": {
+        "operationId": "listGoogleBusinessMedia",
+        "summary": "List location photos",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "addGoogleBusinessMedia",
+        "summary": "Add a location photo",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The photo is a media-library asset in the same workspace, handed to Google as a short-lived signed URL. JPEG and PNG only.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessMediaRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/media/{mediaKey}": {
+      "delete": {
+        "operationId": "deleteGoogleBusinessMedia",
+        "summary": "Remove a location photo",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "mediaKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google media key"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/gbp/place-actions": {
+      "get": {
+        "operationId": "listGoogleBusinessPlaceActions",
+        "summary": "List place action links",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The Book, Order and Reserve buttons shown on the profile.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleBusinessPlaceAction",
+        "summary": "Add a place action link",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessPlaceActionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/place-actions/{linkId}": {
+      "patch": {
+        "operationId": "updateGoogleBusinessPlaceAction",
+        "summary": "Update a place action link",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "linkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Place action link id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessPlaceActionPatchRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteGoogleBusinessPlaceAction",
+        "summary": "Remove a place action link",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "linkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Place action link id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/gbp/verification": {
+      "get": {
+        "operationId": "getGoogleBusinessVerificationOptions",
+        "summary": "List verification options",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The ways Google will let this location be verified.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "language_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/gbp/verification/start": {
+      "post": {
+        "operationId": "startGoogleBusinessVerification",
+        "summary": "Start verification",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "The response names the pending verification to complete with the PIN.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessVerifyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/verification/complete": {
+      "post": {
+        "operationId": "completeGoogleBusinessVerification",
+        "summary": "Complete verification",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleBusinessVerifyCompleteRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/gbp/performance": {
+      "get": {
+        "operationId": "getGoogleBusinessPerformance",
+        "summary": "Get Business Profile performance",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Daily impressions, calls, direction requests and website clicks for the date range. Pass `keywords=true` for the monthly search terms instead.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "daily_metrics",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "BUSINESS_IMPRESSIONS_DESKTOP_MAPS",
+                  "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH",
+                  "BUSINESS_IMPRESSIONS_MOBILE_MAPS",
+                  "BUSINESS_IMPRESSIONS_MOBILE_SEARCH",
+                  "BUSINESS_CONVERSATIONS",
+                  "BUSINESS_DIRECTION_REQUESTS",
+                  "CALL_CLICKS",
+                  "WEBSITE_CLICKS",
+                  "BUSINESS_BOOKINGS",
+                  "BUSINESS_FOOD_ORDERS",
+                  "BUSINESS_FOOD_MENU_CLICKS"
+                ]
+              }
+            },
+            "description": "Repeat the parameter for each metric, or send one comma-separated value. Defaults to the common set."
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/gbp/assign": {
+      "post": {
+        "operationId": "assignGoogleBusinessLocation",
+        "summary": "Assign the location to another workspace",
+        "tags": [
+          "Google Business"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "workspace_id": {
+                          "type": "string",
+                          "format": "uuid"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "workspace_id"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Business Profile management is not available: Google has not granted this deployment API access yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Moves the connection and every row keyed to it in one transaction. The caller must own both workspaces.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Google Business account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveAccountRequest"
               }
             }
           }
@@ -23091,6 +24695,495 @@
         },
         "required": [
           "workspace_id"
+        ]
+      },
+      "GoogleBusinessLocationRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 750
+          },
+          "website_uri": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "primary_phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 30
+          },
+          "additional_phones": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "maxItems": 2
+          },
+          "store_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          },
+          "regular_hours": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "open_day": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                },
+                "open_time": {
+                  "type": "string",
+                  "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                },
+                "close_day": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                },
+                "close_time": {
+                  "type": "string",
+                  "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                }
+              },
+              "required": [
+                "open_day",
+                "open_time",
+                "close_day",
+                "close_time"
+              ]
+            },
+            "maxItems": 50
+          }
+        }
+      },
+      "GoogleBusinessAttributesRequest": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  "maxItems": 50
+                },
+                "uri_values": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "format": "uri"
+                  },
+                  "maxItems": 50
+                }
+              },
+              "required": [
+                "name"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "attributes"
+        ]
+      },
+      "GoogleBusinessMenusRequest": {
+        "type": "object",
+        "properties": {
+          "menus": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "display_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "display_name"
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 10
+                },
+                "sections": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "labels": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "display_name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 255
+                            }
+                          },
+                          "required": [
+                            "display_name"
+                          ]
+                        },
+                        "minItems": 1,
+                        "maxItems": 10
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "labels": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "display_name": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "maxLength": 1000
+                                  }
+                                },
+                                "required": [
+                                  "display_name"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 10
+                            },
+                            "price": {
+                              "type": "object",
+                              "properties": {
+                                "currency_code": {
+                                  "type": "string",
+                                  "minLength": 3,
+                                  "maxLength": 3
+                                },
+                                "units": {
+                                  "type": "string",
+                                  "maxLength": 20
+                                },
+                                "nanos": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "currency_code"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "labels"
+                          ]
+                        },
+                        "maxItems": 200
+                      }
+                    },
+                    "required": [
+                      "labels",
+                      "items"
+                    ]
+                  },
+                  "maxItems": 50
+                }
+              },
+              "required": [
+                "labels",
+                "sections"
+              ]
+            },
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "menus"
+        ]
+      },
+      "GoogleBusinessServicesRequest": {
+        "type": "object",
+        "properties": {
+          "service_items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "structured_service_item": {
+                  "type": "object",
+                  "properties": {
+                    "service_type_id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 300
+                    }
+                  },
+                  "required": [
+                    "service_type_id"
+                  ]
+                },
+                "free_form_service_item": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "label": {
+                      "type": "object",
+                      "properties": {
+                        "display_name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "description": {
+                          "type": "string",
+                          "maxLength": 300
+                        }
+                      },
+                      "required": [
+                        "display_name"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "category",
+                    "label"
+                  ]
+                },
+                "price": {
+                  "type": "object",
+                  "properties": {
+                    "currency_code": {
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 3
+                    },
+                    "units": {
+                      "type": "string",
+                      "maxLength": 20
+                    },
+                    "nanos": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "currency_code"
+                  ]
+                }
+              }
+            },
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "service_items"
+        ]
+      },
+      "GoogleBusinessMediaRequest": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "COVER",
+              "PROFILE",
+              "LOGO",
+              "EXTERIOR",
+              "INTERIOR",
+              "PRODUCT",
+              "AT_WORK",
+              "FOOD_AND_DRINK",
+              "MENU",
+              "COMMON_AREA",
+              "ROOMS",
+              "TEAMS",
+              "ADDITIONAL"
+            ],
+            "default": "ADDITIONAL"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "media_id"
+        ]
+      },
+      "GoogleBusinessPlaceActionRequest": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "place_action_type": {
+            "type": "string",
+            "enum": [
+              "APPOINTMENT",
+              "ONLINE_APPOINTMENT",
+              "DINING_RESERVATION",
+              "FOOD_ORDERING",
+              "FOOD_DELIVERY",
+              "FOOD_TAKEOUT",
+              "SHOP_ONLINE"
+            ]
+          },
+          "is_preferred": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uri",
+          "place_action_type"
+        ]
+      },
+      "GoogleBusinessPlaceActionPatchRequest": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "is_preferred": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GoogleBusinessVerifyRequest": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "EMAIL",
+              "PHONE_CALL",
+              "SMS",
+              "AUTO",
+              "VETTED_PARTNER"
+            ]
+          },
+          "language_code": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "phone_number": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "email_address": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "email"
+          },
+          "mailer_contact_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "method"
+        ]
+      },
+      "GoogleBusinessVerifyCompleteRequest": {
+        "type": "object",
+        "properties": {
+          "verification_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "verification_name",
+          "pin"
         ]
       },
       "CreateWebhookRequest": {
