@@ -1,0 +1,36 @@
+meta {
+  name: Search the public ad archive
+  type: http
+  seq: 36
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/library?connection_id=&countries=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  countries: 
+  ~q: 
+  ~page_ids: 
+  ~active_status: ACTIVE
+  ~limit: 
+  ~after: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Ads anyone is running, by keyword or by Page. Read live from Meta on every request and never stored, so a result that stops running is simply absent next time.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

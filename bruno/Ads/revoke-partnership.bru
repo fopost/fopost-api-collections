@@ -1,0 +1,33 @@
+meta {
+  name: Revoke a partnership permission
+  type: http
+  seq: 39
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/partnership/creators/:creatorId?workspace_id=&connection_id=&page_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+  page_id: 
+}
+
+params:path {
+  creatorId: {{creatorId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Fetch a product feed now
+  type: http
+  seq: 26
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/feeds/:feedId/uploads
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+  feedId: {{feedId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `url`: string (uri) — Overrides the feed's own url for this run
+}

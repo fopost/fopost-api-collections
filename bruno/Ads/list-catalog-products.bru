@@ -1,0 +1,35 @@
+meta {
+  name: List catalog products
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/products?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ~after: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One page; pass `nextCursor` back as `after` for the next.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
