@@ -7263,7 +7263,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Comments, mentions and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "Comments, mentions, reviews and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -7285,7 +7285,8 @@
               "enum": [
                 "comment",
                 "mention",
-                "dm"
+                "dm",
+                "review"
               ]
             }
           },
@@ -7587,7 +7588,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "One row per platform post that has collected comments (`kind=comments`, the default), per post the account was tagged in (`kind=mentions`), or per review left on the business (`kind=reviews`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -7608,7 +7609,8 @@
               "type": "string",
               "enum": [
                 "comments",
-                "mentions"
+                "mentions",
+                "reviews"
               ],
               "default": "comments"
             }
@@ -8358,6 +8360,9 @@
           },
           "502": {
             "description": "The platform refused the reply; `message` carries its reason"
+          },
+          "503": {
+            "description": "This deployment holds no credentials for the platform yet"
           }
         },
         "description": "Sends the reply on the platform as the connected account and settles the item. Only where `canReply` is true. A DM reply may carry `media_ids` (sent as short-lived signed links) and `quick_replies`; either also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
@@ -14399,6 +14404,7 @@
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
+                "inbox.review_received",
                 "automation.triggered",
                 "automation.completed",
                 "automation.failed"
@@ -14463,6 +14469,7 @@
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
+                "inbox.review_received",
                 "automation.triggered",
                 "automation.completed",
                 "automation.failed"
@@ -19585,6 +19592,7 @@
           "inbox.comment_received",
           "inbox.mention_received",
           "inbox.message_received",
+          "inbox.review_received",
           "automation.triggered",
           "automation.completed",
           "automation.failed"
@@ -20575,7 +20583,8 @@
                         "comment",
                         "mention",
                         "reply",
-                        "dm"
+                        "dm",
+                        "review"
                       ]
                     },
                     "count": {
@@ -21669,7 +21678,8 @@
             "enum": [
               "comment",
               "mention",
-              "dm"
+              "dm",
+              "review"
             ]
           },
           "state": {
@@ -21717,6 +21727,13 @@
               "string",
               "null"
             ]
+          },
+          "rating": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Stars on a review, 1-5. Null on every other type"
           },
           "attachments": {
             "type": "array",
@@ -21933,6 +21950,13 @@
               "string",
               "null"
             ]
+          },
+          "rating": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Stars, on a review thread. Null on comments and mentions"
           },
           "post": {
             "$ref": "#/components/schemas/InboxPostContext"

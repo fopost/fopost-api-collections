@@ -3654,7 +3654,7 @@
                 }
               ]
             },
-            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
+            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `inbox.review_received` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Example name\",\n  \"url\": \"https://example.com\",\n  \"active\": false,\n  \"secret\": \"xxxxxxxxxxxxxxxx\"\n}",
@@ -5153,7 +5153,7 @@
                 }
               ]
             },
-            "description": "Comments, mentions and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+            "description": "Comments, mentions, reviews and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
           },
           "response": [],
           "event": [
@@ -5357,7 +5357,7 @@
                 }
               ]
             },
-            "description": "One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+            "description": "One row per platform post that has collected comments (`kind=comments`, the default), per post the account was tagged in (`kind=mentions`), or per review left on the business (`kind=reviews`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
           },
           "response": [],
           "event": [
