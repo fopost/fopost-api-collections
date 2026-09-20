@@ -1,0 +1,31 @@
+meta {
+  name: List allowlisted creators
+  type: http
+  seq: 37
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/partnership/creators?connection_id=&page_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  page_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Creators who allowlisted this Page to run partnership ads on their posts.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

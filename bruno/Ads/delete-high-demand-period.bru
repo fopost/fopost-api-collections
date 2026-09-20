@@ -1,0 +1,33 @@
+meta {
+  name: Delete a high-demand period
+  type: http
+  seq: 53
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/account/high-demand-periods/:id?workspace_id=&connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,7 +1,7 @@
 meta {
   name: Create a creative
   type: http
-  seq: 41
+  seq: 84
 }
 
 post {
@@ -21,8 +21,7 @@ body:json {
     "adAccountId": "string",
     "pageId": "string",
     "name": "Example name",
-    "format": "image",
-    "text": "Hello from FoPost."
+    "format": "image"
   }
 }
 
@@ -40,6 +39,7 @@ docs {
   **Scope:** `ads`
 
   **Optional fields** (not in the example body):
+  - `text`: string — Primary text. Required except for `partnership`, which runs the creator's post
   - `headline`: string
   - `destinationUrl`: string (uri)
   - `callToAction`: `LEARN_MORE` | `SHOP_NOW` | `SIGN_UP` | `SUBSCRIBE` | `CONTACT_US` | `DOWNLOAD` | `GET_OFFER` | `BOOK_NOW` | `APPLY_NOW` | `WATCH_MORE` — Defaults to `LEARN_MORE`
@@ -47,4 +47,8 @@ docs {
   - `mediaUrl`: string — A media library asset url: the image, or the video. Required for `video`
   - `thumbnailMediaUrl`: string — A video's poster frame, as a library image; Meta's own frame when omitted
   - `cards`: object[] — Carousel cards; required for `carousel`
+  - `productSetId`: string — Required for `catalog`: Meta fills the cards from this product set
+  - `description`: string — `catalog` only: the per-product line under the headline
+  - `creatorPostId`: string — Required for `partnership`: the creator's Instagram media id, or their Page post as `{page}_{post}`
+  - `creatorInstagramUserId`: string — `partnership` only: the creator's Instagram account
 }

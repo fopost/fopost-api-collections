@@ -1,0 +1,35 @@
+meta {
+  name: List feed uploads
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/feeds/:feedId/uploads?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+  feedId: {{feedId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Each run Meta made of the feed, newest first.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

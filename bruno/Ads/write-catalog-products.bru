@@ -1,0 +1,51 @@
+meta {
+  name: Upsert or delete catalog products
+  type: http
+  seq: 21
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/products
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "products": [
+      {
+        "op": "upsert",
+        "retailerId": "x",
+        "name": "Example name",
+        "url": "https://example.com",
+        "imageUrl": "https://example.com",
+        "priceMinor": 0,
+        "currency": "xxx"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Up to 500 products in one batch, keyed by your own `retailerId`. Upserts and deletes travel together.
+
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+}
