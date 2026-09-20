@@ -1723,7 +1723,7 @@
                 }
               ]
             },
-            "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+            "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to. `kind=security` is the audit log — members joining, leaving, changing role or access, and changes to two-step verification, passkeys, single sign-on and signed-in devices. Security rows are append-only and never pruned.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
           },
           "response": [],
           "event": [
