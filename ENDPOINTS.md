@@ -201,9 +201,9 @@
 | POST | `/v1/ads/{id}/refresh` | Refresh an ad’s status and insights | `ads` |
 | GET | `/v1/ads/external` | List ads made outside FoPost | `ads` |
 | GET | `/v1/ads/boostable` | List posts that can be boosted | `ads` |
-| GET | `/v1/ads/connections` | List Meta Ads connections | `ads` |
-| POST | `/v1/ads/connections/meta/authorize` | Start a Meta Ads connection | `ads` |
-| DELETE | `/v1/ads/connections/{id}` | Remove a Meta Ads connection | `ads` |
+| GET | `/v1/ads/connections` | List ad connections | `ads` |
+| POST | `/v1/ads/connections/meta/authorize` | Start an ad connection | `ads` |
+| DELETE | `/v1/ads/connections/{id}` | Remove an ad connection | `ads` |
 | GET | `/v1/ads/providers` | List ad networks | `ads` |
 | GET | `/v1/ads/sources` | List ad accounts and Pages | `ads` |
 | GET | `/v1/ads/audiences` | List custom audiences and pixels | `ads` |

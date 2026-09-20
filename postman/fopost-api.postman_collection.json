@@ -6302,7 +6302,7 @@
     },
     {
       "name": "Ads",
-      "description": "Meta ads, audiences and lead forms",
+      "description": "Ads, audiences and lead forms across ad networks",
       "item": [
         {
           "name": "List ads",
@@ -6661,7 +6661,7 @@
                 }
               ]
             },
-            "description": "Published posts with a delivery on an account a Meta Ads connection reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Published posts with a delivery on an account an ad connection reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -6679,7 +6679,7 @@
           ]
         },
         {
-          "name": "List Meta Ads connections",
+          "name": "List ad connections",
           "request": {
             "method": "GET",
             "header": [],
@@ -6720,7 +6720,7 @@
           ]
         },
         {
-          "name": "Start a Meta Ads connection",
+          "name": "Start an ad connection",
           "request": {
             "method": "POST",
             "header": [
@@ -6769,7 +6769,7 @@
           ]
         },
         {
-          "name": "Remove a Meta Ads connection",
+          "name": "Remove an ad connection",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -6874,7 +6874,7 @@
                 }
               ]
             },
-            "description": "Every Meta Ads connection with the ad accounts and Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Every ad connection with the ad accounts and, where the network has them, the Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -7075,7 +7075,7 @@
                 }
               ]
             },
-            "description": "Every Page a Meta Ads connection reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Every Page a lead-form network reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -7305,7 +7305,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -7431,7 +7431,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7533,7 +7533,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7593,7 +7593,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7657,7 +7657,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7718,7 +7718,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7829,7 +7829,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7889,7 +7889,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -7953,7 +7953,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8014,7 +8014,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8125,7 +8125,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8185,7 +8185,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8249,7 +8249,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8310,7 +8310,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8420,7 +8420,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -8521,7 +8521,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8576,7 +8576,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8631,7 +8631,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8691,7 +8691,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8755,7 +8755,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8816,7 +8816,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -8880,7 +8880,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -9150,7 +9150,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
