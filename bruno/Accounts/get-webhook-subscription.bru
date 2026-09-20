@@ -1,11 +1,11 @@
 meta {
-  name: List Slack members
+  name: Get the webhook subscription
   type: http
-  seq: 37
+  seq: 19
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/slack/members
+  url: {{baseUrl}}/v1/accounts/:id/webhook-subscription
   body: none
   auth: inherit
 }
@@ -21,7 +21,7 @@ tests {
 }
 
 docs {
-  People in the connected Slack workspace, for addressing a DM.
+  What the network currently delivers to our webhook for this account. `subscribed` is false when the subscription lapsed or a required field is missing.
 
   Requires the `accounts` scope when using an API key.
 

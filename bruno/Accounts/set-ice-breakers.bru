@@ -1,17 +1,17 @@
 meta {
-  name: Rename an account group
+  name: Set ice breakers
   type: http
-  seq: 29
+  seq: 11
 }
 
-patch {
-  url: {{baseUrl}}/v1/account-groups/:id
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/ice-breakers
   body: json
   auth: inherit
 }
 
 params:path {
-  id: {{id}}
+  id: {{accountId}}
 }
 
 headers {
@@ -20,7 +20,12 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "ice_breakers": [
+      {
+        "question": "x",
+        "payload": "x"
+      }
+    ]
   }
 }
 
@@ -31,6 +36,8 @@ tests {
 }
 
 docs {
+  Replaces the ice breakers for this account. Up to four, each an 80-character question with a payload your webhook receives.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

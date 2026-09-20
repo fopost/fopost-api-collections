@@ -1,17 +1,17 @@
 meta {
-  name: Rename an account group
+  name: Set the greeting
   type: http
-  seq: 29
+  seq: 17
 }
 
-patch {
-  url: {{baseUrl}}/v1/account-groups/:id
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/greeting
   body: json
   auth: inherit
 }
 
 params:path {
-  id: {{id}}
+  id: {{accountId}}
 }
 
 headers {
@@ -20,7 +20,11 @@ headers {
 
 body:json {
   {
-    "name": "Example name"
+    "greeting": [
+      {
+        "text": "Hello from FoPost."
+      }
+    ]
   }
 }
 
@@ -31,6 +35,8 @@ tests {
 }
 
 docs {
+  Replaces the greeting, one entry per locale, each up to 160 characters.
+
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`

@@ -3,7 +3,7 @@
   "info": {
     "title": "FoPost API",
     "version": "1.0.0",
-    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
+    "description": "REST API for FoPost \u2014 schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings \u2192 API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
     "contact": {
       "name": "FoPost Support",
       "url": "https://fopost.com/contact"
@@ -1366,7 +1366,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Queues delivery of a draft or scheduled post to its assigned accounts (or the `accountIds` subset). Accounts with expired or revoked credentials are failed immediately; degraded accounts publish with a warning. Delivery is asynchronous — poll the deliveries endpoint or subscribe to webhooks for the outcome. With `options.dryRun` the request validates and returns the target accounts without publishing (200 instead of 202).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Queues delivery of a draft or scheduled post to its assigned accounts (or the `accountIds` subset). Accounts with expired or revoked credentials are failed immediately; degraded accounts publish with a warning. Delivery is asynchronous \u2014 poll the deliveries endpoint or subscribe to webhooks for the outcome. With `options.dryRun` the request validates and returns the target accounts without publishing (200 instead of 202).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -1889,7 +1889,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "The post’s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.",
+        "description": "The post\u2019s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -1956,7 +1956,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Copies the post — content, target accounts, per-platform settings and labels — into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.\n\nRequires the `posts` scope when using an API key.",
+        "description": "Copies the post \u2014 content, target accounts, per-platform settings and labels \u2014 into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -2876,7 +2876,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard → API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard \u2192 API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "accounts",
         "requestBody": {
           "required": true,
@@ -3226,6 +3226,660 @@
           }
         },
         "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/messaging/ice-breakers": {
+      "get": {
+        "operationId": "getIceBreakers",
+        "summary": "Get ice breakers",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaIceBreakers"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The tappable prompts a new Messenger or Instagram conversation opens with. Up to four; networks without them answer 400.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setIceBreakers",
+        "summary": "Set ice breakers",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaIceBreakers"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Replaces the ice breakers for this account. Up to four, each an 80-character question with a payload your webhook receives.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetIceBreakersRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteIceBreakers",
+        "summary": "Clear ice breakers",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaIceBreakers"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/messaging/persistent-menu": {
+      "get": {
+        "operationId": "getPersistentMenu",
+        "summary": "Get the persistent menu",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaPersistentMenu"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The always-visible Messenger menu. Facebook Pages only; other networks answer 400.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setPersistentMenu",
+        "summary": "Set the persistent menu",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaPersistentMenu"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Replaces the menu, one entry per locale. Up to three items each, either a postback or an http(s) link.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetPersistentMenuRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deletePersistentMenu",
+        "summary": "Clear the persistent menu",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaPersistentMenu"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/messaging/greeting": {
+      "get": {
+        "operationId": "getGreeting",
+        "summary": "Get the greeting",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaGreeting"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The text shown before a Messenger conversation starts. Facebook Pages only; other networks answer 400.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setGreeting",
+        "summary": "Set the greeting",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaGreeting"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Replaces the greeting, one entry per locale, each up to 160 characters.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetGreetingRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteGreeting",
+        "summary": "Clear the greeting",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MetaGreeting"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/webhook-subscription": {
+      "get": {
+        "operationId": "getWebhookSubscription",
+        "summary": "Get the webhook subscription",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookSubscription"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "What the network currently delivers to our webhook for this account. `subscribed` is false when the subscription lapsed or a required field is missing.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "resubscribeWebhook",
+        "summary": "Re-subscribe the webhook",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookSubscription"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Subscribes the app to every field this account needs, lapsed or not.\n\nRequires the `accounts` scope when using an API key.",
         "x-fopost-scope": "accounts",
         "parameters": [
           {
@@ -4654,7 +5308,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Fetches the account’s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.\n\nRequires the `accounts` scope when using an API key.",
+        "description": "Fetches the account\u2019s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.\n\nRequires the `accounts` scope when using an API key.",
         "x-fopost-scope": "accounts",
         "parameters": [
           {
@@ -5489,7 +6143,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response \u2014 store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "webhooks",
         "requestBody": {
           "required": true,
@@ -5915,7 +6569,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
+        "description": "Cross-workspace dashboard totals, period deltas, today\u2019s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -6579,7 +7233,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "429": {
-            "description": "Collection throttled — retry after `retryAfter` seconds",
+            "description": "Collection throttled \u2014 retry after `retryAfter` seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -6589,7 +7243,7 @@
             }
           }
         },
-        "description": "Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).\n\nRequires the `analytics` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Collects fresh metrics for the user\u2019s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).\n\nRequires the `analytics` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -6685,7 +7339,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Creates a trigger \u2192 pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "automations",
         "requestBody": {
           "required": true,
@@ -7204,7 +7858,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Public endpoint for `api_webhook` automations. Authenticated by the automation’s secret in the `x-automation-secret` header (returned when the automation was created), not by an API key. The JSON body (optional) becomes the trigger payload.",
+        "description": "Public endpoint for `api_webhook` automations. Authenticated by the automation\u2019s secret in the `x-automation-secret` header (returned when the automation was created), not by an API key. The JSON body (optional) becomes the trigger payload.",
         "parameters": [
           {
             "name": "id",
@@ -7587,7 +8241,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "One row per platform post that has collected comments (`kind=comments`, the default) or per post the account was tagged in (`kind=mentions`). Fetch a thread's items with `GET /v1/inbox?account_id=\u2026&post_external_id=\u2026`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -7720,7 +8374,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=…&conversation_id=…`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=\u2026&conversation_id=\u2026`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -8184,7 +8838,7 @@
     "/v1/inbox/{id}": {
       "patch": {
         "operationId": "updateInboxItem",
-        "summary": "Change an item’s state, or edit our own comment",
+        "summary": "Change an item\u2019s state, or edit our own comment",
         "tags": [
           "Inbox"
         ],
@@ -8890,6 +9544,89 @@
         }
       }
     },
+    "/v1/inbox/conversations/{id}/handover": {
+      "post": {
+        "operationId": "setInboxHandover",
+        "summary": "Hand over a Messenger thread",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "app_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "control": {
+                          "type": "string",
+                          "enum": [
+                            "passed",
+                            "taken"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the network has no hand-over"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Passes the thread to another Meta app, or takes it back when no `app_id` is given. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The conversation id of a DM"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InboxHandoverRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/inbox/{id}/attachments/{index}": {
       "get": {
         "operationId": "getInboxAttachment",
@@ -8948,7 +9685,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Position in the item’s `attachments`"
+            "description": "Position in the item\u2019s `attachments`"
           },
           {
             "name": "variant",
@@ -9275,7 +10012,7 @@
     "/v1/ads/{id}/refresh": {
       "post": {
         "operationId": "refreshAd",
-        "summary": "Refresh an ad’s status and insights",
+        "summary": "Refresh an ad\u2019s status and insights",
         "tags": [
           "Ads"
         ],
@@ -9791,7 +10528,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -10076,7 +10813,7 @@
     "/v1/ads/lead-forms/{formId}/leads": {
       "get": {
         "operationId": "listLeads",
-        "summary": "List a form’s leads",
+        "summary": "List a form\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -10164,7 +10901,7 @@
     "/v1/ads/{id}/insights": {
       "get": {
         "operationId": "getAdInsights",
-        "summary": "Get an ad’s insights over a date range",
+        "summary": "Get an ad\u2019s insights over a date range",
         "tags": [
           "Ads"
         ],
@@ -10318,7 +11055,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Totals for an ad account (`act_…`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Totals for an ad account (`act_\u2026`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "parameters": [
           {
@@ -10348,7 +11085,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…` or a Meta object id"
+            "description": "`act_\u2026` or a Meta object id"
           },
           {
             "name": "since",
@@ -10439,7 +11176,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "How many people the targeting reaches on the Page’s placements.\n\nRequires the `ads` scope when using an API key.",
+        "description": "How many people the targeting reaches on the Page\u2019s placements.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "requestBody": {
           "required": true,
@@ -10456,7 +11193,7 @@
     "/v1/ads/accounts/{adAccountId}/tree": {
       "get": {
         "operationId": "getAdAccountTree",
-        "summary": "Get an ad account’s campaign tree",
+        "summary": "Get an ad account\u2019s campaign tree",
         "tags": [
           "Ads"
         ],
@@ -10508,7 +11245,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           },
           {
             "name": "workspace_id",
@@ -11831,7 +12568,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -12682,7 +13419,7 @@
       },
       "post": {
         "operationId": "subscribeLeadPage",
-        "summary": "Collect a Page’s leads",
+        "summary": "Collect a Page\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -12749,7 +13486,7 @@
     "/v1/ads/lead-pages/{pageId}": {
       "delete": {
         "operationId": "unsubscribeLeadPage",
-        "summary": "Stop collecting a Page’s leads",
+        "summary": "Stop collecting a Page\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -14059,6 +14796,190 @@
         ],
         "additionalProperties": false
       },
+      "SetIceBreakersRequest": {
+        "type": "object",
+        "properties": {
+          "ice_breakers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "payload": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "required": [
+                "question",
+                "payload"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 4
+          }
+        },
+        "required": [
+          "ice_breakers"
+        ],
+        "additionalProperties": false
+      },
+      "SetPersistentMenuRequest": {
+        "type": "object",
+        "properties": {
+          "persistent_menu": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "call_to_actions": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "postback"
+                            ]
+                          },
+                          "title": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 30
+                          },
+                          "payload": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 1000
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "title",
+                          "payload"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "web_url"
+                            ]
+                          },
+                          "title": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 30
+                          },
+                          "url": {
+                            "type": "string",
+                            "maxLength": 2048,
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "title",
+                          "url"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 3
+                },
+                "locale": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 10,
+                  "default": "default"
+                },
+                "composer_input_disabled": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "call_to_actions"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "persistent_menu"
+        ],
+        "additionalProperties": false
+      },
+      "SetGreetingRequest": {
+        "type": "object",
+        "properties": {
+          "greeting": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 10,
+                  "default": "default"
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "greeting"
+        ],
+        "additionalProperties": false
+      },
+      "InboxHandoverRequest": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "app_id": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$"
+          },
+          "metadata": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
       "CreateWorkspaceRequest": {
         "type": "object",
         "properties": {
@@ -15097,7 +16018,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -15333,7 +16254,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -15603,7 +16524,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -15815,7 +16736,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -16417,7 +17338,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "pageId": {
             "type": "string",
@@ -16575,7 +17496,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "pageId": {
             "type": "string",
@@ -17318,7 +18239,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 6,
-            "description": "0 = Sunday … 6 = Saturday"
+            "description": "0 = Sunday \u2026 6 = Saturday"
           },
           "time": {
             "type": "string",
@@ -17839,7 +18760,7 @@
                       "items": {
                         "$ref": "#/components/schemas/ContentSignal"
                       },
-                      "description": "Advisory signals — they never block publishing"
+                      "description": "Advisory signals \u2014 they never block publishing"
                     }
                   }
                 }
@@ -17887,7 +18808,7 @@
                       "items": {
                         "$ref": "#/components/schemas/ContentSignal"
                       },
-                      "description": "Advisory signals — they never block publishing"
+                      "description": "Advisory signals \u2014 they never block publishing"
                     }
                   }
                 }
@@ -18953,6 +19874,140 @@
         },
         "required": [
           "commands"
+        ]
+      },
+      "MetaIceBreakers": {
+        "type": "object",
+        "properties": {
+          "ice_breakers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "question",
+                "payload"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ice_breakers"
+        ]
+      },
+      "MetaPersistentMenu": {
+        "type": "object",
+        "properties": {
+          "persistent_menu": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string"
+                },
+                "composer_input_disabled": {
+                  "type": "boolean"
+                },
+                "call_to_actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "postback",
+                          "web_url"
+                        ]
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "payload": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "title"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "locale",
+                "call_to_actions"
+              ]
+            }
+          }
+        },
+        "required": [
+          "persistent_menu"
+        ]
+      },
+      "MetaGreeting": {
+        "type": "object",
+        "properties": {
+          "greeting": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "locale",
+                "text"
+              ]
+            }
+          }
+        },
+        "required": [
+          "greeting"
+        ]
+      },
+      "WebhookSubscription": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean",
+            "description": "True when the app is subscribed and every required field is present"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The fields the network reports as subscribed"
+          },
+          "missing_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Required fields the network is not delivering"
+          }
+        },
+        "required": [
+          "subscribed",
+          "fields",
+          "missing_fields"
         ]
       },
       "AccountCreated": {
@@ -20244,7 +21299,7 @@
                 }
               }
             },
-            "description": "Labels on the post — always empty for platform-native posts"
+            "description": "Labels on the post \u2014 always empty for platform-native posts"
           },
           "metrics": {
             "type": "object",
@@ -22715,7 +23770,7 @@
               "properties": {
                 "id": {
                   "type": "string",
-                  "description": "`act_…`"
+                  "description": "`act_\u2026`"
                 },
                 "name": {
                   "type": "string"

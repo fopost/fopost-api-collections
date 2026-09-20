@@ -1,17 +1,17 @@
 meta {
-  name: Delete an account group
+  name: Clear the persistent menu
   type: http
-  seq: 30
+  seq: 15
 }
 
 delete {
-  url: {{baseUrl}}/v1/account-groups/:id
+  url: {{baseUrl}}/v1/accounts/:id/messaging/persistent-menu
   body: none
   auth: inherit
 }
 
 params:path {
-  id: {{id}}
+  id: {{accountId}}
 }
 
 tests {
@@ -21,8 +21,6 @@ tests {
 }
 
 docs {
-  Deletes the group only; its accounts stay connected.
-
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
