@@ -1,0 +1,43 @@
+meta {
+  name: Find keyword ideas
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/google/keyword-ideas
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Ideas from seed keywords, a landing page, or both.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `seeds`: string[]
+  - `url`: string (uri)
+  - `languageId`: string
+  - `geoTargetIds`: string[]
+}

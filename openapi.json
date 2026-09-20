@@ -9673,6 +9673,2046 @@
         "x-fopost-scope": "ads"
       }
     },
+    "/v1/ads/connections/google/authorize": {
+      "post": {
+        "operationId": "authorizeGoogleAds",
+        "summary": "Start a Google Ads connection",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "A saved card is required before another connection"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The workspace already has an active Google Ads connection"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Returns the Google login URL. The user who calls this must finish the login in their own browser session: the callback checks that the same user came back. An ad connection fills a connected-account slot, so past the free allowance a saved card is required.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectMetaAdsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/keywords": {
+      "get": {
+        "operationId": "listGoogleKeywords",
+        "summary": "List Google Ads keywords",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleKeyword"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Keywords on the account, or on one ad group. Google Ads only: on another network this answers 400.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "ad_group_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Limit to one ad group"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleKeyword",
+        "summary": "Add a keyword",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Adds a keyword to an ad group. Needs the `publish` scope: it goes live.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGoogleKeywordRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/keywords/{id}": {
+      "patch": {
+        "operationId": "updateGoogleKeyword",
+        "summary": "Pause, resume or rebid a keyword",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Keyword object id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGoogleKeywordRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteGoogleKeyword",
+        "summary": "Remove a keyword",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Keyword object id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/keyword-ideas": {
+      "post": {
+        "operationId": "googleKeywordIdeas",
+        "summary": "Find keyword ideas",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleKeywordIdea"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Ideas from seed keywords, a landing page, or both.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleKeywordIdeasRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/keyword-metrics": {
+      "post": {
+        "operationId": "googleKeywordMetrics",
+        "summary": "Read historical keyword metrics",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleKeywordIdea"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleKeywordIdeasRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/search-terms": {
+      "get": {
+        "operationId": "listGoogleSearchTerms",
+        "summary": "List search terms",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleSearchTerm"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "What people actually searched, with the metrics each term earned.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/google/bid-strategies": {
+      "get": {
+        "operationId": "listGoogleBidStrategies",
+        "summary": "List portfolio bid strategies",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleBidStrategy"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleBidStrategy",
+        "summary": "Create a bid strategy",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/ad-schedule": {
+      "get": {
+        "operationId": "listGoogleAdSchedule",
+        "summary": "Read a campaign ad schedule",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleAdScheduleSlot"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "campaign_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setGoogleAdSchedule",
+        "summary": "Replace a campaign ad schedule",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "slots": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Google has no partial edit for a schedule: the slots given replace every slot on the campaign.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/negative-keywords": {
+      "get": {
+        "operationId": "listGoogleNegativeKeywordLists",
+        "summary": "List negative keyword lists",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleSharedSet"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleNegativeKeywordList",
+        "summary": "Create a negative keyword list",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/negative-keywords/keywords": {
+      "post": {
+        "operationId": "addGoogleNegativeKeywords",
+        "summary": "Add keywords to a negative list",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "added": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/negative-keywords/attach": {
+      "post": {
+        "operationId": "attachGoogleNegativeKeywordList",
+        "summary": "Attach a negative list to a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "campaignId": {
+                          "type": "string"
+                        },
+                        "sharedSetId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/assets": {
+      "get": {
+        "operationId": "listGoogleAssets",
+        "summary": "List account assets",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoogleAssetsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Sitelinks, callouts and structured snippets, with where each one is attached.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleAsset",
+        "summary": "Create an asset",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGoogleAssetRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/assets/attach": {
+      "post": {
+        "operationId": "attachGoogleAsset",
+        "summary": "Attach an asset to the account or a campaign",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "assetId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/assets/{id}": {
+      "delete": {
+        "operationId": "deleteGoogleAsset",
+        "summary": "Detach an asset",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Detached"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "An asset itself is permanent on Google, so this removes every link that puts it under an ad.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Asset object id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/asset-groups": {
+      "get": {
+        "operationId": "listGoogleAssetGroups",
+        "summary": "List Performance Max asset groups",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleAssetGroup"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "campaign_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Limit to one campaign"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleAssetGroup",
+        "summary": "Create a Performance Max asset group",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGoogleAssetGroupRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/asset-groups/{id}": {
+      "patch": {
+        "operationId": "updateGoogleAssetGroup",
+        "summary": "Rename, pause or resume an asset group",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Asset group object id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteGoogleAssetGroup",
+        "summary": "Remove an asset group",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Asset group object id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/local-services": {
+      "get": {
+        "operationId": "listGoogleLocalServicesLeads",
+        "summary": "List Local Services leads",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleLocalServicesLead"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Leads from Local Services Ads, read live and never stored.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/google/conversions": {
+      "get": {
+        "operationId": "listGoogleConversionActions",
+        "summary": "List conversion actions",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleConversionAction"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createGoogleConversionAction",
+        "summary": "Create a conversion action",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Requires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/conversions/upload": {
+      "post": {
+        "operationId": "uploadGoogleConversions",
+        "summary": "Upload click conversions",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "uploaded": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Offline conversions, matched to a click by `gclid`, `gbraid` or `wbraid`.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadGoogleConversionsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/conversions/adjustments": {
+      "post": {
+        "operationId": "uploadGoogleConversionAdjustments",
+        "summary": "Upload conversion adjustments",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "uploaded": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Restate, retract or enhance a conversion already counted.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/insights/query": {
+      "post": {
+        "operationId": "runGoogleInsightsQuery",
+        "summary": "Run a GAQL query",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "rows": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "A raw read-only Google Ads Query Language SELECT against one customer. The customer comes from `customerId`, never from the query text, and anything that is not a SELECT is refused before the connection is touched. Google Ads only.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleInsightsQueryRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/ads/sources": {
       "get": {
         "operationId": "listAdSources",
@@ -15798,6 +17838,419 @@
         },
         "required": [
           "workspaceId"
+        ]
+      },
+      "CreateGoogleKeywordRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "adGroupId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}~[a-zA-Z]+~\\d{1,20}(~\\d{1,20})?$",
+            "description": "`<customerId>~<kind>~<id>`, e.g. `1234567890~adGroup~77`"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "matchType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "PHRASE",
+              "BROAD"
+            ]
+          },
+          "cpcBidMinor": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "description": "Bid in account minor units"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId",
+          "adGroupId",
+          "text",
+          "matchType"
+        ]
+      },
+      "UpdateGoogleKeywordRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "cpcBidMinor": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId"
+        ]
+      },
+      "GoogleAdsScopeRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId"
+        ]
+      },
+      "GoogleKeywordIdeasRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "seeds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "languageId": {
+            "type": "string"
+          },
+          "geoTargetIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId"
+        ]
+      },
+      "CreateGoogleAssetRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "spec": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "sitelink"
+                    ]
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 25
+                  },
+                  "description1": {
+                    "type": "string",
+                    "maxLength": 35
+                  },
+                  "description2": {
+                    "type": "string",
+                    "maxLength": 35
+                  },
+                  "finalUrl": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "text",
+                  "finalUrl"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "callout"
+                    ]
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 25
+                  }
+                },
+                "required": [
+                  "kind",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "snippet"
+                    ]
+                  },
+                  "header": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 25
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 25
+                    },
+                    "minItems": 3,
+                    "maxItems": 10
+                  }
+                },
+                "required": [
+                  "kind",
+                  "header",
+                  "values"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId",
+          "spec"
+        ]
+      },
+      "CreateGoogleAssetGroupRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "campaignId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}~[a-zA-Z]+~\\d{1,20}(~\\d{1,20})?$",
+            "description": "`<customerId>~<kind>~<id>`, e.g. `1234567890~adGroup~77`"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "finalUrls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "minItems": 1,
+            "maxItems": 10
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ],
+            "default": "paused"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId",
+          "campaignId",
+          "name",
+          "finalUrls"
+        ]
+      },
+      "UploadGoogleConversionsRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "conversions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "gclid": {
+                  "type": "string"
+                },
+                "gbraid": {
+                  "type": "string"
+                },
+                "wbraid": {
+                  "type": "string"
+                },
+                "conversionActionId": {
+                  "type": "string"
+                },
+                "conversionDateTime": {
+                  "type": "string",
+                  "description": "`yyyy-MM-dd HH:mm:ss+|-HH:mm`, the only shape Google accepts"
+                },
+                "valueMinor": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "currencyCode": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3
+                },
+                "orderId": {
+                  "type": "string",
+                  "maxLength": 128
+                }
+              },
+              "required": [
+                "conversionActionId",
+                "conversionDateTime"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "customerId",
+          "conversions"
+        ]
+      },
+      "GoogleInsightsQueryRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "pattern": "^\\d{8,12}$",
+            "description": "Google Ads customer id, digits only"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 5000,
+            "description": "A read-only GAQL SELECT"
+          }
+        },
+        "required": [
+          "connectionId",
+          "customerId",
+          "query"
         ]
       },
       "CreateAdCampaignRequest": {
@@ -22687,6 +25140,349 @@
               "type": "boolean"
             },
             "description": "What the network supports: campaigns, boost, audiences, leadForms, and so on"
+          }
+        }
+      },
+      "GoogleKeyword": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "`<customerId>~keyword~<adGroupId>~<criterionId>`"
+          },
+          "adGroupId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "matchType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "PHRASE",
+              "BROAD"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "cpcBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "negative": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GoogleKeywordIdea": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "avgMonthlySearches": {
+            "type": "integer"
+          },
+          "competition": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lowTopOfPageBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "highTopOfPageBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      },
+      "GoogleSearchTerm": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string"
+          },
+          "adGroupId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/InsightsMetrics"
+          }
+        }
+      },
+      "GoogleBidStrategy": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "campaignCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "GoogleAdScheduleSlot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dayOfWeek": {
+            "type": "string"
+          },
+          "startHour": {
+            "type": "integer"
+          },
+          "endHour": {
+            "type": "integer"
+          },
+          "bidModifier": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      },
+      "GoogleSharedSet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "memberCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "GoogleAsset": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What a sitelink, callout or snippet renders"
+          },
+          "finalUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "GoogleAssetLink": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "customer",
+              "campaign"
+            ]
+          },
+          "ownerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fieldType": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "GoogleAssetsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "assets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GoogleAsset"
+                }
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GoogleAssetLink"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GoogleAssetGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "finalUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GoogleLocalServicesLead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "service": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "contactName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "GoogleConversionAction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "countingType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valueMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
           }
         }
       },

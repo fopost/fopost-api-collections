@@ -1,0 +1,40 @@
+meta {
+  name: Create an asset
+  type: http
+  seq: 30
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/google/assets
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string",
+    "spec": {
+      "kind": "sitelink",
+      "text": "Hello from FoPost.",
+      "finalUrl": "https://example.com"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

@@ -1,0 +1,33 @@
+meta {
+  name: List Local Services leads
+  type: http
+  seq: 37
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/local-services?connection_id=&customer_id=&since=&until=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+  since: 
+  until: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Leads from Local Services Ads, read live and never stored.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
