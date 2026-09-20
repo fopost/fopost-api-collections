@@ -1,0 +1,29 @@
+meta {
+  name: List A/B studies
+  type: http
+  seq: 76
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/account/studies?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

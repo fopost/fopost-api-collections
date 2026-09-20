@@ -1,0 +1,39 @@
+meta {
+  name: Assign the location to another workspace
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/assign
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Moves the connection and every row keyed to it in one transaction. The caller must own both workspaces.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

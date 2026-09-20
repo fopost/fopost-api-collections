@@ -1,0 +1,43 @@
+meta {
+  name: Add a location photo
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/media
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "media_id": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The photo is a media-library asset in the same workspace, handed to Google as a short-lived signed URL. JPEG and PNG only.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `category`: `COVER` | `PROFILE` | `LOGO` | `EXTERIOR` | `INTERIOR` | `PRODUCT` | `AT_WORK` | `FOOD_AND_DRINK` | `MENU` | `COMMON_AREA` | `ROOMS` | `TEAMS` | `ADDITIONAL`
+  - `description`: string
+}

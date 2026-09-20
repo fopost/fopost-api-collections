@@ -1,0 +1,36 @@
+meta {
+  name: Ask a creator for partnership permission
+  type: http
+  seq: 68
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/partnership/creators
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "pageId": "string",
+    "creatorId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

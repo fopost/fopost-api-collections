@@ -1,0 +1,53 @@
+meta {
+  name: Replace the food menus
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/menus
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "menus": [
+      {
+        "labels": [
+          {
+            "display_name": "Example display"
+          }
+        ],
+        "sections": [
+          {
+            "labels": [],
+            "items": []
+          }
+        ]
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Google has no per-section patch, so the whole menu set is replaced.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

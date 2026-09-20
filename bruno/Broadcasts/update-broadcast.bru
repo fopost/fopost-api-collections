@@ -1,0 +1,49 @@
+meta {
+  name: Update a broadcast
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/v1/broadcasts/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "text": "Hello from FoPost.",
+    "media_id": "00000000-0000-0000-0000-000000000000",
+    "scheduled_at": "2026-01-01T12:00:00.000Z"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only a draft or scheduled broadcast can be edited.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `text`: string
+  - `media_id`: string (uuid)
+  - `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.
+  - `scheduled_at`: string (date-time) | null
+}

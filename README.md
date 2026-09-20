@@ -3,9 +3,10 @@
 Ready-to-run API client collections for the [FoPost](https://fopost.com) API, generated from its
 OpenAPI specification. Import one, paste an API key, and every endpoint is a request you can send.
 
-Covers **185 operations across 16 groups**: posts, publishing, validation, the posting queue,
-workspaces, accounts, communities, labels, webhooks, analytics, automations, inbox, ads, media, the
-API itself, and OAuth. The full list is in [ENDPOINTS.md](ENDPOINTS.md).
+Covers **322 operations across 20 groups**: posts, publishing, validation, the posting queue,
+workspaces, accounts, communities, Google Business Profile, labels, webhooks, analytics,
+automations, inbox, contacts, broadcasts, knowledge, ads, media, the API itself, and OAuth. The full list is in
+[ENDPOINTS.md](ENDPOINTS.md).
 
 | Client | What to import | |
 | --- | --- | --- |

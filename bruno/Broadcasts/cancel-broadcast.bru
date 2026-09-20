@@ -1,0 +1,29 @@
+meta {
+  name: Cancel a broadcast
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/broadcasts/:id/cancel
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Stops it where it stands. Anyone not yet written to stays unsent; messages already delivered are not recalled. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

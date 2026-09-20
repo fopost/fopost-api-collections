@@ -1,7 +1,7 @@
 meta {
   name: Create an ad set
   type: http
-  seq: 59
+  seq: 102
 }
 
 post {
@@ -52,4 +52,7 @@ docs {
 
   **Optional fields** (not in the example body):
   - `paused`: boolean — Create it paused; set to false to go live at once
+  - `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number
+  - `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`
+  - `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set
 }
