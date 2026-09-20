@@ -1,0 +1,43 @@
+meta {
+  name: Create a broadcast
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/broadcasts
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "account_id": "{{accountId}}",
+    "name": "Example name",
+    "text": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Creates it without sending. Give `scheduled_at` to have it go out on its own, or call send when you are ready.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `media_id`: string (uuid)
+  - `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.
+  - `scheduled_at`: string (date-time) | null
+}
