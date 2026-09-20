@@ -31547,6 +31547,13 @@
             ],
             "format": "date-time"
           },
+          "moderationStatus": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The platform's own moderation state, where it reports one: `published`, `held`, `spam` or `rejected`"
+          },
           "canHide": {
             "type": "boolean"
           },
@@ -33139,6 +33146,10 @@
           "canStartConversation": {
             "type": "boolean",
             "description": "A new DM can be opened from this account by handle"
+          },
+          "reconnectRequired": {
+            "type": "boolean",
+            "description": "The grant predates a permission the inbox read needs; reconnect the account"
           }
         }
       },
