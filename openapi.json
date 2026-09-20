@@ -5268,7 +5268,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "description": "The account posts through a webhook (`webhook_connection`); upgrade it to the bot first",
+            "description": "The account posts through a webhook (`webhook_connection`), or the bot cannot post in the chosen channel (`channel_not_writable`)",
             "content": {
               "application/json": {
                 "schema": {
@@ -29600,6 +29600,10 @@
           },
           "nsfw": {
             "type": "boolean"
+          },
+          "can_post": {
+            "type": "boolean",
+            "description": "False when a Discord channel permission shuts the bot out; publishing there would fail"
           },
           "is_current": {
             "type": "boolean",
