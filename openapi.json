@@ -3,7 +3,7 @@
   "info": {
     "title": "FoPost API",
     "version": "1.0.0",
-    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
+    "description": "REST API for FoPost \u2014 schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings \u2192 API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status. Some errors include additional context fields.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nList endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.",
     "contact": {
       "name": "FoPost Support",
       "url": "https://fopost.com/contact"
@@ -1382,7 +1382,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Queues delivery of a draft or scheduled post to its assigned accounts (or the `accountIds` subset). Accounts with expired or revoked credentials are failed immediately; degraded accounts publish with a warning. Delivery is asynchronous — poll the deliveries endpoint or subscribe to webhooks for the outcome. With `options.dryRun` the request validates and returns the target accounts without publishing (200 instead of 202).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Queues delivery of a draft or scheduled post to its assigned accounts (or the `accountIds` subset). Accounts with expired or revoked credentials are failed immediately; degraded accounts publish with a warning. Delivery is asynchronous \u2014 poll the deliveries endpoint or subscribe to webhooks for the outcome. With `options.dryRun` the request validates and returns the target accounts without publishing (200 instead of 202).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -1905,7 +1905,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "The post’s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.",
+        "description": "The post\u2019s publish history. Each run is one publish pass over the post and carries the attempts it made per account, with the permalink of anything that went live. Newest run first.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -1972,7 +1972,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Copies the post — content, target accounts, per-platform settings and labels — into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.\n\nRequires the `posts` scope when using an API key.",
+        "description": "Copies the post \u2014 content, target accounts, per-platform settings and labels \u2014 into a new draft in the same workspace. Schedule, approval and delivery state are not carried over.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -2892,7 +2892,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard → API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Mints a single-use link, open for one hour, that lets one of your end users connect a social account into your workspace with no FoPost login, on a page carrying your `branding`. The account is tagged with `externalUserId`. `redirectUrl` must be on a domain in the workspace redirect allowlist (dashboard \u2192 API Keys); the user is sent there with `status`, `platform`, `account_id` and `external_user_id` once connected. `workspaceId` may be omitted for a key bound to one workspace.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "accounts",
         "requestBody": {
           "required": true,
@@ -10300,6 +10300,78 @@
         }
       }
     },
+    "/v1/accounts/{id}/insights": {
+      "get": {
+        "operationId": "getAccountPlatformMetrics",
+        "summary": "Get an account\u2019s per-network metric set",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPlatformMetricsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "This network\u2019s metric access has not been granted yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Pass `raw=true` for the numbers only this network reports, keyed by the platform\u2019s own metric names \u2014 ad-break earnings, story taps, a retention curve, the search terms behind a listing. Read from the newest collected snapshot, never fetched live.\n\nA network whose metric access has been requested but not granted answers `503 platform_metrics_unavailable` rather than an empty set.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "raw",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            },
+            "description": "Pass `true` for the per-network metric set"
+          }
+        ]
+      }
+    },
     "/v1/accounts/{id}/analytics": {
       "get": {
         "operationId": "getAccountAnalyticsHistory",
@@ -10469,7 +10541,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Fetches the account’s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.\n\nRequires the `accounts` scope when using an API key.",
+        "description": "Fetches the account\u2019s communities from X. Falls back to the stored list (with an explanatory `note`) when the X API is unavailable.\n\nRequires the `accounts` scope when using an API key.",
         "x-fopost-scope": "accounts",
         "parameters": [
           {
@@ -11152,7 +11224,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to. `kind=security` is the audit log — members joining, leaving, changing role or access, and changes to two-step verification, passkeys, single sign-on and signed-in devices. Security rows are append-only and never pruned.\n\nRequires the `analytics` scope when using an API key.",
+        "description": "What happened in a workspace, newest first: publishes, account connections and health changes, webhook deliveries, inbox replies, automation runs and billing. Rows are kept for 90 days. Omit workspace_id to read every workspace the caller belongs to. `kind=security` is the audit log \u2014 members joining, leaving, changing role or access, and changes to two-step verification, passkeys, single sign-on and signed-in devices. Security rows are append-only and never pruned.\n\nRequires the `analytics` scope when using an API key.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -11305,7 +11377,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response — store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Registers an HTTPS endpoint for workspace events. The signing `secret` is returned only in this response \u2014 store it to verify payloads.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "webhooks",
         "requestBody": {
           "required": true,
@@ -11731,7 +11803,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
+        "description": "Cross-workspace dashboard totals, period deltas, today\u2019s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -12398,7 +12470,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "The same inbox numbers broken out per thread: what each one carried and how long it waited for a reply. Aggregates only — no message text and no author.\n\nRequires the `analytics` scope when using an API key.",
+        "description": "The same inbox numbers broken out per thread: what each one carried and how long it waited for a reply. Aggregates only \u2014 no message text and no author.\n\nRequires the `analytics` scope when using an API key.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -12497,7 +12569,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "429": {
-            "description": "Collection throttled — retry after `retryAfter` seconds",
+            "description": "Collection throttled \u2014 retry after `retryAfter` seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -12507,7 +12579,7 @@
             }
           }
         },
-        "description": "Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).\n\nRequires the `analytics` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Collects fresh metrics for the user\u2019s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).\n\nRequires the `analytics` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -13125,7 +13197,7 @@
     "/v1/contacts/{id}/conversations": {
       "get": {
         "operationId": "listContactConversations",
-        "summary": "List a contact’s conversations",
+        "summary": "List a contact\u2019s conversations",
         "tags": [
           "Contacts"
         ],
@@ -13542,7 +13614,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Freezes the recipient list and starts sending. Contacts a network’s messaging window has closed on are skipped with `window_closed` rather than attempted, so the number sent can be lower than the audience. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "Freezes the recipient list and starts sending. Contacts a network\u2019s messaging window has closed on are skipped with `window_closed` rather than attempted, so the number sent can be lower than the audience. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -13628,7 +13700,7 @@
     "/v1/broadcasts/{id}/recipients": {
       "get": {
         "operationId": "listBroadcastRecipients",
-        "summary": "List a broadcast’s recipients",
+        "summary": "List a broadcast\u2019s recipients",
         "tags": [
           "Broadcasts"
         ],
@@ -14146,7 +14218,7 @@
     "/v1/sequences/{id}/enrollments": {
       "get": {
         "operationId": "listEnrollments",
-        "summary": "List a sequence’s enrollments",
+        "summary": "List a sequence\u2019s enrollments",
         "tags": [
           "Broadcasts"
         ],
@@ -14291,7 +14363,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Creates a trigger → pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Creates a trigger \u2192 pipeline workflow. The webhook trigger `secret` is returned only in this response.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "automations",
         "requestBody": {
           "required": true,
@@ -14810,7 +14882,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Public endpoint for `api_webhook` automations. Authenticated by the automation’s secret in the `x-automation-secret` header (returned when the automation was created), not by an API key. The JSON body (optional) becomes the trigger payload.",
+        "description": "Public endpoint for `api_webhook` automations. Authenticated by the automation\u2019s secret in the `x-automation-secret` header (returned when the automation was created), not by an API key. The JSON body (optional) becomes the trigger payload.",
         "parameters": [
           {
             "name": "id",
@@ -15197,7 +15269,7 @@
             "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
-        "description": "Queues the source to be read and indexed again — a `url` source is re-fetched. Answers 202 immediately; poll the source for its status.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "Queues the source to be read and indexed again \u2014 a `url` source is re-fetched. Answers 202 immediately; poll the source for its status.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -15670,7 +15742,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "One row per platform post that has collected comments (`kind=comments`, the default), per post the account was tagged in (`kind=mentions`), or per review left on the business (`kind=reviews`). Fetch a thread's items with `GET /v1/inbox?account_id=…&post_external_id=…`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "One row per platform post that has collected comments (`kind=comments`, the default), per post the account was tagged in (`kind=mentions`), or per review left on the business (`kind=reviews`). Fetch a thread's items with `GET /v1/inbox?account_id=\u2026&post_external_id=\u2026`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -15804,7 +15876,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=…&conversation_id=…`.\n\nRequires the `inbox` scope when using an API key.",
+        "description": "One row per direct-message thread, latest first. Fetch a thread with `GET /v1/inbox?account_id=\u2026&conversation_id=\u2026`.\n\nRequires the `inbox` scope when using an API key.",
         "x-fopost-scope": "inbox",
         "parameters": [
           {
@@ -16268,7 +16340,7 @@
     "/v1/inbox/{id}": {
       "patch": {
         "operationId": "updateInboxItem",
-        "summary": "Change an item’s state, or edit our own comment",
+        "summary": "Change an item\u2019s state, or edit our own comment",
         "tags": [
           "Inbox"
         ],
@@ -17118,7 +17190,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Position in the item’s `attachments`"
+            "description": "Position in the item\u2019s `attachments`"
           },
           {
             "name": "variant",
@@ -17445,7 +17517,7 @@
     "/v1/ads/{id}/refresh": {
       "post": {
         "operationId": "refreshAd",
-        "summary": "Refresh an ad’s status and insights",
+        "summary": "Refresh an ad\u2019s status and insights",
         "tags": [
           "Ads"
         ],
@@ -21247,7 +21319,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -21390,7 +21462,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -21642,7 +21714,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "1–100, 25 by default"
+            "description": "1\u2013100, 25 by default"
           },
           {
             "name": "after",
@@ -21941,7 +22013,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           },
           {
             "name": "since",
@@ -22042,7 +22114,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -22245,7 +22317,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -22390,7 +22462,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -22533,7 +22605,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -22609,7 +22681,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -22692,7 +22764,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -22775,7 +22847,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -22910,7 +22982,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -22993,7 +23065,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -23128,7 +23200,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       }
@@ -23196,7 +23268,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -23481,7 +23553,7 @@
     "/v1/ads/lead-forms/{formId}/leads": {
       "get": {
         "operationId": "listLeads",
-        "summary": "List a form’s leads",
+        "summary": "List a form\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -23569,7 +23641,7 @@
     "/v1/ads/{id}/insights": {
       "get": {
         "operationId": "getAdInsights",
-        "summary": "Get an ad’s insights over a date range",
+        "summary": "Get an ad\u2019s insights over a date range",
         "tags": [
           "Ads"
         ],
@@ -23723,7 +23795,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Totals for an ad account (`act_…`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Totals for an ad account (`act_\u2026`), campaign, ad set or ad, optionally split by one breakdown and by day.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "parameters": [
           {
@@ -23753,7 +23825,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…` or a Meta object id"
+            "description": "`act_\u2026` or a Meta object id"
           },
           {
             "name": "since",
@@ -23844,7 +23916,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "How many people the targeting reaches on the Page’s placements.\n\nRequires the `ads` scope when using an API key.",
+        "description": "How many people the targeting reaches on the Page\u2019s placements.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "requestBody": {
           "required": true,
@@ -23861,7 +23933,7 @@
     "/v1/ads/accounts/{adAccountId}/tree": {
       "get": {
         "operationId": "getAdAccountTree",
-        "summary": "Get an ad account’s campaign tree",
+        "summary": "Get an ad account\u2019s campaign tree",
         "tags": [
           "Ads"
         ],
@@ -23913,7 +23985,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           },
           {
             "name": "workspace_id",
@@ -25236,7 +25308,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "`act_…`"
+            "description": "`act_\u2026`"
           }
         ]
       },
@@ -26087,7 +26159,7 @@
       },
       "post": {
         "operationId": "subscribeLeadPage",
-        "summary": "Collect a Page’s leads",
+        "summary": "Collect a Page\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -26154,7 +26226,7 @@
     "/v1/ads/lead-pages/{pageId}": {
       "delete": {
         "operationId": "unsubscribeLeadPage",
-        "summary": "Stop collecting a Page’s leads",
+        "summary": "Stop collecting a Page\u2019s leads",
         "tags": [
           "Ads"
         ],
@@ -29802,7 +29874,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30017,7 +30089,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           }
         },
         "required": [
@@ -30072,7 +30144,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30102,7 +30174,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "objectId": {
             "type": "string",
@@ -30142,7 +30214,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30218,7 +30290,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "startAt": {
             "type": "string",
@@ -30266,7 +30338,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30322,7 +30394,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30562,7 +30634,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -30856,7 +30928,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -31481,7 +31553,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "name": {
             "type": "string",
@@ -32111,7 +32183,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "pageId": {
             "type": "string",
@@ -32294,7 +32366,7 @@
           "adAccountId": {
             "type": "string",
             "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "description": "Meta ad account id, `act_\u2026`"
           },
           "pageId": {
             "type": "string",
@@ -33037,7 +33109,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 6,
-            "description": "0 = Sunday … 6 = Saturday"
+            "description": "0 = Sunday \u2026 6 = Saturday"
           },
           "time": {
             "type": "string",
@@ -33558,7 +33630,7 @@
                       "items": {
                         "$ref": "#/components/schemas/ContentSignal"
                       },
-                      "description": "Advisory signals — they never block publishing"
+                      "description": "Advisory signals \u2014 they never block publishing"
                     }
                   }
                 }
@@ -33606,7 +33678,7 @@
                       "items": {
                         "$ref": "#/components/schemas/ContentSignal"
                       },
-                      "description": "Advisory signals — they never block publishing"
+                      "description": "Advisory signals \u2014 they never block publishing"
                     }
                   }
                 }
@@ -36099,7 +36171,7 @@
                 }
               }
             },
-            "description": "Labels on the post — always empty for platform-native posts"
+            "description": "Labels on the post \u2014 always empty for platform-native posts"
           },
           "metrics": {
             "type": "object",
@@ -36715,6 +36787,86 @@
                     },
                     "message": {
                       "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PlatformMetricRow": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "count",
+              "duration_ms",
+              "currency_usd",
+              "ratio",
+              "series"
+            ]
+          },
+          "value": {}
+        }
+      },
+      "AccountPlatformMetricsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "platform": {
+                "type": "string"
+              },
+              "account": {
+                "type": "object",
+                "properties": {
+                  "fetched_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/PlatformMetricRow"
+                    }
+                  }
+                }
+              },
+              "post": {
+                "type": "object",
+                "properties": {
+                  "external_post_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "fetched_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/PlatformMetricRow"
                     }
                   }
                 }
@@ -38204,7 +38356,7 @@
               "unsupported_platform",
               null
             ],
-            "description": "Why nothing was sent. `window_closed` means the network’s messaging window had shut, so the message was never attempted."
+            "description": "Why nothing was sent. `window_closed` means the network\u2019s messaging window had shut, so the message was never attempted."
           },
           "sent_at": {
             "type": [
@@ -39195,7 +39347,7 @@
           },
           "score": {
             "type": "number",
-            "description": "Similarity to the question, 0–1"
+            "description": "Similarity to the question, 0\u20131"
           }
         },
         "required": [
@@ -40962,7 +41114,7 @@
               "properties": {
                 "id": {
                   "type": "string",
-                  "description": "`act_…`"
+                  "description": "`act_\u2026`"
                 },
                 "name": {
                   "type": "string"
