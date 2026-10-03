@@ -19531,297 +19531,6 @@
         }
       }
     },
-    "/v1/ads/google/recommendations": {
-      "get": {
-        "operationId": "listGoogleRecommendations",
-        "summary": "List recommendations",
-        "tags": [
-          "Ads"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/GoogleRecommendation"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          },
-          "503": {
-            "description": "Google Ads is not configured on this deployment"
-          }
-        },
-        "description": "Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.\n\nRequires the `ads` scope when using an API key.",
-        "x-fopost-scope": "ads",
-        "parameters": [
-          {
-            "name": "workspace_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Restrict to a single workspace the user belongs to"
-          },
-          {
-            "name": "connection_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "customer_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Google Ads customer id, digits only"
-          },
-          {
-            "name": "types",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/v1/ads/google/optimization-score": {
-      "get": {
-        "operationId": "getGoogleOptimizationScore",
-        "summary": "Read the optimization score",
-        "tags": [
-          "Ads"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/GoogleOptimizationScore"
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          },
-          "503": {
-            "description": "Google Ads is not configured on this deployment"
-          }
-        },
-        "description": "The account’s score and weight, and the score of each live campaign.\n\nRequires the `ads` scope when using an API key.",
-        "x-fopost-scope": "ads",
-        "parameters": [
-          {
-            "name": "workspace_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Restrict to a single workspace the user belongs to"
-          },
-          {
-            "name": "connection_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "customer_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Google Ads customer id, digits only"
-          }
-        ]
-      }
-    },
-    "/v1/ads/google/recommendations/apply": {
-      "post": {
-        "operationId": "applyGoogleRecommendations",
-        "summary": "Apply recommendations",
-        "tags": [
-          "Ads"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "applied": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          },
-          "503": {
-            "description": "Google Ads is not configured on this deployment"
-          }
-        },
-        "description": "Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/ads/google/recommendations/dismiss": {
-      "post": {
-        "operationId": "dismissGoogleRecommendations",
-        "summary": "Dismiss recommendations",
-        "tags": [
-          "Ads"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "dismissed": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          },
-          "503": {
-            "description": "Google Ads is not configured on this deployment"
-          }
-        },
-        "description": "Hides each recommendation so Google stops surfacing it.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/ads/google/local-services": {
       "get": {
         "operationId": "listGoogleLocalServicesLeads",
@@ -26722,6 +26431,961 @@
         }
       }
     },
+    "/v1/ads/audiences/{id}/companies": {
+      "post": {
+        "operationId": "addAudienceCompanies",
+        "summary": "Add companies to a company-list audience",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "added": {
+                          "type": "integer",
+                          "description": "Rows accepted by the network"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Business-to-business networks match on companies rather than people. The rows travel with the request and are never stored.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Audience id as the network addresses it"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAudienceCompaniesRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/linkedin/bid-pricing": {
+      "post": {
+        "operationId": "getAdBidPricing",
+        "summary": "Quote what an audience costs at auction",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BidPricing"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Named for the network that introduced it; any connection whose `capabilities.forecasts` is true answers it.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidPricingRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/linkedin/supply-forecast": {
+      "post": {
+        "operationId": "getAdSupplyForecast",
+        "summary": "Forecast what a budget would deliver",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SupplyForecast"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplyForecastRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/linkedin/conversion-rules": {
+      "get": {
+        "operationId": "listConversionRules",
+        "summary": "List conversion rules on an ad account",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ConversionRule"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createConversionRule",
+        "summary": "Create a conversion rule",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConversionRuleRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/linkedin/conversion-rules/{id}": {
+      "get": {
+        "operationId": "getConversionRule",
+        "summary": "Get a conversion rule",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionRule"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateConversionRule",
+        "summary": "Change a conversion rule",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionRule"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConversionRuleRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteConversionRule",
+        "summary": "Turn a conversion rule off",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Turned off"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The network keeps the history, so the rule stops counting rather than going away.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/ads/linkedin/conversion-rules/{id}/associations": {
+      "post": {
+        "operationId": "attachConversionRule",
+        "summary": "Attach a conversion rule to an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionRule"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversionAssociationRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "detachConversionRule",
+        "summary": "Detach a conversion rule from an ad set",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionRule"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversionAssociationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/linkedin/conversion-rules/{id}/metrics": {
+      "get": {
+        "operationId": "getConversionMetrics",
+        "summary": "Read what a conversion rule recorded",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionMetrics"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD"
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD"
+          }
+        ]
+      }
+    },
+    "/v1/ads/linkedin/conversion-rules/{id}/events": {
+      "post": {
+        "operationId": "sendConversionEvents",
+        "summary": "Send conversions back to the network",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "integer",
+                          "description": "Events the network took"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "Meta refused the request; `message` carries its reason"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The identity on each event is hashed inside the API; the address itself never reaches the network and nothing about an event is stored.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversion rule id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Meta Ads connection to act through"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversionEventsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/ads/lead-forms/{formId}": {
       "get": {
         "operationId": "getLeadForm",
@@ -30756,8 +31420,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -30906,6 +31571,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -30971,8 +31663,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           }
         },
         "required": [
@@ -30995,8 +31688,9 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           },
           "creatorId": {
             "type": "string",
@@ -31026,8 +31720,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31056,8 +31751,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "objectId": {
             "type": "string",
@@ -31096,8 +31792,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31172,8 +31869,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "startAt": {
             "type": "string",
@@ -31220,8 +31918,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31276,8 +31975,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31465,6 +32165,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -31516,8 +32243,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31705,6 +32433,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -31721,8 +32476,9 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           },
           "text": {
             "type": "string",
@@ -31816,8 +32572,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -31915,6 +32672,90 @@
                   "subtype",
                   "pixelId"
                 ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "subtype": {
+                    "type": "string",
+                    "enum": [
+                      "COMPANY_LIST"
+                    ]
+                  },
+                  "companies": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "domain": {
+                          "type": "string",
+                          "maxLength": 255
+                        },
+                        "pageUrl": {
+                          "type": "string",
+                          "maxLength": 2048,
+                          "format": "uri"
+                        },
+                        "ticker": {
+                          "type": "string",
+                          "maxLength": 10
+                        },
+                        "country": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2
+                        }
+                      }
+                    },
+                    "maxItems": 10000,
+                    "default": [],
+                    "description": "Company list; the rows travel with the request and are never stored"
+                  }
+                },
+                "required": [
+                  "subtype"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "subtype": {
+                    "type": "string",
+                    "enum": [
+                      "ENGAGEMENT"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "page",
+                      "ad",
+                      "lead_form",
+                      "video"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "retentionDays": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 365,
+                    "default": 90
+                  }
+                },
+                "required": [
+                  "subtype",
+                  "source",
+                  "sourceId"
+                ]
               }
             ]
           }
@@ -31925,6 +32766,710 @@
           "adAccountId",
           "name",
           "spec"
+        ]
+      },
+      "AddAudienceCompaniesRequest": {
+        "type": "object",
+        "properties": {
+          "companies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                "domain": {
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "pageUrl": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "format": "uri"
+                },
+                "ticker": {
+                  "type": "string",
+                  "maxLength": 10
+                },
+                "country": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                }
+              }
+            },
+            "minItems": 1,
+            "maxItems": 10000
+          }
+        },
+        "required": [
+          "companies"
+        ]
+      },
+      "BidPricingRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "engagement",
+              "traffic",
+              "awareness",
+              "video_views",
+              "messages",
+              "calls",
+              "whatsapp",
+              "sales"
+            ]
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                "maxItems": 50,
+                "description": "ISO 3166-1 alpha-2 codes. At least one country or one location is required."
+              },
+              "ageMin": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "ageMax": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "male",
+                  "female"
+                ]
+              },
+              "audienceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "maxItems": 20
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "region",
+                        "city",
+                        "zip",
+                        "geo_market"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name",
+                    "type"
+                  ]
+                },
+                "maxItems": 200,
+                "description": "Locations below country level, from `GET /v1/ads/targeting/search`"
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "behaviors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "income": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
+              }
+            },
+            "required": [
+              "countries",
+              "ageMin",
+              "ageMax",
+              "gender"
+            ]
+          },
+          "placements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "maxItems": 10
+          },
+          "bidType": {
+            "type": "string",
+            "enum": [
+              "CPC",
+              "CPM",
+              "CPV"
+            ]
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "goal",
+          "targeting"
+        ]
+      },
+      "SupplyForecastRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "engagement",
+              "traffic",
+              "awareness",
+              "video_views",
+              "messages",
+              "calls",
+              "whatsapp",
+              "sales"
+            ]
+          },
+          "targeting": {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                "maxItems": 50,
+                "description": "ISO 3166-1 alpha-2 codes. At least one country or one location is required."
+              },
+              "ageMin": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "ageMax": {
+                "type": "integer",
+                "minimum": 13,
+                "maximum": 65
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "male",
+                  "female"
+                ]
+              },
+              "audienceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "maxItems": 20
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "region",
+                        "city",
+                        "zip",
+                        "geo_market"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name",
+                    "type"
+                  ]
+                },
+                "maxItems": 200,
+                "description": "Locations below country level, from `GET /v1/ads/targeting/search`"
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "behaviors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "income": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
+              }
+            },
+            "required": [
+              "countries",
+              "ageMin",
+              "ageMax",
+              "gender"
+            ]
+          },
+          "placements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "maxItems": 10
+          },
+          "budgetMinor": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000000,
+            "description": "Budget for the forecast window, ad account currency, minor units"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "goal",
+          "targeting"
+        ]
+      },
+      "CreateConversionRuleRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "purchase",
+              "lead",
+              "sign_up",
+              "add_to_cart",
+              "download",
+              "install",
+              "key_page_view",
+              "other"
+            ]
+          },
+          "attribution": {
+            "type": "string",
+            "enum": [
+              "last_touch",
+              "each_campaign"
+            ]
+          },
+          "postClickWindowDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 90,
+            "default": 30
+          },
+          "viewThroughWindowDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 90,
+            "default": 7
+          },
+          "valueMinor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000,
+            "description": "Default value of one conversion, ad account currency, minor units"
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "name",
+          "type",
+          "attribution"
+        ]
+      },
+      "UpdateConversionRuleRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "purchase",
+              "lead",
+              "sign_up",
+              "add_to_cart",
+              "download",
+              "install",
+              "key_page_view",
+              "other"
+            ]
+          },
+          "attribution": {
+            "type": "string",
+            "enum": [
+              "last_touch",
+              "each_campaign"
+            ]
+          },
+          "postClickWindowDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 90
+          },
+          "viewThroughWindowDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 90
+          },
+          "valueMinor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000,
+            "description": "Default value of one conversion, ad account currency, minor units"
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ConversionAssociationRequest": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "An ad set on the same connection"
+          }
+        },
+        "required": [
+          "campaignId"
+        ]
+      },
+      "ConversionEventsRequest": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "happenedAt": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Epoch milliseconds"
+                },
+                "valueMinor": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100000000
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3
+                },
+                "eventId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "description": "Your own id for the event, so a replay is deduplicated"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "Hashed inside the API; the address itself never reaches the network"
+                },
+                "clickId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "description": "The network click id, as the landing page received it"
+                }
+              },
+              "required": [
+                "happenedAt"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "Each event needs an email address or a click id"
+          }
+        },
+        "required": [
+          "events"
         ]
       },
       "CreateLeadFormRequest": {
@@ -31940,8 +33485,9 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -32441,8 +33987,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "pixelId": {
             "type": "string",
@@ -32608,8 +34155,9 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -32685,7 +34233,8 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
+            "minLength": 1,
+            "maxLength": 64,
             "description": "The Page the ads in this set run as"
           },
           "name": {
@@ -32874,6 +34423,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -33087,6 +34663,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -33243,13 +34846,15 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           },
           "name": {
             "type": "string",
@@ -33426,13 +35031,15 @@
           },
           "adAccountId": {
             "type": "string",
-            "pattern": "^act_\\d+$",
-            "description": "Meta ad account id, `act_…`"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           },
           "targeting": {
             "type": "object",
@@ -33576,6 +35183,33 @@
                   ]
                 },
                 "maxItems": 10
+              },
+              "facets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 100
+                },
+                "description": "Facets the network defines for itself, keyed by the type used with `GET /v1/ads/targeting/search` — `job_title`, `company_size`, `industry` and the rest of the B2B set on LinkedIn."
               }
             },
             "required": [
@@ -33608,8 +35242,9 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           }
         },
         "required": [
@@ -33632,8 +35267,9 @@
           },
           "pageId": {
             "type": "string",
-            "pattern": "^\\d{1,32}$",
-            "description": "Facebook Page id"
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
           }
         },
         "required": [
@@ -42062,110 +43698,6 @@
           }
         }
       },
-      "GoogleRecommendation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "campaignId": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "adGroupId": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "dismissed": {
-            "type": "boolean"
-          },
-          "impact": {
-            "type": "object",
-            "properties": {
-              "baseClicks": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "potentialClicks": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "baseCostMinor": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "potentialCostMinor": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "baseConversions": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "potentialConversions": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "GoogleOptimizationScore": {
-        "type": "object",
-        "properties": {
-          "score": {
-            "type": [
-              "number",
-              "null"
-            ]
-          },
-          "weight": {
-            "type": [
-              "number",
-              "null"
-            ]
-          },
-          "campaigns": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "score": {
-                  "type": [
-                    "number",
-                    "null"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
       "GoogleLocalServicesLead": {
         "type": "object",
         "properties": {
@@ -42251,6 +43783,28 @@
               "integer",
               "null"
             ]
+          },
+          "targetingFacets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What `GET /v1/ads/targeting/search` accepts on this network, in picker order"
+          },
+          "trackingMacros": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Macros the network expands inside a creative's tracking parameters"
           }
         }
       },
@@ -43745,6 +45299,163 @@
                 }
               }
             }
+          }
+        }
+      },
+      "BidPricing": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "suggestedBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "minBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "maxBidMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "dailyBudgetFloorMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      },
+      "SupplyForecast": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "impressions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "clicks": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "spendMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "windowDays": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Days the forecast covers"
+          },
+          "ready": {
+            "type": "boolean",
+            "description": "False while the network has no answer for that audience"
+          }
+        }
+      },
+      "ConversionRule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "purchase",
+              "lead",
+              "sign_up",
+              "add_to_cart",
+              "download",
+              "install",
+              "key_page_view",
+              "other"
+            ]
+          },
+          "attribution": {
+            "type": "string",
+            "enum": [
+              "last_touch",
+              "each_campaign"
+            ]
+          },
+          "postClickWindowDays": {
+            "type": "integer"
+          },
+          "viewThroughWindowDays": {
+            "type": "integer"
+          },
+          "valueMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "campaignIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Ad sets this rule is attached to"
+          }
+        }
+      },
+      "ConversionMetrics": {
+        "type": "object",
+        "properties": {
+          "conversions": {
+            "type": "integer"
+          },
+          "postClickConversions": {
+            "type": "integer"
+          },
+          "viewThroughConversions": {
+            "type": "integer"
+          },
+          "valueMinor": {
+            "type": "integer"
+          },
+          "costPerConversionMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
           }
         }
       },

@@ -1,0 +1,48 @@
+meta {
+  name: Forecast what a budget would deliver
+  type: http
+  seq: 131
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/linkedin/supply-forecast
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "goal": "engagement",
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `placements`: string[]
+  - `budgetMinor`: integer — Budget for the forecast window, ad account currency, minor units
+}

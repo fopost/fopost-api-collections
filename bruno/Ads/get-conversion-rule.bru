@@ -1,11 +1,11 @@
 meta {
-  name: List recommendations
+  name: Get a conversion rule
   type: http
-  seq: 37
+  seq: 134
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/google/recommendations?connection_id=&customer_id=
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id?connection_id=
   body: none
   auth: inherit
 }
@@ -13,8 +13,10 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  customer_id: 
-  ~types: 
+}
+
+params:path {
+  id: {{id}}
 }
 
 tests {
@@ -24,8 +26,6 @@ tests {
 }
 
 docs {
-  Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`

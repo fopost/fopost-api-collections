@@ -1,0 +1,50 @@
+meta {
+  name: Quote what an audience costs at auction
+  type: http
+  seq: 130
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/linkedin/bid-pricing
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "goal": "engagement",
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Named for the network that introduced it; any connection whose `capabilities.forecasts` is true answers it.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `placements`: string[]
+  - `bidType`: `CPC` | `CPM` | `CPV`
+}

@@ -1,11 +1,11 @@
 meta {
-  name: Read the optimization score
+  name: Read what a conversion rule recorded
   type: http
-  seq: 38
+  seq: 139
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/google/optimization-score?connection_id=&customer_id=
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/metrics?connection_id=&since=&until=
   body: none
   auth: inherit
 }
@@ -13,7 +13,12 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  customer_id: 
+  since: 
+  until: 
+}
+
+params:path {
+  id: {{id}}
 }
 
 tests {
@@ -23,8 +28,6 @@ tests {
 }
 
 docs {
-  The account’s score and weight, and the score of each live campaign.
-
   Requires the `ads` scope when using an API key.
 
   **Scope:** `ads`
