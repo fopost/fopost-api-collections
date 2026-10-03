@@ -13717,6 +13717,218 @@
           ]
         },
         {
+          "name": "List recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations?connection_id=&customer_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "customer_id",
+                  "value": "",
+                  "description": "Google Ads customer id, digits only",
+                  "disabled": false
+                },
+                {
+                  "key": "types",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read the optimization score",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/optimization-score?connection_id=&customer_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "optimization-score"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "customer_id",
+                  "value": "",
+                  "description": "Google Ads customer id, digits only",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "The account’s score and weight, and the score of each live campaign.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Apply recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations/apply",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations",
+                "apply"
+              ]
+            },
+            "description": "Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"customerId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dismiss recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations/dismiss",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations",
+                "dismiss"
+              ]
+            },
+            "description": "Hides each recommendation so Google stops surfacing it.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"customerId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "List Local Services leads",
           "request": {
             "method": "GET",

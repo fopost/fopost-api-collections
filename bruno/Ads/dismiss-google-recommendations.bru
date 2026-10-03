@@ -1,17 +1,13 @@
 meta {
-  name: Delete a comment on an ad
+  name: Dismiss recommendations
   type: http
-  seq: 107
+  seq: 40
 }
 
-delete {
-  url: {{baseUrl}}/v1/ads/comments/:id
+post {
+  url: {{baseUrl}}/v1/ads/google/recommendations/dismiss
   body: json
   auth: inherit
-}
-
-params:path {
-  id: {{id}}
 }
 
 headers {
@@ -22,7 +18,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "adId": "x"
+    "customerId": "string"
   }
 }
 
@@ -33,9 +29,9 @@ tests {
 }
 
 docs {
-  A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.
+  Hides each recommendation so Google stops surfacing it.
 
-  Requires the `ads` scope when using an API key.
+  Requires the `publish` scope when using an API key.
 
-  **Scope:** `ads`
+  **Scope:** `publish`
 }

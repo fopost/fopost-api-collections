@@ -19531,6 +19531,297 @@
         }
       }
     },
+    "/v1/ads/google/recommendations": {
+      "get": {
+        "operationId": "listGoogleRecommendations",
+        "summary": "List recommendations",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GoogleRecommendation"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/google/optimization-score": {
+      "get": {
+        "operationId": "getGoogleOptimizationScore",
+        "summary": "Read the optimization score",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/GoogleOptimizationScore"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "The account’s score and weight, and the score of each live campaign.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Google Ads customer id, digits only"
+          }
+        ]
+      }
+    },
+    "/v1/ads/google/recommendations/apply": {
+      "post": {
+        "operationId": "applyGoogleRecommendations",
+        "summary": "Apply recommendations",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "applied": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/google/recommendations/dismiss": {
+      "post": {
+        "operationId": "dismissGoogleRecommendations",
+        "summary": "Dismiss recommendations",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dismissed": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Google Ads is not configured on this deployment"
+          }
+        },
+        "description": "Hides each recommendation so Google stops surfacing it.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAdsScopeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/ads/google/local-services": {
       "get": {
         "operationId": "listGoogleLocalServicesLeads",
@@ -41767,6 +42058,110 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          }
+        }
+      },
+      "GoogleRecommendation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adGroupId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dismissed": {
+            "type": "boolean"
+          },
+          "impact": {
+            "type": "object",
+            "properties": {
+              "baseClicks": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "potentialClicks": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "baseCostMinor": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "potentialCostMinor": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "baseConversions": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "potentialConversions": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GoogleOptimizationScore": {
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "weight": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "campaigns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              }
             }
           }
         }

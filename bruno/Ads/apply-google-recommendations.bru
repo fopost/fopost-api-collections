@@ -1,11 +1,11 @@
 meta {
-  name: Upload conversion adjustments
+  name: Apply recommendations
   type: http
-  seq: 45
+  seq: 39
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/google/conversions/adjustments
+  url: {{baseUrl}}/v1/ads/google/recommendations/apply
   body: json
   auth: inherit
 }
@@ -24,12 +24,12 @@ body:json {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([201]);
+    expect(res.getStatus()).to.be.oneOf([200]);
   });
 }
 
 docs {
-  Restate, retract or enhance a conversion already counted.
+  Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.
 
   Requires the `publish` scope when using an API key.
 
