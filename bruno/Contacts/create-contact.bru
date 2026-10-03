@@ -1,0 +1,46 @@
+meta {
+  name: Create a contact
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/contacts
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "channels": [
+      {
+        "platform": "string",
+        "handle": "string"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Folds into the contact that already holds the first channel, so this can never produce a duplicate of someone the inbox has already filed.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `display_name`: string
+  - `note`: string
+  - `fields`: object
+}

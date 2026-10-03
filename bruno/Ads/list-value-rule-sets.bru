@@ -1,0 +1,29 @@
+meta {
+  name: List value rule sets
+  type: http
+  seq: 84
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/account/value-rule-sets?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

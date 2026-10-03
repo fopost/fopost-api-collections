@@ -1,0 +1,30 @@
+meta {
+  name: List caption tracks
+  type: http
+  seq: 41
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/youtube/videos/:videoId/captions
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  videoId: {{videoId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Caption tracks on one of the channel's own videos.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

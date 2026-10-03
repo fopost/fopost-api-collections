@@ -1,0 +1,49 @@
+meta {
+  name: Set the persistent menu
+  type: http
+  seq: 14
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/persistent-menu
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "persistent_menu": [
+      {
+        "call_to_actions": [
+          {
+            "type": "postback",
+            "title": "x",
+            "payload": "x"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replaces the menu, one entry per locale. Up to three items each, either a postback or an http(s) link.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

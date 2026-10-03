@@ -1,0 +1,30 @@
+meta {
+  name: List the goals a connection can run
+  type: http
+  seq: 44
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/goals?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  What the network can run on this deployment. A goal it cannot run is absent here and refused as `unsupported` if asked for anyway.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

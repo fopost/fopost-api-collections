@@ -1,0 +1,45 @@
+meta {
+  name: Update a sequence
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{baseUrl}}/v1/sequences/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "status": "active"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Pausing it stops every enrollment from firing without ending any of them; resuming picks them up where they stood.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `steps`: object[]
+  - `status`: `active` | `paused`
+}

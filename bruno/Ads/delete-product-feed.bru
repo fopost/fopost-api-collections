@@ -1,0 +1,33 @@
+meta {
+  name: Delete a product feed
+  type: http
+  seq: 54
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/feeds/:feedId?workspace_id=&connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+  feedId: {{feedId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,43 @@
+meta {
+  name: Rename or refilter a product set
+  type: http
+  seq: 59
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/product-sets/:setId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+  setId: {{setId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `filter`: object — Meta's own product-set filter; every product in the catalog when omitted
+}

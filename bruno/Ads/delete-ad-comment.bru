@@ -1,0 +1,41 @@
+meta {
+  name: Delete a comment on an ad
+  type: http
+  seq: 103
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/comments/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

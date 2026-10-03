@@ -1,0 +1,30 @@
+meta {
+  name: List product catalogs
+  type: http
+  seq: 45
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/catalogs?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Catalogs the connection's business portfolios own or are a partner on. Read live from Meta and never stored.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

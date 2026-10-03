@@ -1,0 +1,42 @@
+meta {
+  name: Hide or show a comment on an ad
+  type: http
+  seq: 102
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/comments/:id/hide
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adId": "x",
+    "hidden": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Also requires the `publish` scope.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

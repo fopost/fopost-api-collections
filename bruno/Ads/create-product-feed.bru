@@ -1,0 +1,43 @@
+meta {
+  name: Create a product feed
+  type: http
+  seq: 53
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/catalogs/:id/feeds
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `url`: string (uri) — Where Meta fetches the file; omit for manual uploads
+  - `schedule`: `HOURLY` | `DAILY` | `WEEKLY` — Needs `url`
+}

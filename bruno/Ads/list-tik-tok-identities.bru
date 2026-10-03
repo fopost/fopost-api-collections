@@ -1,0 +1,31 @@
+meta {
+  name: List TikTok identities
+  type: http
+  seq: 97
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/tiktok/identities?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The accounts an ad can run as on one ad account. An identity id is what a Spark ad and an ad group take as `pageId`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

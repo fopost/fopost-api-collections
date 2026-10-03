@@ -1,0 +1,34 @@
+meta {
+  name: Search TikTok's Commercial Music Library
+  type: http
+  seq: 52
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/music?q=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: 
+  ~limit: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Tracks a post may use. Needs the Marketing API product on the TikTok app; without it the request answers 403 rather than an empty list.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

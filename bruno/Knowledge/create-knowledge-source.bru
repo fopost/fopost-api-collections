@@ -1,0 +1,43 @@
+meta {
+  name: Add a knowledge source
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/knowledge/sources
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "kind": "faq",
+    "title": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Adds a source and queues it for indexing, so it comes back `pending`. A `faq` or `text` source needs `content`, a `url` source needs `url`, and a `file` source needs `media_id` pointing at a plain-text or CSV item in the same workspace.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `content`: string
+  - `url`: string
+  - `media_id`: string (uuid)
+  - `brand_voice_id`: string (uuid) | null
+  - `workspace_id`: string (uuid)
+}

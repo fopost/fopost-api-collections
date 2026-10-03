@@ -1,11 +1,11 @@
 meta {
-  name: Search the network's public ad library
+  name: Search the public ad archive
   type: http
-  seq: 49
+  seq: 66
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/ad-library?connection_id=
+  url: {{baseUrl}}/v1/ads/library?connection_id=&countries=
   body: none
   auth: inherit
 }
@@ -13,12 +13,12 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  ~keyword: 
-  ~advertiser: 
-  ~countries: 
-  ~since: 
-  ~until: 
-  ~cursor: 
+  countries: 
+  ~q: 
+  ~page_ids: 
+  ~active_status: ACTIVE
+  ~limit: 
+  ~after: 
 }
 
 tests {
@@ -28,7 +28,7 @@ tests {
 }
 
 docs {
-  Ads the network publishes for everyone, not the connection’s own ads. Available only on networks whose `capabilities.adLibrary` is true.
+  Ads anyone is running, by keyword or by Page. Read live from Meta on every request and never stored, so a result that stops running is simply absent next time.
 
   Requires the `ads` scope when using an API key.
 

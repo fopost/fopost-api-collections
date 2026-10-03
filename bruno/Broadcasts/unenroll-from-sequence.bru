@@ -1,0 +1,41 @@
+meta {
+  name: Unenroll contacts from a sequence
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/v1/sequences/:id/unenroll
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "contact_ids": [
+      "00000000-0000-0000-0000-000000000000"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Nothing further fires for them. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}
