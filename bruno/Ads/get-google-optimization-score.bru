@@ -1,11 +1,11 @@
 meta {
-  name: List iOS 14 campaign limits
+  name: Read the optimization score
   type: http
-  seq: 84
+  seq: 38
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/account/ios-limits?connection_id=&ad_account_id=
+  url: {{baseUrl}}/v1/ads/google/optimization-score?connection_id=&customer_id=
   body: none
   auth: inherit
 }
@@ -13,7 +13,7 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  ad_account_id: 
+  customer_id: 
 }
 
 tests {
@@ -23,7 +23,7 @@ tests {
 }
 
 docs {
-  How many iOS 14 campaigns the ad account may run at once, per app.
+  The account’s score and weight, and the score of each live campaign.
 
   Requires the `ads` scope when using an API key.
 

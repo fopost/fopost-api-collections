@@ -1,11 +1,11 @@
 meta {
-  name: List iOS 14 campaign limits
+  name: List recommendations
   type: http
-  seq: 84
+  seq: 37
 }
 
 get {
-  url: {{baseUrl}}/v1/ads/account/ios-limits?connection_id=&ad_account_id=
+  url: {{baseUrl}}/v1/ads/google/recommendations?connection_id=&customer_id=
   body: none
   auth: inherit
 }
@@ -13,7 +13,8 @@ get {
 params:query {
   ~workspace_id: 
   connection_id: 
-  ad_account_id: 
+  customer_id: 
+  ~types: 
 }
 
 tests {
@@ -23,7 +24,7 @@ tests {
 }
 
 docs {
-  How many iOS 14 campaigns the ad account may run at once, per app.
+  Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.
 
   Requires the `ads` scope when using an API key.
 
