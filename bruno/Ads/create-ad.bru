@@ -33,8 +33,7 @@ body:json {
       "ageMax": 13,
       "gender": "all"
     },
-    "pageId": "string",
-    "text": "Hello from FoPost."
+    "pageId": "string"
   }
 }
 
@@ -53,6 +52,8 @@ docs {
 
   **Optional fields** (not in the example body):
   - `paused`: boolean — Create the ad paused; set to false to go live at once
+  - `text`: string — Required unless `sparkPostId` is set, which carries the post’s own caption
+  - `sparkPostId`: string — A post already live on the network, from `GET /v1/ads/spark-posts`. Runs it as a Spark ad, so `text` and `mediaUrl` are ignored. Needs `capabilities.sparkAds`.
   - `headline`: string
   - `destinationUrl`: string (uri)
   - `mediaUrl`: string — A media library asset url

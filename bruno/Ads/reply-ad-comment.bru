@@ -1,13 +1,17 @@
 meta {
-  name: Pause or resume many objects
+  name: Reply to a comment on an ad
   type: http
-  seq: 120
+  seq: 101
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/status
+  url: {{baseUrl}}/v1/ads/comments/:id/reply
   body: json
   auth: inherit
+}
+
+params:path {
+  id: {{id}}
 }
 
 headers {
@@ -18,24 +22,19 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "status": "active",
-    "objects": [
-      {
-        "id": "x",
-        "level": "campaign"
-      }
-    ]
+    "adId": "x",
+    "text": "Hello from FoPost."
   }
 }
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([201]);
   });
 }
 
 docs {
-  Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.
+  Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

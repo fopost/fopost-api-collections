@@ -1,13 +1,17 @@
 meta {
-  name: Pause or resume many objects
+  name: Hide or show a comment on an ad
   type: http
-  seq: 120
+  seq: 102
 }
 
 post {
-  url: {{baseUrl}}/v1/ads/status
+  url: {{baseUrl}}/v1/ads/comments/:id/hide
   body: json
   auth: inherit
+}
+
+params:path {
+  id: {{id}}
 }
 
 headers {
@@ -18,13 +22,8 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "status": "active",
-    "objects": [
-      {
-        "id": "x",
-        "level": "campaign"
-      }
-    ]
+    "adId": "x",
+    "hidden": false
   }
 }
 
@@ -35,7 +34,7 @@ tests {
 }
 
 docs {
-  Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.
+  Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

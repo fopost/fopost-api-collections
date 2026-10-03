@@ -1,13 +1,17 @@
 meta {
-  name: Pause or resume many objects
+  name: Delete a comment on an ad
   type: http
-  seq: 120
+  seq: 103
 }
 
-post {
-  url: {{baseUrl}}/v1/ads/status
+delete {
+  url: {{baseUrl}}/v1/ads/comments/:id
   body: json
   auth: inherit
+}
+
+params:path {
+  id: {{id}}
 }
 
 headers {
@@ -18,13 +22,7 @@ body:json {
   {
     "workspaceId": "{{workspaceId}}",
     "connectionId": "00000000-0000-0000-0000-000000000000",
-    "status": "active",
-    "objects": [
-      {
-        "id": "x",
-        "level": "campaign"
-      }
-    ]
+    "adId": "x"
   }
 }
 
@@ -35,7 +33,7 @@ tests {
 }
 
 docs {
-  Up to 50 campaigns, ad sets and ads. Each succeeds or fails on its own. Also requires the `publish` scope.
+  A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 
