@@ -1,0 +1,33 @@
+meta {
+  name: List active stories
+  type: http
+  seq: 49
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/instagram/stories
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~insights: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Stories still inside their 24 hours, whether or not they were posted through FoPost. Story media is not on the media edge.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

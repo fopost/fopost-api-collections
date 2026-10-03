@@ -1,0 +1,41 @@
+meta {
+  name: Set the default post languages
+  type: http
+  seq: 45
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/bluesky/languages
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "languages": [
+      "xx"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  BCP-47 tags, at most three. An empty list clears the default.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,34 @@
+meta {
+  name: Search Instagram's audio library
+  type: http
+  seq: 47
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/instagram/audio
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~q: 
+  ~audio_type: music
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Tracks a Reel can carry. With no query Instagram answers with what is trending. Attach one by sending its id as the `audio_id` platform setting.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

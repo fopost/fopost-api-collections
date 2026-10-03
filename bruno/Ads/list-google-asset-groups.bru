@@ -1,0 +1,30 @@
+meta {
+  name: List Performance Max asset groups
+  type: http
+  seq: 33
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/asset-groups?connection_id=&customer_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+  ~campaign_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

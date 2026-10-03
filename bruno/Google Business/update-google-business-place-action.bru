@@ -1,0 +1,43 @@
+meta {
+  name: Update a place action link
+  type: http
+  seq: 14
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/place-actions/:linkId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  linkId: {{linkId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "uri": "https://example.com",
+    "is_preferred": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `uri`: string (uri)
+  - `is_preferred`: boolean
+}

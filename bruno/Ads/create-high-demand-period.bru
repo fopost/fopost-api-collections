@@ -1,0 +1,41 @@
+meta {
+  name: Declare a high-demand period
+  type: http
+  seq: 82
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/account/high-demand-periods
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
+    "startAt": "2026-01-01T12:00:00.000Z",
+    "endAt": "2026-01-01T12:00:00.000Z",
+    "budgetValue": 1,
+    "budgetValueType": "ABSOLUTE"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Tells Meta to expect heavier spend over a window, so pacing allows for it.
+
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,44 @@
+meta {
+  name: Set ice breakers
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/messaging/ice-breakers
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "ice_breakers": [
+      {
+        "question": "x",
+        "payload": "x"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replaces the ice breakers for this account. Up to four, each an 80-character question with a payload your webhook receives.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

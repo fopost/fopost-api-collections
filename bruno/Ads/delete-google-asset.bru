@@ -1,0 +1,41 @@
+meta {
+  name: Detach an asset
+  type: http
+  seq: 32
+}
+
+delete {
+  url: {{baseUrl}}/v1/ads/google/assets/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([204]);
+  });
+}
+
+docs {
+  An asset itself is permanent on Google, so this removes every link that puts it under an ad.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

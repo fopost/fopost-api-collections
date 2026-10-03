@@ -1,0 +1,55 @@
+meta {
+  name: Predict reach and frequency
+  type: http
+  seq: 62
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/reach-frequency
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "string",
+    "name": "Example name",
+    "targeting": {
+      "countries": [
+        "xx"
+      ],
+      "ageMin": 13,
+      "ageMax": 13,
+      "gender": "all"
+    },
+    "placements": [
+      "x"
+    ],
+    "budgetMinor": 1,
+    "startAt": "2026-01-01T12:00:00.000Z",
+    "endAt": "2026-01-01T12:00:00.000Z"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  A prediction for a fixed flight and budget. Nothing is bought until you reserve it.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `frequencyCap`: integer — How often one person should see the ad over the flight
+}

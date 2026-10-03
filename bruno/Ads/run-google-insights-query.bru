@@ -1,0 +1,40 @@
+meta {
+  name: Run a GAQL query
+  type: http
+  seq: 42
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/insights/query
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string",
+    "query": "xxxxxxxxxx"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  A raw read-only Google Ads Query Language SELECT against one customer. The customer comes from `customerId`, never from the query text, and anything that is not a SELECT is refused before the connection is touched. Google Ads only.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `workspaceId`: string (uuid)
+}

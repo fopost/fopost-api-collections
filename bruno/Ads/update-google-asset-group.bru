@@ -1,0 +1,39 @@
+meta {
+  name: Rename, pause or resume an asset group
+  type: http
+  seq: 35
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/google/asset-groups/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

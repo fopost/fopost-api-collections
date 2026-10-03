@@ -1,0 +1,29 @@
+meta {
+  name: Read TikTok creator info
+  type: http
+  seq: 46
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/creator-info
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The account-level switches TikTok enforces at publish time: which privacy levels are open, whether comments, Duet or Stitch are off, and the creator's own video length cap. These are changed in the TikTok app.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,31 @@
+meta {
+  name: List iOS 14 campaign limits
+  type: http
+  seq: 80
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/account/ios-limits?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  How many iOS 14 campaigns the ad account may run at once, per app.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

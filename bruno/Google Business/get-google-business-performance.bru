@@ -1,0 +1,37 @@
+meta {
+  name: Get Business Profile performance
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/performance?start_date=&end_date=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  start_date: 
+  end_date: 
+  ~daily_metrics: 
+  ~keywords: 
+  ~page_token: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Daily impressions, calls, direction requests and website clicks for the date range. Pass `keywords=true` for the monthly search terms instead.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
