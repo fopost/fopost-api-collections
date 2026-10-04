@@ -1,0 +1,29 @@
+meta {
+  name: Refresh one post's metrics now
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/posts/:id/analytics/collect
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{postId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Re-reads one post from the network instead of waiting for the next scheduled collection, and stores the reading so it joins that post's timeline. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network. One post is still a platform call, so this spends the same per-user budget as `POST /v1/analytics/collect`: over the limit, the `429` body carries `retryAfter` in seconds. An API key needs the `analytics` scope as well as `posts`.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

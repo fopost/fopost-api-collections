@@ -1,0 +1,32 @@
+meta {
+  name: List recommendations
+  type: http
+  seq: 37
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/recommendations?connection_id=&customer_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+  ~types: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

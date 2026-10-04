@@ -7747,6 +7747,48 @@
           ]
         },
         {
+          "name": "Refresh one post's metrics now",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/posts/:id/analytics/collect",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "posts",
+                ":id",
+                "analytics",
+                "collect"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{postId}}",
+                  "description": "FoPost post id, or a URL-encoded platform permalink"
+                }
+              ]
+            },
+            "description": "Re-reads one post from the network instead of waiting for the next scheduled collection, and stores the reading so it joins that post's timeline. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network. One post is still a platform call, so this spends the same per-user budget as `POST /v1/analytics/collect`: over the limit, the `429` body carries `retryAfter` in seconds. An API key needs the `analytics` scope as well as `posts`.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Get workspace analytics",
           "request": {
             "method": "GET",
@@ -7820,6 +7862,67 @@
               ]
             },
             "description": "Pass `raw=true` for the numbers only this network reports, keyed by the platform’s own metric names — ad-break earnings, story taps, a retention curve, the search terms behind a listing. Read from the newest collected snapshot, never fetched live.\n\nA network whose metric access has been requested but not granted answers `503 platform_metrics_unavailable` rather than an empty set.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List posts made outside FoPost",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/native-posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "native-posts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "20",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "days",
+                  "value": "",
+                  "description": "Only posts published in the last this many days",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Posts that exist on the account but never went out through FoPost, newest first, with the freshest metrics held for each. An API key needs the `analytics` scope as well as `accounts`.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
           },
           "response": [],
           "event": [
@@ -8437,6 +8540,213 @@
               ]
             },
             "description": "The same inbox numbers broken out per thread: what each one carried and how long it waited for a reply. Aggregates only — no message text and no author.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get content decay by post age",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics/decay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics",
+                "decay"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "",
+                  "description": "Restrict to a single connected account",
+                  "disabled": true
+                },
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "days",
+                  "value": "30",
+                  "description": "Only posts published in the last this many days",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "How engagement accumulates as a post ages, from the repeated readings taken of each post. Each band reports where the average post had got to by that age and what share of its final engagement that was, so `halfLifeBucket` says how long a post keeps earning. Posts are counted by their publish time falling inside the range.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get posting cadence against engagement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics/frequency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics",
+                "frequency"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "",
+                  "description": "Restrict to a single connected account",
+                  "disabled": true
+                },
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "days",
+                  "value": "90",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Weekly posting cadence set against what each cadence earned per post. Weeks run Monday to Sunday in UTC and are filed under the band their own post count falls in; a week with no posts belongs to no band. `best` is the cadence with the highest engagement per post.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get metric readings since a timestamp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics/changes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics",
+                "changes"
+              ],
+              "query": [
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "Return readings recorded after this instant",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "100",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "accountId",
+                  "value": "",
+                  "description": "Restrict to a single connected account",
+                  "disabled": true
+                },
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Post metric readings recorded after `since`, oldest first, with a `cursor` to pass as the next `since`. This is how an external store mirrors our metrics without refetching the whole history. Defaults to the last 7 days.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get one post's readings over time",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics/posts/:id/timeline",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics",
+                "posts",
+                ":id",
+                "timeline"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "FoPost post id, or a URL-encoded platform permalink"
+                }
+              ]
+            },
+            "description": "Every reading held for one post, oldest first, each carrying what moved since the reading before it, with one timeline per delivery. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
           },
           "response": [],
           "event": [
@@ -13710,6 +14020,218 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations?connection_id=&customer_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "customer_id",
+                  "value": "",
+                  "description": "Google Ads customer id, digits only",
+                  "disabled": false
+                },
+                {
+                  "key": "types",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Google’s own read on what the account should change next, with the impact it projects. `types` narrows to a comma-separated list of recommendation types.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read the optimization score",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/optimization-score?connection_id=&customer_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "optimization-score"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                },
+                {
+                  "key": "connection_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "customer_id",
+                  "value": "",
+                  "description": "Google Ads customer id, digits only",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "The account’s score and weight, and the score of each live campaign.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Apply recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations/apply",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations",
+                "apply"
+              ]
+            },
+            "description": "Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"customerId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dismiss recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads/google/recommendations/dismiss",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads",
+                "google",
+                "recommendations",
+                "dismiss"
+              ]
+            },
+            "description": "Hides each recommendation so Google stops surfacing it.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"customerId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }
