@@ -1,0 +1,32 @@
+meta {
+  name: List Google Ads keywords
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/keywords?connection_id=&customer_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+  ~ad_group_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Keywords on the account, or on one ad group. Google Ads only: on another network this answers 400.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

@@ -1,0 +1,29 @@
+meta {
+  name: List custom fields
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/contacts/fields?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The columns this workspace keeps about its contacts, in display order.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Import contacts from a CSV
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/contacts/import
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "csv": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Every row folds into an existing contact when its handle is already on file, so importing the same file twice merges rather than duplicates.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

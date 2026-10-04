@@ -1,0 +1,45 @@
+meta {
+  name: Start verification
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/verification/start
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "method": "ADDRESS"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The response names the pending verification to complete with the PIN.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `language_code`: string
+  - `phone_number`: string
+  - `email_address`: string (email)
+  - `mailer_contact_name`: string
+}

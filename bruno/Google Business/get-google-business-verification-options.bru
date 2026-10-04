@@ -1,0 +1,33 @@
+meta {
+  name: List verification options
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/verification
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~language_code: en
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The ways Google will let this location be verified.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

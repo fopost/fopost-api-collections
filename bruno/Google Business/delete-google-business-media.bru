@@ -1,0 +1,28 @@
+meta {
+  name: Remove a location photo
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/media/:mediaKey
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  mediaKey: {{mediaKey}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

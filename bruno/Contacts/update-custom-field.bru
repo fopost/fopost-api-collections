@@ -1,0 +1,45 @@
+meta {
+  name: Update a custom field
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/v1/contacts/fields/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "position": 1
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The key and the type are fixed once created; the name and options are not.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `options`: string[]
+  - `position`: integer
+}

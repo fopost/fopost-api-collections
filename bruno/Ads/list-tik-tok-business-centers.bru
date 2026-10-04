@@ -1,0 +1,30 @@
+meta {
+  name: List TikTok Business Centers
+  type: http
+  seq: 100
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/tiktok/business-centers?connection_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  TikTok groups ad accounts into Business Centers, which no other network has an equivalent for — hence the only network-named routes in this section. `unsupported` on any other connection.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

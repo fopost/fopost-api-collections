@@ -1,0 +1,52 @@
+meta {
+  name: Replace the service list
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/services
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "service_items": [
+      {
+        "structured_service_item": {
+          "service_type_id": "x"
+        },
+        "free_form_service_item": {
+          "category": "x",
+          "label": {
+            "display_name": "Example display"
+          }
+        },
+        "price": {
+          "currency_code": "xxx"
+        }
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

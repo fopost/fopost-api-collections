@@ -1,0 +1,48 @@
+meta {
+  name: Update a knowledge source
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/v1/knowledge/sources/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "string",
+    "content": "Hello from FoPost.",
+    "url": "string",
+    "brand_voice_id": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changing `content` or `url` makes the stored passages stale, so the source returns to `pending` and is re-indexed.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `content`: string
+  - `url`: string
+  - `brand_voice_id`: string (uuid) | null
+}

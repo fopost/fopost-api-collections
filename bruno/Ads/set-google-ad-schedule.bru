@@ -1,0 +1,37 @@
+meta {
+  name: Replace a campaign ad schedule
+  type: http
+  seq: 24
+}
+
+put {
+  url: {{baseUrl}}/v1/ads/google/ad-schedule
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Google has no partial edit for a schedule: the slots given replace every slot on the campaign.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

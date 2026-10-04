@@ -1,0 +1,33 @@
+meta {
+  name: List a contact’s conversations
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/v1/contacts/:id/conversations
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~limit: 50
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The threads this person appears in, newest first. Matched on their channels, so a contact merged from two handles brings both threads with it.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Read story insights
+  type: http
+  seq: 50
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/instagram/stories/:storyId/insights
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  storyId: {{storyId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Views, reach, replies and navigation for one story. Instagram withholds these for a story too young or too small to report, and answers empty.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Read the default post languages
+  type: http
+  seq: 44
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/bluesky/languages
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  What a post from this connection is written in when the post does not say. Bluesky filters the feed by language.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

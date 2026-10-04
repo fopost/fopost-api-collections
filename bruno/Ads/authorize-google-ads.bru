@@ -1,0 +1,39 @@
+meta {
+  name: Start a Google Ads connection
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/connections/google/authorize
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Returns the Google login URL. The user who calls this must finish the login in their own browser session: the callback checks that the same user came back. An ad connection fills a connected-account slot, so past the free allowance a saved card is required.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `method`: `business` | `user` — `business` for Facebook Login for Business, `user` for a personal login
+  - `returnTo`: string — Dashboard path to land on after Meta redirects back
+}

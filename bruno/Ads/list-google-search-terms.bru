@@ -1,0 +1,33 @@
+meta {
+  name: List search terms
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/google/search-terms?connection_id=&customer_id=&since=&until=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  customer_id: 
+  since: 
+  until: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  What people actually searched, with the metrics each term earned.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

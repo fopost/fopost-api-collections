@@ -1,0 +1,29 @@
+meta {
+  name: List Pinterest boards
+  type: http
+  seq: 36
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/pinterest/boards
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Boards this connection can pin to, for the composer board picker.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

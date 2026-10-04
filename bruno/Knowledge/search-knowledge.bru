@@ -1,0 +1,32 @@
+meta {
+  name: Search the knowledge base
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/knowledge/search?q=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: 
+  ~top_k: 5
+  ~brand_voice_id: 
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The passages closest to a question, best first. An empty list is the honest answer when nothing stored answers it.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}
