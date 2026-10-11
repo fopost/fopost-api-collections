@@ -88,6 +88,10 @@
       "description": "The people behind the inbox, and the fields kept about them"
     },
     {
+      "name": "Blog",
+      "description": "Long-form articles written for your own website: keyword plan, drafts, review and publishing"
+    },
+    {
       "name": "Broadcasts",
       "description": "One message into many conversations, and drip sequences"
     },
@@ -13646,6 +13650,1160 @@
               "minimum": 1,
               "maximum": 100
             }
+          }
+        ]
+      }
+    },
+    "/v1/blog/settings": {
+      "get": {
+        "operationId": "getBlogSettings",
+        "summary": "Get blog settings",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogSettings"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Where articles publish, how often they are planned and how long a draft waits for review.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateBlogSettings",
+        "summary": "Update blog settings",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogSettings"
+                    },
+                    "websiteSecret": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Setting `websiteUrl` for the first time issues a signing secret, returned once as `websiteSecret`. The `product_blog` target is available to admins only.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBlogSettingsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/settings/website-secret": {
+      "post": {
+        "operationId": "rotateBlogWebsiteSecret",
+        "summary": "Rotate the website signing secret",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "websiteSecret": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The new secret is returned once and never readable again.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "workspaceId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/settings/website-test": {
+      "post": {
+        "operationId": "testBlogWebsite",
+        "summary": "Send a signed test article to the website",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "ok": {
+                          "type": "boolean"
+                        },
+                        "status": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "error": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Answers 200 when the site accepted it, 502 with the reason otherwise.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "workspaceId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/keywords": {
+      "get": {
+        "operationId": "listBlogKeywords",
+        "summary": "List the keyword plan",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BlogKeyword"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated: suggested, planned, written, dismissed"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createBlogKeyword",
+        "summary": "Add a keyword",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogKeyword"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "keyword": {
+                    "type": "string"
+                  },
+                  "plannedFor": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "workspaceId",
+                  "keyword"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/keywords/plan": {
+      "post": {
+        "operationId": "planBlogKeywords",
+        "summary": "Research keywords and fill the calendar",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "202": {
+            "description": "Queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "queued"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "$ref": "#/components/responses/PaymentRequired"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Runs in the background and spends AI credits. Seeds are derived from the site description when omitted.\n\nRequires the `ai` scope when using an API key.",
+        "x-fopost-scope": "ai",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "seeds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "workspaceId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/keywords/{id}": {
+      "patch": {
+        "operationId": "updateBlogKeyword",
+        "summary": "Update a keyword",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogKeyword"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Keyword id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "suggested",
+                      "planned",
+                      "written",
+                      "dismissed"
+                    ]
+                  },
+                  "plannedFor": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteBlogKeyword",
+        "summary": "Remove a keyword",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Keyword id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/blog/articles": {
+      "get": {
+        "operationId": "listBlogArticles",
+        "summary": "List articles",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BlogArticle"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated statuses"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createBlogArticle",
+        "summary": "Request an article",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "202": {
+            "description": "Queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "$ref": "#/components/responses/PaymentRequired"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Queues the writer: research, outline, body, meta and images run in the background and the draft lands in review. Spends AI credits.\n\nRequires the `ai` scope when using an API key.",
+        "x-fopost-scope": "ai",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBlogArticleRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/blog/articles/{id}": {
+      "get": {
+        "operationId": "getBlogArticle",
+        "summary": "Get an article",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticleFull"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateBlogArticle",
+        "summary": "Edit an article",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticleFull"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Only a draft, scheduled, failed or rejected article can be edited.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBlogArticleRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteBlogArticle",
+        "summary": "Delete an article",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/blog/articles/{id}/regenerate": {
+      "post": {
+        "operationId": "regenerateBlogArticle",
+        "summary": "Rewrite an article",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "202": {
+            "description": "Queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "$ref": "#/components/responses/PaymentRequired"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Runs the writer again on the same brief. Spends AI credits.\n\nRequires the `ai` scope when using an API key.",
+        "x-fopost-scope": "ai",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/blog/articles/{id}/publish": {
+      "post": {
+        "operationId": "publishBlogArticle",
+        "summary": "Publish an article now",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "202": {
+            "description": "Publishing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Sends the draft to the configured target without waiting for the review window.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/blog/articles/{id}/reject": {
+      "post": {
+        "operationId": "rejectBlogArticle",
+        "summary": "Reject a draft",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BlogArticle"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
           }
         ]
       }
@@ -31123,6 +32281,7 @@
                 "account.connected",
                 "account.disconnected",
                 "account.health_changed",
+                "article.published",
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
@@ -31188,6 +32347,7 @@
                 "account.connected",
                 "account.disconnected",
                 "account.health_changed",
+                "article.published",
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
@@ -38883,6 +40043,7 @@
           "account.connected",
           "account.disconnected",
           "account.health_changed",
+          "article.published",
           "inbox.comment_received",
           "inbox.mention_received",
           "inbox.message_received",
@@ -42094,6 +43255,568 @@
           "failed",
           "pending"
         ]
+      },
+      "BlogArticleImage": {
+        "type": "object",
+        "properties": {
+          "mediaId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Index of the outline heading the image sits under; absent on the featured image"
+          }
+        },
+        "required": [
+          "mediaId",
+          "url",
+          "alt"
+        ]
+      },
+      "BlogSettings": {
+        "type": "object",
+        "properties": {
+          "siteUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "topic": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "audience": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "type": "string"
+          },
+          "locationCode": {
+            "type": "integer"
+          },
+          "cadencePerWeek": {
+            "type": "integer",
+            "description": "Articles planned per week; 0 turns planning off"
+          },
+          "reviewHoldDays": {
+            "type": "integer",
+            "description": "Days a draft waits for review before it may auto-publish"
+          },
+          "autoPublish": {
+            "type": "boolean"
+          },
+          "imageTier": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "standard",
+              "best"
+            ]
+          },
+          "inBodyImages": {
+            "type": "integer"
+          },
+          "minWords": {
+            "type": "integer"
+          },
+          "maxWords": {
+            "type": "integer"
+          },
+          "brandVoiceId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "targetKind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "product_blog",
+              "account",
+              "website",
+              null
+            ]
+          },
+          "targetAccountId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "targetPlatform": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "websiteUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hasWebsiteSecret": {
+            "type": "boolean"
+          },
+          "keywordDataAvailable": {
+            "type": "boolean",
+            "description": "Whether search volume and difficulty can be fetched on this deployment"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "language",
+          "cadencePerWeek",
+          "reviewHoldDays",
+          "autoPublish",
+          "hasWebsiteSecret"
+        ]
+      },
+      "UpdateBlogSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "siteUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "topic": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "audience": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "type": "string"
+          },
+          "locationCode": {
+            "type": "integer"
+          },
+          "cadencePerWeek": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 7
+          },
+          "reviewHoldDays": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 14
+          },
+          "autoPublish": {
+            "type": "boolean"
+          },
+          "imageTier": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "standard",
+              "best"
+            ]
+          },
+          "inBodyImages": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "minWords": {
+            "type": "integer"
+          },
+          "maxWords": {
+            "type": "integer"
+          },
+          "brandVoiceId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "targetKind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "product_blog",
+              "account",
+              "website",
+              null
+            ]
+          },
+          "targetAccountId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "websiteUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "description": "Where published articles are POSTed as a signed webhook; setting it issues a secret, returned once"
+          }
+        },
+        "required": [
+          "workspaceId"
+        ]
+      },
+      "BlogKeyword": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "keyword": {
+            "type": "string"
+          },
+          "searchVolume": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "difficulty": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "0–100"
+          },
+          "cpc": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "intent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "provider",
+              "user",
+              "agent"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "suggested",
+              "planned",
+              "written",
+              "dismissed"
+            ]
+          },
+          "plannedFor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "keyword",
+          "source",
+          "status",
+          "createdAt"
+        ]
+      },
+      "BlogArticle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "excerpt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metaTitle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metaDescription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "featuredImage": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BlogArticleImage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "wordCount": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "writing",
+              "draft",
+              "scheduled",
+              "publishing",
+              "published",
+              "failed",
+              "rejected"
+            ]
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "user",
+              "agent"
+            ]
+          },
+          "reviewUntil": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "publishAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "publishedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "publishedUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "slug",
+          "tags",
+          "wordCount",
+          "status",
+          "origin",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "BlogArticleFull": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BlogArticle"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "instructions": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "outline": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "brief": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "The research the writer worked from"
+              },
+              "bodyMarkdown": {
+                "type": "string"
+              },
+              "bodyHtml": {
+                "type": "string"
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BlogArticleImage"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CreateBlogArticleRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": "string"
+          },
+          "keywordId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A keyword from the plan; its term becomes the target"
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "workspaceId"
+        ],
+        "description": "One of title, keyword or keywordId is required"
+      },
+      "UpdateBlogArticleRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "excerpt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metaTitle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metaDescription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bodyMarkdown": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publishAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Puts the draft on the calendar; null returns it to review"
+          }
+        }
       },
       "Broadcast": {
         "type": "object",
@@ -47342,6 +49065,16 @@
       },
       "Conflict": {
         "description": "The request conflicts with the current state of the resource",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "PaymentRequired": {
+        "description": "The AI balance cannot cover the run. The body carries `upgrade_url`, where funds can be added.",
         "content": {
           "application/json": {
             "schema": {
