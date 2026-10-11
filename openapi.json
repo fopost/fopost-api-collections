@@ -13697,14 +13697,14 @@
         "x-fopost-scope": "posts",
         "parameters": [
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       },
@@ -13961,14 +13961,14 @@
         "x-fopost-scope": "posts",
         "parameters": [
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           },
           {
             "name": "status",
@@ -14191,14 +14191,14 @@
             "description": "Keyword id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ],
         "requestBody": {
@@ -14267,14 +14267,14 @@
             "description": "Keyword id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       }
@@ -14325,14 +14325,14 @@
         "x-fopost-scope": "posts",
         "parameters": [
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           },
           {
             "name": "status",
@@ -14462,14 +14462,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       },
@@ -14531,14 +14531,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ],
         "requestBody": {
@@ -14589,14 +14589,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       }
@@ -14660,14 +14660,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       }
@@ -14728,14 +14728,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       }
@@ -14796,14 +14796,14 @@
             "description": "Article id"
           },
           {
-            "name": "workspace_id",
+            "name": "workspaceId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             },
-            "description": "Restrict to a single workspace the user belongs to"
+            "description": "The workspace the blog belongs to"
           }
         ]
       }

@@ -11129,7 +11129,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/settings?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/settings?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11140,9 +11140,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ]
@@ -11313,7 +11313,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/keywords?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/keywords?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11324,9 +11324,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 },
                 {
@@ -11466,7 +11466,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/keywords/:id?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/keywords/:id?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11478,9 +11478,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11524,7 +11524,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/keywords/:id?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/keywords/:id?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11536,9 +11536,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11573,7 +11573,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11584,9 +11584,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 },
                 {
@@ -11673,7 +11673,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11685,9 +11685,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11727,7 +11727,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11739,9 +11739,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11785,7 +11785,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11797,9 +11797,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11834,7 +11834,7 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id/regenerate?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id/regenerate?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11847,9 +11847,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11884,7 +11884,7 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id/publish?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id/publish?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11897,9 +11897,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
@@ -11934,7 +11934,7 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/v1/blog/articles/:id/reject?workspace_id=",
+              "raw": "{{baseUrl}}/v1/blog/articles/:id/reject?workspaceId=",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -11947,9 +11947,9 @@
               ],
               "query": [
                 {
-                  "key": "workspace_id",
+                  "key": "workspaceId",
                   "value": "",
-                  "description": "Restrict to a single workspace the user belongs to",
+                  "description": "The workspace the blog belongs to",
                   "disabled": false
                 }
               ],
