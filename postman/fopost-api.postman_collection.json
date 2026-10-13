@@ -10407,6 +10407,55 @@
           ]
         },
         {
+          "name": "Delete a conversation from the inbox",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/conversations/:id?account_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "conversations",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "The connected account the thread belongs to",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "The conversation id of a DM"
+                }
+              ]
+            },
+            "description": "Removes a DM thread from the inbox only. No network lets an app delete a conversation, so the platform keeps its copy and the thread returns if the other side writes again.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Show the typing indicator",
           "request": {
             "method": "POST",
@@ -14708,7 +14757,7 @@
                 "catalogs"
               ]
             },
-            "description": "Created on the connection's business portfolio. A connection that reaches no portfolio answers 400.\n\nRequires the `ads` and `publish` scopes when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `vertical`: string — Meta's catalog vertical; `commerce` when omitted",
+            "description": "Created on `businessId`, or on the connection's business portfolio when omitted. A business the connection does not reach answers 404; a connection that reaches no portfolio answers 400.\n\nRequires the `ads` and `publish` scopes when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `vertical`: string — Meta's catalog vertical; `commerce` when omitted\n- `businessId`: string — The business portfolio that owns the new catalog, one of `businesses` from the catalog list",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"Example name\"\n}",
@@ -20549,7 +20598,7 @@
                 "upload"
               ]
             },
-            "description": "Accepts up to 5 files (max 50 MB each) as multipart/form-data under the `files` field. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`",
+            "description": "Accepts up to 5 files as multipart/form-data under the `files` field, each within the account ceiling (`GET /v1/media/limits`) and the 100 MB this route carries; a larger file goes through direct upload. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`",
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -20592,6 +20641,47 @@
           ]
         },
         {
+          "name": "Upload limits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/limits",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                "limits"
+              ],
+              "query": [
+                {
+                  "key": "workspaceId",
+                  "value": "",
+                  "description": "Resolve the ceiling for this workspace’s billing account",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "The largest file this account may upload and what set that ceiling, plus the per-file ceiling of a multipart request. Read it before uploading to pick the route and to tell the user the real limit.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Sign a direct upload",
           "request": {
             "method": "POST",
@@ -20612,7 +20702,7 @@
                 "presign"
               ]
             },
-            "description": "Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`",
+            "description": "Returns a signed URL for one file up to the account ceiling (`GET /v1/media/limits`, at most 5 GB), same allowed types as upload. PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `folderId`: string (uuid) — Library folder to file the item under\n- `origin`: `chat` — Keep the file out of the library (chat attachment)\n- `brandRole`: `logo` | `product` | `person` | `background`\n- `brandVoiceId`: string (uuid)\n- `personConsent`: object — Required with brandRole=person",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"filename\": \"Example file\",\n  \"mimeType\": \"string\",\n  \"size\": 1\n}",

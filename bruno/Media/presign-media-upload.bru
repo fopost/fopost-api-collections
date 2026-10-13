@@ -1,7 +1,7 @@
 meta {
   name: Sign a direct upload
   type: http
-  seq: 3
+  seq: 4
 }
 
 post {
@@ -30,11 +30,18 @@ tests {
 }
 
 docs {
-  Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.
+  Returns a signed URL for one file up to the account ceiling (`GET /v1/media/limits`, at most 5 GB), same allowed types as upload. PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.
 
   Requires the `posts` scope when using an API key.
 
   Requires an active subscription; without one the request fails with 403 `subscription_required`.
 
   **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `folderId`: string (uuid) — Library folder to file the item under
+  - `origin`: `chat` — Keep the file out of the library (chat attachment)
+  - `brandRole`: `logo` | `product` | `person` | `background`
+  - `brandVoiceId`: string (uuid)
+  - `personConsent`: object — Required with brandRole=person
 }
