@@ -1,0 +1,29 @@
+meta {
+  name: List articles
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/v1/blog/articles?workspaceId=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspaceId: 
+  ~status: 
+  ~limit: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

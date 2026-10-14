@@ -1,0 +1,31 @@
+meta {
+  name: Reject a draft
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/articles/:id/reject?workspaceId=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspaceId: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

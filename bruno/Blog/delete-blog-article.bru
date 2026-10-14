@@ -1,0 +1,31 @@
+meta {
+  name: Delete an article
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{baseUrl}}/v1/blog/articles/:id?workspaceId=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspaceId: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([204]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

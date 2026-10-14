@@ -1,0 +1,33 @@
+meta {
+  name: Rewrite an article
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/articles/:id/regenerate?workspaceId=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspaceId: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  Runs the writer again on the same brief. Spends AI credits.
+
+  Requires the `ai` scope when using an API key.
+
+  **Scope:** `ai`
+}
