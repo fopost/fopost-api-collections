@@ -28,12 +28,12 @@ body:json {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([204]);
   });
 }
 
 docs {
-  A comment already gone on the network answers 200, not 404. Also requires the `publish` scope.
+  A comment already gone on the network answers 204, not 404. Also requires the `publish` scope.
 
   Requires the `ads` scope when using an API key.
 

@@ -16,12 +16,12 @@ params:path {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([204]);
   });
 }
 
 docs {
-  Soft-deletes the workspace. Requires the workspace owner role.
+  Soft-deletes the workspace. Requires the workspace owner role. Refused with 409 while accounts are still connected, or when it is your only workspace.
 
   Requires the `workspaces` scope when using an API key.
 

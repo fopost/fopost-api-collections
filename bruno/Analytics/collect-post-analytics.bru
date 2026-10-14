@@ -21,7 +21,7 @@ tests {
 }
 
 docs {
-  Re-reads one post from the network instead of waiting for the next scheduled collection, and stores the reading so it joins that post's timeline. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network. One post is still a platform call, so this spends the same per-user budget as `POST /v1/analytics/collect`: over the limit, the `429` body carries `retryAfter` in seconds. An API key needs the `analytics` scope as well as `posts`.
+  Re-reads one post from the network instead of waiting for the next scheduled collection, and stores the reading so it joins that post's timeline. `id` is a FoPost post id or, URL-encoded, the permalink of a post made natively on the network. One post is still a platform call, so this spends the same per-user budget as `POST /v1/analytics/collect`: over the limit, the `429` body carries `retry_after` in seconds. An API key needs the `analytics` scope as well as `posts`.
 
   Requires the `analytics` scope when using an API key.
 
