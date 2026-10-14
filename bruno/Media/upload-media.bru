@@ -30,7 +30,7 @@ tests {
 }
 
 docs {
-  Accepts up to 5 files (max 50 MB each) as multipart/form-data under the `files` field. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.
+  Accepts up to 5 files as multipart/form-data under the `files` field, each within the account ceiling (`GET /v1/media/limits`) and the 100 MB this route carries; a larger file goes through direct upload. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.
 
   Requires the `posts` scope when using an API key.
 

@@ -784,6 +784,16 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           },
+          "413": {
+            "description": "A file is over the account ceiling (`file_too_large`, with `max_file_bytes`) or the storage allowance (`storage_limit_reached`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           }
@@ -792,10 +802,32 @@
         "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
+          "description": "JSON, or `multipart/form-data` with the same JSON in a `post` field and up to 5 files under `files`. Files are stored in the workspace library and attached to the first content block. Multipart carries files up to 100 MB each; a larger file goes through direct upload and is attached by url.",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreatePostRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "post": {
+                    "type": "string",
+                    "description": "The JSON body, as a string"
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "post"
+                ]
               }
             }
           }
@@ -890,6 +922,16 @@
               }
             }
           },
+          "413": {
+            "description": "A file is over the account ceiling (`file_too_large`, with `max_file_bytes`) or the storage allowance (`storage_limit_reached`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "422": {
             "$ref": "#/components/responses/InvalidId"
           },
@@ -913,10 +955,32 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "JSON, or `multipart/form-data` with the same JSON in a `post` field and up to 5 files under `files`, which join the first content block (of the new `content`, or of the stored content when none is sent). Multipart carries files up to 100 MB each.",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdatePostRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "post": {
+                    "type": "string",
+                    "description": "The JSON body, as a string"
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "post"
+                ]
               }
             }
           }
@@ -18521,6 +18585,79 @@
         }
       }
     },
+    "/v1/inbox/conversations/{id}": {
+      "delete": {
+        "operationId": "deleteInboxConversation",
+        "summary": "Delete a conversation from the inbox",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deleted": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Removes a DM thread from the inbox only. No network lets an app delete a conversation, so the platform keeps its copy and the thread returns if the other side writes again.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The conversation id of a DM"
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The connected account the thread belongs to"
+          }
+        ]
+      }
+    },
     "/v1/inbox/conversations/{id}/typing": {
       "post": {
         "operationId": "setInboxTyping",
@@ -22017,7 +22154,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Created on the connection's business portfolio. A connection that reaches no portfolio answers 400.\n\nRequires the `ads` and `publish` scopes when using an API key.",
+        "description": "Created on `businessId`, or on the connection's business portfolio when omitted. A business the connection does not reach answers 404; a connection that reaches no portfolio answers 400.\n\nRequires the `ads` and `publish` scopes when using an API key.",
         "x-fopost-scope": "ads",
         "requestBody": {
           "required": true,
@@ -29765,11 +29902,21 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "413": {
+            "description": "A file is over the account ceiling or the 100 MB multipart ceiling (`file_too_large`, with `max_file_bytes`), or over the storage allowance (`storage_limit_reached`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Accepts up to 5 files (max 50 MB each) as multipart/form-data under the `files` field. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Accepts up to 5 files as multipart/form-data under the `files` field, each within the account ceiling (`GET /v1/media/limits`) and the 100 MB this route carries; a larger file goes through direct upload. Allowed types: jpeg, png, gif, webp, mp4, mov, webm, pdf, txt, csv. File content is verified against the declared type. When `workspaceId` is provided the files are also saved to the media library.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
@@ -29797,6 +29944,61 @@
             }
           }
         }
+      }
+    },
+    "/v1/media/limits": {
+      "get": {
+        "operationId": "getUploadLimits",
+        "summary": "Upload limits",
+        "tags": [
+          "Media"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UploadLimits"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The largest file this account may upload and what set that ceiling, plus the per-file ceiling of a multipart request. Read it before uploading to pick the route and to tell the user the real limit.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Resolve the ceiling for this workspace’s billing account"
+          }
+        ]
       }
     },
     "/v1/media/presign": {
@@ -29838,7 +30040,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "413": {
-            "description": "The file would exceed the free storage allowance (`storage_limit_reached`)",
+            "description": "The file is over the account ceiling (`file_too_large`, with `max_file_bytes`) or would exceed the storage allowance (`storage_limit_reached`)",
             "content": {
               "application/json": {
                 "schema": {
@@ -29851,7 +30053,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Returns a signed URL for one file (max 50 MB, same allowed types as upload). PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Returns a signed URL for one file up to the account ceiling (`GET /v1/media/limits`, at most 5 GB), same allowed types as upload. PUT the raw bytes to `uploadUrl` with exactly the returned headers and a `Content-Length` equal to `size`, then call the complete step. Nothing appears in the library until completion validates the object. An upload that is never completed is discarded after 24 hours.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
@@ -29875,8 +30077,45 @@
                   "size": {
                     "type": "integer",
                     "minimum": 1,
-                    "maximum": 52428800,
+                    "maximum": 5368709120,
                     "description": "Bytes"
+                  },
+                  "folderId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Library folder to file the item under"
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "chat"
+                    ],
+                    "description": "Keep the file out of the library (chat attachment)"
+                  },
+                  "brandRole": {
+                    "type": "string",
+                    "enum": [
+                      "logo",
+                      "product",
+                      "person",
+                      "background"
+                    ]
+                  },
+                  "brandVoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "personConsent": {
+                    "type": "object",
+                    "description": "Required with brandRole=person",
+                    "properties": {
+                      "subject": {
+                        "type": "string"
+                      },
+                      "statement": {
+                        "type": "string"
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -29918,7 +30157,7 @@
             }
           },
           "400": {
-            "description": "Nothing was uploaded (`upload_missing`), the content does not match the declared type, or the object is over 50 MB",
+            "description": "Nothing was uploaded (`upload_missing`) or the content does not match the declared type",
             "content": {
               "application/json": {
                 "schema": {
@@ -29957,7 +30196,7 @@
             }
           },
           "413": {
-            "description": "The file would exceed the free storage allowance (`storage_limit_reached`)",
+            "description": "The object is over the account ceiling (`file_too_large`) or would exceed the storage allowance (`storage_limit_reached`)",
             "content": {
               "application/json": {
                 "schema": {
@@ -32993,6 +33232,11 @@
             "minLength": 1,
             "maxLength": 40,
             "description": "Meta's catalog vertical; `commerce` when omitted"
+          },
+          "businessId": {
+            "type": "string",
+            "pattern": "^\\d{1,32}$",
+            "description": "The business portfolio that owns the new catalog, one of `businesses` from the catalog list"
           }
         },
         "required": [
@@ -47716,6 +47960,21 @@
                   "$ref": "#/components/schemas/AdCatalog"
                 }
               },
+              "businesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "Business portfolios a new catalog can be created under"
+              },
               "workspaceId": {
                 "type": "string",
                 "format": "uuid"
@@ -48971,6 +49230,70 @@
           "size"
         ]
       },
+      "UploadLimits": {
+        "type": "object",
+        "properties": {
+          "maxFileBytes": {
+            "type": "integer",
+            "description": "The largest file this account may upload, by any route. Grows with the connected-account count (100 MB up to 2 accounts, 400 MB up to 7, 2 GB up to 15, 5 GB beyond) and is 5 GB with the Large Uploads add-on."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "accounts",
+              "add_on",
+              "bypass"
+            ],
+            "description": "What set the ceiling"
+          },
+          "connectedAccounts": {
+            "type": "integer"
+          },
+          "largeUploadsEnabled": {
+            "type": "boolean"
+          },
+          "nextTier": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "upToAccounts": {
+                "type": "integer",
+                "nullable": true
+              },
+              "maxFileBytes": {
+                "type": "integer"
+              }
+            },
+            "description": "The next ceiling up and the account count that unlocks it; null at the top"
+          },
+          "multipartMaxFileBytes": {
+            "type": "integer",
+            "description": "What a multipart request (`/v1/media/upload`, or a post with files) can carry per file. Larger files go through direct upload."
+          },
+          "maxFilesPerUpload": {
+            "type": "integer"
+          },
+          "directUploadAvailable": {
+            "type": "boolean"
+          },
+          "allowedTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "maxFileBytes",
+          "source",
+          "connectedAccounts",
+          "largeUploadsEnabled",
+          "multipartMaxFileBytes",
+          "maxFilesPerUpload",
+          "directUploadAvailable",
+          "allowedTypes"
+        ]
+      },
       "PresignedUpload": {
         "type": "object",
         "properties": {
@@ -49001,6 +49324,10 @@
             "type": "string",
             "format": "date-time",
             "description": "When the signed URL stops accepting the PUT"
+          },
+          "maxFileBytes": {
+            "type": "integer",
+            "description": "The account ceiling the file was checked against"
           }
         },
         "required": [
@@ -49008,7 +49335,8 @@
           "uploadUrl",
           "method",
           "headers",
-          "expiresAt"
+          "expiresAt",
+          "maxFileBytes"
         ]
       }
     },
