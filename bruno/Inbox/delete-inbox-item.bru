@@ -16,12 +16,12 @@ params:path {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([204]);
   });
 }
 
 docs {
-  Removes the comment from the platform where it was left, whether someone else wrote it or it is our own reply. Only where `canDelete` is true. Deleting our own reply also requires the `publish` scope.
+  Removes the comment from the platform where it was left, whether someone else wrote it or it is our own reply. Only where `can_delete` is true. Deleting our own reply also requires the `publish` scope.
 
   Requires the `inbox` scope when using an API key.
 

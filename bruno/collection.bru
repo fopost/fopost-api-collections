@@ -19,9 +19,17 @@ docs {
 
   Each operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.
 
+  ## Responses
+
+  Every key in a response body and every query parameter is snake_case; request bodies keep the field names documented on each operation. The ads endpoints (`/v1/ads/*`) are the one exception and keep camelCase keys. A single resource is returned as the object itself (`201` on create); a collection is `{ "data": [...], "meta": {...} }`. A success with nothing to return is `204` with an empty body.
+
   ## Errors
 
-  Errors return `{ "error": "<code>", "message": "<explanation>" }` with a matching HTTP status. Some errors include additional context fields.
+  Errors return `{ "error": "<code>", "message": "<explanation>" }` with a matching HTTP status, including an unknown route (`404 not_found`) and a server fault (`500 internal_error`). `error` is a stable snake_case code; `message` is for humans and may change. Some errors include additional context fields. A feature that is not set up on this deployment answers `503 not_configured`; a malformed answer from an upstream provider answers `502 upstream_error`.
+
+  ## Request ids
+
+  Every response carries an `X-Request-Id` header. Quote it when contacting support about a specific request.
 
   ## Rate limiting
 
@@ -29,5 +37,5 @@ docs {
 
   ## Pagination
 
-  List endpoints that paginate accept `page` and `per_page` query parameters and return a `meta` object with `current_page`, `per_page`, `total`, and `last_page`.
+  Offset-paged lists accept `page` and `per_page` (1 to 100) and return `meta: { page, per_page, total, total_pages }`. Cursor-paged lists return `meta: { next_cursor, has_more }`; pass `next_cursor` back in the cursor parameter the operation documents until `has_more` is false. Lists that do not paginate return `{ "data": [...] }` with no `meta`.
 }
