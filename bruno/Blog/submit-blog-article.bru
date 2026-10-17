@@ -1,0 +1,33 @@
+meta {
+  name: Submit an article for approval
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/articles/:id/submit?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Moves a draft, failed or rejected article to review.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}
