@@ -1,0 +1,53 @@
+meta {
+  name: Update blog settings
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/v1/blog/settings
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Setting `websiteUrl` for the first time issues a signing secret, returned once as `website_secret`. The `product_blog` target is available to admins only.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `siteUrl`: string (uri) | null
+  - `topic`: string | null
+  - `audience`: string | null
+  - `language`: string
+  - `locationCode`: integer
+  - `cadencePerWeek`: integer
+  - `reviewHoldDays`: integer
+  - `autoPublish`: boolean
+  - `imageTier`: `draft` | `standard` | `best`
+  - `inBodyImages`: integer
+  - `minWords`: integer
+  - `maxWords`: integer
+  - `brandVoiceId`: string (uuid) | null
+  - `targetKind`: `product_blog` | `account` | `website` | `null`
+  - `targetAccountId`: string (uuid) | null
+  - `websiteUrl`: string (uri) | null — Where published articles are POSTed as a signed webhook; setting it issues a secret, returned once
+}

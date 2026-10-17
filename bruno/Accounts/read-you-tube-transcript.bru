@@ -1,0 +1,30 @@
+meta {
+  name: Read a transcript
+  type: http
+  seq: 43
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/youtube/captions/:captionId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  captionId: {{captionId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The text of one caption track.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

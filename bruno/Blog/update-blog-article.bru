@@ -1,0 +1,58 @@
+meta {
+  name: Edit an article
+  type: http
+  seq: 13
+}
+
+patch {
+  url: {{baseUrl}}/v1/blog/articles/:id?workspace_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "string",
+    "slug": "string",
+    "excerpt": "string",
+    "metaTitle": "string",
+    "metaDescription": "Hello from FoPost.",
+    "bodyMarkdown": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Only a draft, scheduled, failed or rejected article can be edited.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `slug`: string
+  - `excerpt`: string | null
+  - `metaTitle`: string | null
+  - `metaDescription`: string | null
+  - `bodyMarkdown`: string
+  - `tags`: string[]
+  - `publishAt`: string (date-time) | null — Puts the draft on the calendar; null returns it to review
+}

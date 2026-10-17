@@ -1,0 +1,29 @@
+meta {
+  name: Re-subscribe the webhook
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/webhook-subscription
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Subscribes the app to every field this account needs, lapsed or not.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

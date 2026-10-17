@@ -1,0 +1,33 @@
+meta {
+  name: Find a LinkedIn mention
+  type: http
+  seq: 51
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/linkedin/mentions?q=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Organizations a post can mention, with the URN that makes the text render as a link. People are not searchable: LinkedIn has no public person search, so a member mention needs a URN you already hold.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

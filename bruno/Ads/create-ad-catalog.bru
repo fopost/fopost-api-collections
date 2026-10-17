@@ -1,0 +1,41 @@
+meta {
+  name: Create a product catalog
+  type: http
+  seq: 50
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/catalogs
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Created on `businessId`, or on the connection's business portfolio when omitted. A business the connection does not reach answers 404; a connection that reaches no portfolio answers 400.
+
+  Requires the `ads` and `publish` scopes when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `vertical`: string — Meta's catalog vertical; `commerce` when omitted
+  - `businessId`: string — The business portfolio that owns the new catalog, one of `businesses` from the catalog list
+}

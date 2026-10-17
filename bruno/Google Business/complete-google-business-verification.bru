@@ -1,0 +1,38 @@
+meta {
+  name: Complete verification
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/verification/complete
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "verification_name": "Example verification",
+    "pin": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

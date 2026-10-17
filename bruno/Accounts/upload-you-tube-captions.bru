@@ -1,0 +1,45 @@
+meta {
+  name: Upload a caption track
+  type: http
+  seq: 42
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/youtube/videos/:videoId/captions
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  videoId: {{videoId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "language": "xx",
+    "body": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Uploads a subtitle file. YouTube reads SRT and WebVTT and sniffs which one it is, so the format is not declared.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `is_draft`: boolean
+}

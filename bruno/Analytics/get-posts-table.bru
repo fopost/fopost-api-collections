@@ -1,7 +1,7 @@
 meta {
   name: Get posts with delivery breakdown
   type: http
-  seq: 8
+  seq: 11
 }
 
 get {
@@ -12,8 +12,8 @@ get {
 
 params:query {
   ~page: 1
-  ~limit: 20
-  ~accountId: 
+  ~per_page: 20
+  ~account_id: 
   ~workspace_id: 
   ~from: 
   ~to: 
@@ -27,7 +27,7 @@ tests {
 }
 
 docs {
-  Paginated posts of every status with per-delivery outcomes and a status summary.
+  Paginated posts of every status with per-delivery outcomes; `summary` counts the whole filtered set by status.
 
   Requires the `analytics` scope when using an API key.
 

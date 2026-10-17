@@ -1,7 +1,7 @@
 meta {
   name: Delete an ad
   type: http
-  seq: 37
+  seq: 122
 }
 
 delete {
@@ -21,7 +21,7 @@ params:path {
 
 tests {
   test('status is successful', function () {
-    expect(res.getStatus()).to.be.oneOf([200]);
+    expect(res.getStatus()).to.be.oneOf([204]);
   });
 }
 

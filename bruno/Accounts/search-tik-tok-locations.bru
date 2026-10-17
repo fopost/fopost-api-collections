@@ -1,0 +1,34 @@
+meta {
+  name: Search TikTok places
+  type: http
+  seq: 53
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/tiktok/locations?q=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: 
+  ~limit: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Places a post can be tagged with. Same Marketing API product as the music library.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

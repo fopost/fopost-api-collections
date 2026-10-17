@@ -1,0 +1,35 @@
+meta {
+  name: Send a signed test article to the website
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/settings/website-test
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Answers 200 when the site accepted it, 502 (`website_test_failed`) with the reason otherwise.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

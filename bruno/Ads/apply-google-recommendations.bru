@@ -1,0 +1,37 @@
+meta {
+  name: Apply recommendations
+  type: http
+  seq: 39
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/google/recommendations/apply
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Applies each recommendation, which changes what the live account serves or bids. An id that does not name a recommendation on `customerId` is not found.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

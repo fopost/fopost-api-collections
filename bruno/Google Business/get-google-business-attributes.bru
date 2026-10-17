@@ -1,0 +1,36 @@
+meta {
+  name: Get Business Profile attributes
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/gbp/attributes
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~available: 
+  ~category_name: 
+  ~region_code: 
+  ~language_code: 
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The attribute values set on the location. Pass `available=true` to list the attributes Google offers for its category and region instead.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

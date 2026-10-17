@@ -1,0 +1,43 @@
+meta {
+  name: Create a Performance Max asset group
+  type: http
+  seq: 34
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/google/asset-groups
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string",
+    "campaignId": "string",
+    "name": "Example name",
+    "finalUrls": [
+      "https://example.com"
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `status`: `active` | `paused`
+}

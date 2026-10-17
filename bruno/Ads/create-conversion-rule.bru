@@ -1,0 +1,44 @@
+meta {
+  name: Create a conversion rule
+  type: http
+  seq: 137
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "name": "Example name",
+    "type": "purchase",
+    "attribution": "last_touch"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `postClickWindowDays`: integer
+  - `viewThroughWindowDays`: integer
+  - `valueMinor`: integer — Default value of one conversion, ad account currency, minor units
+  - `currency`: string
+}

@@ -5,13 +5,25 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/v1/media?workspaceId=
+  url: {{baseUrl}}/v1/media
   body: none
   auth: inherit
 }
 
 params:query {
-  workspaceId: 
+  ~workspace_id: 
+  ~folder_id: 
+  ~search: 
+  ~tag: 
+  ~type: image
+  ~url: 
+  ~brand_role: logo
+  ~brand_voice_id: 
+  ~generation_run_id: 
+  ~origin: 
+  ~shared: true
+  ~page: 1
+  ~per_page: 60
 }
 
 script:post-response {
@@ -29,6 +41,8 @@ tests {
 }
 
 docs {
+  Newest first. Without `workspace_id` the list spans every workspace the caller belongs to.
+
   Requires the `posts` scope when using an API key.
 
   **Scope:** `posts`

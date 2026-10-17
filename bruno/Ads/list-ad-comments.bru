@@ -1,0 +1,32 @@
+meta {
+  name: List the comments on an ad
+  type: http
+  seq: 104
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/comments?connection_id=&ad_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_id: 
+  ~after: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Read live from the network and never stored. Paged through `nextCursor`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

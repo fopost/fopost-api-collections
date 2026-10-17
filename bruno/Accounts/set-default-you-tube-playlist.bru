@@ -1,0 +1,39 @@
+meta {
+  name: Set the default YouTube playlist
+  type: http
+  seq: 40
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/youtube/playlists/default
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "playlist_id": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The playlist a new video joins when the post does not pick one. Stored on the connection, not on YouTube; `null` clears it.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
