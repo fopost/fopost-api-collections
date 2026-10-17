@@ -1,0 +1,29 @@
+meta {
+  name: List the blogs on a connected site
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/blogs
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

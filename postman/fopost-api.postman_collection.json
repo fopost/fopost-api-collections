@@ -1055,6 +1055,53 @@
               }
             }
           ]
+        },
+        {
+          "name": "Check a subreddit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/validate/subreddit?account_id=&name=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "validate",
+                "subreddit"
+              ],
+              "query": [
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "The Reddit account to check as",
+                  "disabled": false
+                },
+                {
+                  "key": "name",
+                  "value": "",
+                  "description": "Subreddit name without the `r/` prefix",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Whether a subreddit exists and takes a post from a connected Reddit account. The check runs with that account's token, so `account_id` is required.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -5745,6 +5792,203 @@
               }
             }
           ]
+        },
+        {
+          "name": "List the account's subreddits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/subreddits",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "subreddits"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Subreddits this Reddit account is subscribed to, busiest first, plus its own profile page. `isDefault` marks where a post goes when it names no subreddit. An account connected before we asked for the subreddit permission answers 409 `reconnect_required`.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a subreddit's rules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/subreddits/:name/rules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "subreddits",
+                ":name",
+                "rules"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                },
+                {
+                  "key": "name",
+                  "value": "{{name}}",
+                  "description": "Subreddit name without the `r/` prefix"
+                }
+              ]
+            },
+            "description": "The rules a subreddit posts, in its own order. Show them before publishing.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a subreddit's post flairs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/flairs?subreddit=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "flairs"
+              ],
+              "query": [
+                {
+                  "key": "subreddit",
+                  "value": "",
+                  "description": "Subreddit name without the `r/` prefix",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Post flairs the subreddit offers this account. A flair id is valid only in the subreddit it came from, and preflight rejects one from anywhere else.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Set the account's default subreddit",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/reddit/default-subreddit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "reddit",
+                "default-subreddit"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Reddit account id"
+                }
+              ]
+            },
+            "description": "Where posts from this account go when they name no subreddit. `null` falls back to the account's own profile page, which always accepts a post.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subreddit\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -5982,6 +6226,481 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Blogs",
+      "description": "Articles and products that live on a connected site, not in FoPost",
+      "item": [
+        {
+          "name": "List the blogs on a connected site",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List articles on a blog",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs",
+                ":blogId",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "How many to return, 1 to 50 (default 20)",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "published",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Match the article title",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "blogId",
+                  "value": "{{blogId}}",
+                  "description": "Blog id from the blogs list"
+                }
+              ]
+            },
+            "description": "Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create an article on a blog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs",
+                ":blogId",
+                "articles"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "blogId",
+                  "value": "{{blogId}}",
+                  "description": "Blog id from the blogs list"
+                }
+              ]
+            },
+            "description": "Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `excerpt`: string\n- `status`: `published` | `draft` | `pending` | `scheduled`\n- `tags`: string[]\n- `author_name`: string\n- `image_url`: string (uri)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"x\",\n  \"body\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read one article",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs",
+                ":blogId",
+                "articles",
+                ":articleId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "blogId",
+                  "value": "{{blogId}}",
+                  "description": "Blog id from the blogs list"
+                },
+                {
+                  "key": "articleId",
+                  "value": "{{articleId}}",
+                  "description": "Article id on the platform"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update an article in place",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs",
+                ":blogId",
+                "articles",
+                ":articleId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "blogId",
+                  "value": "{{blogId}}",
+                  "description": "Blog id from the blogs list"
+                },
+                {
+                  "key": "articleId",
+                  "value": "{{articleId}}",
+                  "description": "Article id on the platform"
+                }
+              ]
+            },
+            "description": "Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `title`: string\n- `body`: string\n- `excerpt`: string\n- `status`: `published` | `draft` | `pending` | `scheduled`\n- `tags`: string[]\n- `author_name`: string\n- `image_url`: string (uri)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"x\",\n  \"body\": \"string\",\n  \"excerpt\": \"string\",\n  \"status\": \"published\",\n  \"author_name\": \"Example author\",\n  \"image_url\": \"https://example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete an article",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "blogs",
+                ":blogId",
+                "articles",
+                ":articleId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "blogId",
+                  "value": "{{blogId}}",
+                  "description": "Blog id from the blogs list"
+                },
+                {
+                  "key": "articleId",
+                  "value": "{{articleId}}",
+                  "description": "Article id on the platform"
+                }
+              ]
+            },
+            "description": "Removes the article from the connected site. This cannot be undone.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List the store's products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "How many to return, 1 to 50 (default 20)",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Match the product title",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a product",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/products/:productId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "products",
+                ":productId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "productId",
+                  "value": "{{productId}}",
+                  "description": "Product id on the platform"
+                }
+              ]
+            },
+            "description": "Changes the product on the store. Only the fields sent are touched.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `title`: string\n- `description`: string\n- `status`: `active` | `draft` | `archived`\n- `tags`: string[]\n- `product_type`: string\n- `vendor`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"x\",\n  \"description\": \"Hello from FoPost.\",\n  \"status\": \"active\",\n  \"product_type\": \"string\",\n  \"vendor\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }
@@ -10639,6 +11358,61 @@
               }
             }
           ]
+        },
+        {
+          "name": "Vote on an item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/vote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "vote"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"up\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -15122,7 +15896,7 @@
     },
     {
       "name": "Ads",
-      "description": "Meta ads, audiences and lead forms",
+      "description": "Ads, audiences and lead forms across ad networks",
       "item": [
         {
           "name": "List ads",
@@ -15481,7 +16255,7 @@
                 }
               ]
             },
-            "description": "Published posts with a delivery on an account a Meta Ads connection reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Published posts with a delivery on an account an ad connection reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -15499,7 +16273,7 @@
           ]
         },
         {
-          "name": "List Meta Ads connections",
+          "name": "List ad connections",
           "request": {
             "method": "GET",
             "header": [],
@@ -15540,7 +16314,7 @@
           ]
         },
         {
-          "name": "Start a Meta Ads connection",
+          "name": "Start an ad connection",
           "request": {
             "method": "POST",
             "header": [
@@ -15589,7 +16363,7 @@
           ]
         },
         {
-          "name": "Remove a Meta Ads connection",
+          "name": "Remove an ad connection",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -17488,7 +18262,7 @@
                 }
               ]
             },
-            "description": "Every Meta Ads connection with the ad accounts and Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Every ad connection with the ad accounts and, where the network has them, the Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -17530,7 +18304,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ]
@@ -17577,7 +18351,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ]
@@ -17672,7 +18446,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -17782,7 +18556,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -17838,7 +18612,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -17956,7 +18730,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -18069,7 +18843,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -18132,7 +18906,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -18256,7 +19030,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -18431,7 +19205,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -18490,7 +19264,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -18591,7 +19365,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -18763,7 +19537,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -18847,7 +19621,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -18950,7 +19724,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19011,7 +19785,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19077,7 +19851,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19236,7 +20010,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19354,7 +20128,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19457,7 +20231,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19519,7 +20293,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19580,7 +20354,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19634,7 +20408,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19737,7 +20511,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19798,7 +20572,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -19901,7 +20675,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -20120,7 +20894,7 @@
                 }
               ]
             },
-            "description": "Every Page a Meta Ads connection reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
+            "description": "Every Page a lead-form network reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`"
           },
           "response": [],
           "event": [
@@ -20350,7 +21124,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -20475,7 +21249,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ]
@@ -20523,7 +21297,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -20576,7 +21350,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -20682,7 +21456,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -20910,7 +21684,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21012,7 +21786,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21072,7 +21846,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21136,7 +21910,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21197,7 +21971,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21308,7 +22082,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21368,7 +22142,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21432,7 +22206,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21493,7 +22267,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21604,7 +22378,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21664,7 +22438,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21728,7 +22502,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21789,7 +22563,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -21899,7 +22673,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -22000,7 +22774,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22055,7 +22829,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22110,7 +22884,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22170,7 +22944,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22234,7 +23008,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22295,7 +23069,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22365,7 +23139,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22525,7 +23299,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -22628,7 +23402,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22689,7 +23463,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22754,7 +23528,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22816,7 +23590,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22887,7 +23661,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -22953,7 +23727,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -23027,7 +23801,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
@@ -23091,7 +23865,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 },
                 {
@@ -23361,7 +24135,7 @@
                 {
                   "key": "connection_id",
                   "value": "",
-                  "description": "The Meta Ads connection to act through",
+                  "description": "The ad connection to act through",
                   "disabled": false
                 }
               ],
