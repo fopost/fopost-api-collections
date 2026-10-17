@@ -1,0 +1,49 @@
+meta {
+  name: Create a WhatsApp message template
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/templates
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "language": "xx",
+    "category": "MARKETING",
+    "components": [
+      {
+        "type": "HEADER"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Files a template for platform review and answers with the status it was given, which is PENDING on a normal submission.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `allow_category_change`: boolean
+}

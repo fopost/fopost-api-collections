@@ -1,0 +1,29 @@
+meta {
+  name: Get the WhatsApp business profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/profile
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The profile on the connected business number, plus the number quality rating and messaging limit tier. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

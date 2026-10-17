@@ -1,0 +1,29 @@
+meta {
+  name: Get WhatsApp account state
+  type: http
+  seq: 37
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/events
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The account review and verification state, and the number quality rating, name status and messaging limit tier.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

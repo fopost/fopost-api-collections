@@ -1,0 +1,38 @@
+meta {
+  name: Research keywords and fill the calendar
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/keywords/plan
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  Runs in the background and spends AI credits. Seeds are derived from the site description when omitted.
+
+  Requires the `ai` scope when using an API key.
+
+  **Scope:** `ai`
+
+  **Optional fields** (not in the example body):
+  - `seeds`: string[]
+}

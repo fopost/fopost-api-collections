@@ -1,0 +1,29 @@
+meta {
+  name: List sequences
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/sequences
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~page: 1
+  ~per_page: 25
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

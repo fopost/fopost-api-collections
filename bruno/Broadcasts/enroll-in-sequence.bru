@@ -1,0 +1,48 @@
+meta {
+  name: Enroll contacts in a sequence
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/v1/sequences/:id/enroll
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "contact_ids": [
+      "00000000-0000-0000-0000-000000000000"
+    ],
+    "audience": {
+      "source": "inbox"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Re-enrolling someone restarts their walk from the first step rather than running two in parallel. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `contact_ids`: string (uuid)[]
+  - `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.
+}

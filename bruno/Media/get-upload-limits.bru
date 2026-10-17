@@ -1,0 +1,29 @@
+meta {
+  name: Upload limits
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/media/limits
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The largest file this account may upload and what set that ceiling, plus the per-file ceiling of a multipart request. Read it before uploading to pick the route and to tell the user the real limit.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

@@ -1,0 +1,32 @@
+meta {
+  name: List broadcasts
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/broadcasts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~status: draft
+  ~page: 1
+  ~per_page: 25
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Newest first. Spans every workspace the caller belongs to unless `workspace_id` names one, in which case rows omit it.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

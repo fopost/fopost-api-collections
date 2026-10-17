@@ -1,0 +1,39 @@
+meta {
+  name: Link a product catalog
+  type: http
+  seq: 25
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/commerce/catalog
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "catalog_id": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Points the number at a catalog the customer already owns.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

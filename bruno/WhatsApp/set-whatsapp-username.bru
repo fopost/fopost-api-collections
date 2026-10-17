@@ -1,0 +1,39 @@
+meta {
+  name: Set the WhatsApp username
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/profile/username
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "Example user"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The public username on the business number, where the account has one.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

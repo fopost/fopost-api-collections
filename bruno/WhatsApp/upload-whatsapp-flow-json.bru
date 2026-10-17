@@ -1,0 +1,39 @@
+meta {
+  name: Upload a WhatsApp flow definition
+  type: http
+  seq: 34
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId/json
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "flow_json": {}
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Replaces the flow screens. The platform answers with its validation errors rather than refusing, so they come back as data.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

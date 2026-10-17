@@ -1,0 +1,39 @@
+meta {
+  name: Register the flow encryption public key
+  type: http
+  seq: 30
+}
+
+put {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/flows/encryption-key
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "business_public_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Registers the public half of the key a flow endpoint payload is encrypted with. The private half stays with the customer.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

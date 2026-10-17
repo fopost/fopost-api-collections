@@ -1,0 +1,45 @@
+meta {
+  name: Update a WhatsApp flow
+  type: http
+  seq: 32
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "endpoint_uri": "https://example.com"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changes the name, categories or endpoint. The screens are uploaded separately.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `categories`: `SIGN_UP` | `SIGN_IN` | `APPOINTMENT_BOOKING` | `LEAD_GENERATION` | `CONTACT_US` | `CUSTOMER_SUPPORT` | `SURVEY` | `OTHER`[]
+  - `endpoint_uri`: string (uri)
+}

@@ -24,6 +24,7 @@ params:query {
   ~sort: newest
   ~page: 1
   ~per_page: 25
+  ~include_raw: 1
 }
 
 tests {
@@ -33,7 +34,7 @@ tests {
 }
 
 docs {
-  Comments, mentions and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspaceId`.
+  Comments, mentions, reviews and direct messages across the connected accounts, newest first. Without `workspace_id` the list spans every workspace the caller belongs to and each item carries its `workspace_id`.
 
   Requires the `inbox` scope when using an API key.
 

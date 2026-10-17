@@ -1,0 +1,42 @@
+meta {
+  name: Attach a conversion rule to an ad set
+  type: http
+  seq: 141
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/linkedin/conversion-rules/:id/associations?workspace_id=&connection_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  connection_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "campaignId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

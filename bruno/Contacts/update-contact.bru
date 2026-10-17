@@ -1,0 +1,44 @@
+meta {
+  name: Update a contact
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{baseUrl}}/v1/contacts/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "display_name": "Example display",
+    "note": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `display_name`: string | null
+  - `channels`: object[]
+  - `note`: string | null
+  - `fields`: object — A null or empty value clears that field
+}

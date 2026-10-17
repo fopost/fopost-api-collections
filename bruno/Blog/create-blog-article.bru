@@ -1,0 +1,41 @@
+meta {
+  name: Request an article
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/articles
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  Queues the writer: research, outline, body, meta and images run in the background and the draft lands in review. Spends AI credits.
+
+  Requires the `ai` scope when using an API key.
+
+  **Scope:** `ai`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `keyword`: string
+  - `keywordId`: string (uuid) — A keyword from the plan; its term becomes the target
+  - `instructions`: string
+}

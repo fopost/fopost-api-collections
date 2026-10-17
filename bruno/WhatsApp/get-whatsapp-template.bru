@@ -1,0 +1,29 @@
+meta {
+  name: Get a WhatsApp message template
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One template with its current review status. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

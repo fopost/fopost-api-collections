@@ -1,7 +1,7 @@
 meta {
   name: Trigger analytics collection
   type: http
-  seq: 12
+  seq: 20
 }
 
 post {
@@ -11,7 +11,8 @@ post {
 }
 
 params:query {
-  ~accountId: 
+  ~account_id: 
+  ~workspace_id: 
 }
 
 tests {
@@ -21,7 +22,7 @@ tests {
 }
 
 docs {
-  Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retryAfter` (seconds).
+  Collects fresh metrics for the user’s active accounts on demand. Throttled per user; when throttled the 429 body includes `retry_after` (seconds).
 
   Requires the `analytics` scope when using an API key.
 

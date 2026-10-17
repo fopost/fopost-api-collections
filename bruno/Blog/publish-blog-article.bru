@@ -1,0 +1,33 @@
+meta {
+  name: Publish an article now
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/articles/:id/publish?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  Sends the draft to the configured target without waiting for the review window.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+}

@@ -1,0 +1,43 @@
+meta {
+  name: Pause, resume or rebid a keyword
+  type: http
+  seq: 16
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/google/keywords/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "customerId": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `status`: `active` | `paused`
+  - `cpcBidMinor`: integer
+}

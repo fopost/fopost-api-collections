@@ -1,0 +1,46 @@
+meta {
+  name: Update a keyword
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/v1/blog/keywords/:id?workspace_id=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "suggested",
+    "plannedFor": "2026-01-01"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `status`: `suggested` | `planned` | `written` | `dismissed`
+  - `plannedFor`: string (date) | null
+}

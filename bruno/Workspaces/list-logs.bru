@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/v1/logs?workspace_id=
+  url: {{baseUrl}}/v1/logs
   body: none
   auth: inherit
 }
 
 params:query {
-  workspace_id: 
+  ~workspace_id: 
   ~days: 7
   ~status: success
   ~method: 
@@ -30,7 +30,7 @@ tests {
 }
 
 docs {
-  Recent API activity for one workspace, newest first: every request its members made against it, with route, status code, duration and any error message. Rows are kept for 30 days.
+  Recent API activity, newest first: every request members made against the workspace, with route, status code, duration and any error message. Omit workspace_id to read every workspace the caller belongs to plus their own account-level requests. `summary` carries totals and hourly buckets for the whole filtered window. Rows are kept for 30 days.
 
   Requires the `workspaces` scope when using an API key.
 

@@ -1,0 +1,42 @@
+meta {
+  name: Create a custom field
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/v1/contacts/fields
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "key": "string",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `type`: `text` | `number` | `date` | `select` | `boolean`
+  - `options`: string[]
+}
