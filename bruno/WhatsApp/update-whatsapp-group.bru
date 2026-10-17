@@ -1,0 +1,44 @@
+meta {
+  name: Update a WhatsApp group
+  type: http
+  seq: 15
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "subject": "x",
+    "description": "Hello from FoPost."
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changes the subject or description.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `subject`: string
+  - `description`: string
+}

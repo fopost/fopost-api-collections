@@ -1,0 +1,29 @@
+meta {
+  name: Get WhatsApp commerce settings
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/commerce
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Whether the cart and the catalog are visible on this number, and which catalog is linked.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

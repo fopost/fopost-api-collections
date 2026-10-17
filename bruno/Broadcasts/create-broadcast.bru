@@ -40,4 +40,6 @@ docs {
   - `media_id`: string (uuid)
   - `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.
   - `scheduled_at`: string (date-time) | null
+  - `template_name`: string | null — An approved WhatsApp template to send instead of `text`. It is the only message the platform accepts once a contact’s 24-hour window has shut, and the platform bills the customer’s own WhatsApp Business Account for it.
+  - `template_language`: string | null — Language code of the template, e.g. en_US
 }

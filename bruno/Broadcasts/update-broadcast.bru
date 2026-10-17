@@ -23,7 +23,9 @@ body:json {
     "name": "Example name",
     "text": "Hello from FoPost.",
     "media_id": "00000000-0000-0000-0000-000000000000",
-    "scheduled_at": "2026-01-01T12:00:00.000Z"
+    "scheduled_at": "2026-01-01T12:00:00.000Z",
+    "template_name": "Example template",
+    "template_language": "string"
   }
 }
 
@@ -46,4 +48,6 @@ docs {
   - `media_id`: string (uuid)
   - `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.
   - `scheduled_at`: string (date-time) | null
+  - `template_name`: string | null
+  - `template_language`: string | null
 }

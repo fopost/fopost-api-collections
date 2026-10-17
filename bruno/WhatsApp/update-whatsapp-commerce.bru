@@ -1,0 +1,44 @@
+meta {
+  name: Update WhatsApp commerce settings
+  type: http
+  seq: 24
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/commerce
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "is_cart_enabled": false,
+    "is_catalog_visible": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Turns the cart or the catalog on or off.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `is_cart_enabled`: boolean
+  - `is_catalog_visible`: boolean
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Get the flow encryption key status
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/flows/encryption-key
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Whether a business public key is registered and how the platform judged its signature. The key itself is never returned.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

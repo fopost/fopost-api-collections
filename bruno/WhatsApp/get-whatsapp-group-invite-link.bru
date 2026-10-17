@@ -1,0 +1,29 @@
+meta {
+  name: Get a WhatsApp group invite link
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/invite-link
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The current invite link, which is how someone joins the group.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}

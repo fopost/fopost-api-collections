@@ -96,6 +96,10 @@
       "description": "One message into many conversations, and drip sequences"
     },
     {
+      "name": "WhatsApp",
+      "description": "Templates, flows, groups, profile and commerce on a WhatsApp Business number"
+    },
+    {
       "name": "Knowledge",
       "description": "The workspace's own answers, pages and files, used to ground replies"
     },
@@ -11468,6 +11472,2587 @@
             "description": "Only posts published in the last this many days"
           }
         ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/profile": {
+      "get": {
+        "operationId": "getWhatsappProfile",
+        "summary": "Get the WhatsApp business profile",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappProfile"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The profile on the connected business number, plus the number quality rating and messaging limit tier. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateWhatsappProfile",
+        "summary": "Update the WhatsApp business profile",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappProfile"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Writes the profile fields the platform allows. The display name is not one of them: it is a review, requested separately.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWhatsappProfileRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/profile/display-name": {
+      "post": {
+        "operationId": "requestWhatsappDisplayName",
+        "summary": "Request a new WhatsApp display name",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappDisplayNameRequested"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Files a display name change for platform review. The number keeps the old name until the review passes.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestWhatsappDisplayNameRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/profile/username": {
+      "put": {
+        "operationId": "setWhatsappUsername",
+        "summary": "Set the WhatsApp username",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappProfile"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The public username on the business number, where the account has one.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWhatsappUsernameRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/templates": {
+      "get": {
+        "operationId": "listWhatsappTemplates",
+        "summary": "List WhatsApp message templates",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Every template on the account with the review status the platform assigned. Cursor paginated through `after`. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createWhatsappTemplate",
+        "summary": "Create a WhatsApp message template",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Files a template for platform review and answers with the status it was given, which is PENDING on a normal submission.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWhatsappTemplateRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/templates/library": {
+      "get": {
+        "operationId": "listWhatsappTemplateLibrary",
+        "summary": "List the WhatsApp template library",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The pre-written templates the platform offers, for adapting instead of drafting.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/templates/import": {
+      "post": {
+        "operationId": "importWhatsappTemplate",
+        "summary": "Import a library template",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Creates a template from a library entry under a name of your own.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportWhatsappTemplateRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/templates/{templateId}": {
+      "get": {
+        "operationId": "getWhatsappTemplate",
+        "summary": "Get a WhatsApp message template",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "One template with its current review status. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateWhatsappTemplate",
+        "summary": "Update a WhatsApp message template",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappTemplate"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Edits the components or category. The name cannot change; create a new template instead.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWhatsappTemplateRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteWhatsappTemplate",
+        "summary": "Delete a WhatsApp message template",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappDeleted"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Removes the template from the account. The `name` query parameter is required, because that is what the platform deletes by.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/groups": {
+      "get": {
+        "operationId": "listWhatsappGroups",
+        "summary": "List WhatsApp groups",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappGroup"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Groups this business number created. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createWhatsappGroup",
+        "summary": "Create a WhatsApp group",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappGroup"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Creates a group on the business number. Participation is invite-only: send the invite link, because no endpoint adds someone.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWhatsappGroupRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/groups/{groupId}": {
+      "get": {
+        "operationId": "getWhatsappGroup",
+        "summary": "Get a WhatsApp group",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappGroup"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "One group and its participant count.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateWhatsappGroup",
+        "summary": "Update a WhatsApp group",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappGroup"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Changes the subject or description.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWhatsappGroupRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteWhatsappGroup",
+        "summary": "Delete a WhatsApp group",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappDeleted"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Removes the group.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/groups/{groupId}/invite-link": {
+      "get": {
+        "operationId": "getWhatsappGroupInviteLink",
+        "summary": "Get a WhatsApp group invite link",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappInviteLink"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The current invite link, which is how someone joins the group.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "resetWhatsappGroupInviteLink",
+        "summary": "Reset a WhatsApp group invite link",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappInviteLink"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Issues a new link and invalidates the old one, which is how a leaked link is revoked.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/groups/{groupId}/participants": {
+      "delete": {
+        "operationId": "removeWhatsappGroupParticipants",
+        "summary": "Remove WhatsApp group participants",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappDeleted"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Removes people from the group. There is no matching add: participants join through the invite link.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhatsappBlockRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/block": {
+      "get": {
+        "operationId": "listWhatsappBlocked",
+        "summary": "List blocked WhatsApp users",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappBlockResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "People this business number has blocked. Cursor paginated through `after`.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "blockWhatsappUsers",
+        "summary": "Block WhatsApp users",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappBlockResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Blocks up to 100 numbers, and names the ones the platform refused.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhatsappBlockRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "unblockWhatsappUsers",
+        "summary": "Unblock WhatsApp users",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappBlockResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Unblocks up to 100 numbers.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhatsappBlockRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/commerce": {
+      "get": {
+        "operationId": "getWhatsappCommerce",
+        "summary": "Get WhatsApp commerce settings",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappCommerceSettings"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Whether the cart and the catalog are visible on this number, and which catalog is linked.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateWhatsappCommerce",
+        "summary": "Update WhatsApp commerce settings",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappCommerceSettings"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Turns the cart or the catalog on or off.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWhatsappCommerceRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/commerce/catalog": {
+      "post": {
+        "operationId": "linkWhatsappCatalog",
+        "summary": "Link a product catalog",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappCommerceSettings"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Points the number at a catalog the customer already owns.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkWhatsappCatalogRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows": {
+      "get": {
+        "operationId": "listWhatsappFlows",
+        "summary": "List WhatsApp flows",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The in-chat forms on this account, with their status and validation errors.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createWhatsappFlow",
+        "summary": "Create a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Creates a draft flow. Upload its screens separately, then publish it.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWhatsappFlowRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/responses": {
+      "get": {
+        "operationId": "listWhatsappFlowResponses",
+        "summary": "List WhatsApp flow answers",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlowResponse"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "What people submitted through this account flows, newest first. An answer rides on the message it arrived as.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/encryption-key": {
+      "get": {
+        "operationId": "getWhatsappEncryptionKey",
+        "summary": "Get the flow encryption key status",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappEncryptionKeyStatus"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Whether a business public key is registered and how the platform judged its signature. The key itself is never returned.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "setWhatsappEncryptionKey",
+        "summary": "Register the flow encryption public key",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappEncryptionKeyStatus"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Registers the public half of the key a flow endpoint payload is encrypted with. The private half stays with the customer.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWhatsappEncryptionKeyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/{flowId}": {
+      "get": {
+        "operationId": "getWhatsappFlow",
+        "summary": "Get a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "One flow with its validation errors.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateWhatsappFlow",
+        "summary": "Update a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Changes the name, categories or endpoint. The screens are uploaded separately.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWhatsappFlowRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteWhatsappFlow",
+        "summary": "Delete a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappDeleted"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Deletes a draft flow. A published flow is deprecated instead.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/{flowId}/json": {
+      "put": {
+        "operationId": "uploadWhatsappFlowJson",
+        "summary": "Upload a WhatsApp flow definition",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlowJsonResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Replaces the flow screens. The platform answers with its validation errors rather than refusing, so they come back as data.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadWhatsappFlowJsonRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/{flowId}/publish": {
+      "post": {
+        "operationId": "publishWhatsappFlow",
+        "summary": "Publish a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Makes the flow sendable. A published flow can no longer be deleted.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/flows/{flowId}/deprecate": {
+      "post": {
+        "operationId": "deprecateWhatsappFlow",
+        "summary": "Deprecate a WhatsApp flow",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappFlow"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Retires a published flow. This cannot be undone.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/whatsapp/events": {
+      "get": {
+        "operationId": "getWhatsappAccountEvents",
+        "summary": "Get WhatsApp account state",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappProfile"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "The account review and verification state, and the number quality rating, name status and messaging limit tier.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/whatsapp/sandbox/sessions": {
+      "get": {
+        "operationId": "listWhatsappSandboxSessions",
+        "summary": "List WhatsApp sandbox sessions",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappSandboxSession"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Sandbox invitations for a workspace. `meta.configured` says whether the sandbox number is set up at all.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish"
+      },
+      "post": {
+        "operationId": "createWhatsappSandboxSession",
+        "summary": "Invite a tester to the WhatsApp sandbox",
+        "tags": [
+          "WhatsApp"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WhatsappSandboxSession"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "description": "Sends an approved template from the platform-owned test number to one tester. Their reply opens the messaging window and activates the session. This is a send, so it needs the publish scope.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWhatsappSandboxSessionRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/accounts/{id}/analytics": {
@@ -33641,7 +36226,8 @@
                 "wordpress",
                 "nostr",
                 "whop",
-                "skool"
+                "skool",
+                "whatsapp"
               ]
             },
             "minItems": 1,
@@ -33696,7 +36282,8 @@
                 "wordpress",
                 "nostr",
                 "whop",
-                "skool"
+                "skool",
+                "whatsapp"
               ]
             },
             "minItems": 1,
@@ -33826,7 +36413,8 @@
               "wordpress",
               "nostr",
               "whop",
-              "skool"
+              "skool",
+              "whatsapp"
             ]
           },
           "username": {
@@ -33890,6 +36478,562 @@
           "commands"
         ],
         "additionalProperties": false
+      },
+      "UpdateWhatsappProfileRequest": {
+        "type": "object",
+        "properties": {
+          "about": {
+            "type": "string",
+            "maxLength": 139
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 512
+          },
+          "vertical": {
+            "type": "string",
+            "enum": [
+              "UNDEFINED",
+              "OTHER",
+              "AUTO",
+              "BEAUTY",
+              "APPAREL",
+              "EDU",
+              "ENTERTAIN",
+              "EVENT_PLAN",
+              "FINANCE",
+              "GROCERY",
+              "GOVT",
+              "HOTEL",
+              "HEALTH",
+              "NONPROFIT",
+              "PROF_SERVICES",
+              "RETAIL",
+              "TRAVEL",
+              "RESTAURANT"
+            ]
+          },
+          "websites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 2048,
+              "format": "uri"
+            },
+            "maxItems": 2
+          },
+          "profile_picture_media_id": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      },
+      "RequestWhatsappDisplayNameRequest": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 139
+          }
+        },
+        "required": [
+          "display_name"
+        ]
+      },
+      "SetWhatsappUsernameRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "pattern": "^[a-z0-9._]+$"
+          }
+        },
+        "required": [
+          "username"
+        ]
+      },
+      "CreateWhatsappTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 10
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "MARKETING",
+              "UTILITY",
+              "AUTHENTICATION"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "HEADER",
+                    "BODY",
+                    "FOOTER",
+                    "BUTTONS",
+                    "CAROUSEL",
+                    "LIMITED_TIME_OFFER"
+                  ]
+                },
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "TEXT",
+                    "IMAGE",
+                    "VIDEO",
+                    "DOCUMENT",
+                    "LOCATION"
+                  ]
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                "example": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "buttons": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "QUICK_REPLY",
+                          "URL",
+                          "PHONE_NUMBER",
+                          "COPY_CODE",
+                          "FLOW",
+                          "CATALOG",
+                          "MPM"
+                        ]
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 25
+                      },
+                      "url": {
+                        "type": "string",
+                        "maxLength": 2048,
+                        "format": "uri"
+                      },
+                      "phone_number": {
+                        "type": "string",
+                        "maxLength": 20
+                      },
+                      "flow_id": {
+                        "type": "string",
+                        "maxLength": 64
+                      },
+                      "example": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "text"
+                    ]
+                  },
+                  "maxItems": 10
+                },
+                "cards": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  "maxItems": 10
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 10
+          },
+          "allow_category_change": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "category",
+          "components"
+        ]
+      },
+      "UpdateWhatsappTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "MARKETING",
+              "UTILITY",
+              "AUTHENTICATION"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "HEADER",
+                    "BODY",
+                    "FOOTER",
+                    "BUTTONS",
+                    "CAROUSEL",
+                    "LIMITED_TIME_OFFER"
+                  ]
+                },
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "TEXT",
+                    "IMAGE",
+                    "VIDEO",
+                    "DOCUMENT",
+                    "LOCATION"
+                  ]
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                "example": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "buttons": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "QUICK_REPLY",
+                          "URL",
+                          "PHONE_NUMBER",
+                          "COPY_CODE",
+                          "FLOW",
+                          "CATALOG",
+                          "MPM"
+                        ]
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 25
+                      },
+                      "url": {
+                        "type": "string",
+                        "maxLength": 2048,
+                        "format": "uri"
+                      },
+                      "phone_number": {
+                        "type": "string",
+                        "maxLength": 20
+                      },
+                      "flow_id": {
+                        "type": "string",
+                        "maxLength": 64
+                      },
+                      "example": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "text"
+                    ]
+                  },
+                  "maxItems": 10
+                },
+                "cards": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  "maxItems": 10
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 10
+          }
+        }
+      },
+      "ImportWhatsappTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "library_template_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 10
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "MARKETING",
+              "UTILITY",
+              "AUTHENTICATION"
+            ]
+          },
+          "library_template_button_inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "library_template_name",
+          "name",
+          "language",
+          "category"
+        ]
+      },
+      "CreateWhatsappGroupRequest": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "subject"
+        ]
+      },
+      "UpdateWhatsappGroupRequest": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 512
+          }
+        }
+      },
+      "WhatsappBlockRequest": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 20
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "users"
+        ]
+      },
+      "UpdateWhatsappCommerceRequest": {
+        "type": "object",
+        "properties": {
+          "is_cart_enabled": {
+            "type": "boolean"
+          },
+          "is_catalog_visible": {
+            "type": "boolean"
+          }
+        }
+      },
+      "LinkWhatsappCatalogRequest": {
+        "type": "object",
+        "properties": {
+          "catalog_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "catalog_id"
+        ]
+      },
+      "CreateWhatsappFlowRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SIGN_UP",
+                "SIGN_IN",
+                "APPOINTMENT_BOOKING",
+                "LEAD_GENERATION",
+                "CONTACT_US",
+                "CUSTOMER_SUPPORT",
+                "SURVEY",
+                "OTHER"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 8
+          },
+          "endpoint_uri": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          },
+          "clone_flow_id": {
+            "type": "string",
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "name",
+          "categories"
+        ]
+      },
+      "UpdateWhatsappFlowRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SIGN_UP",
+                "SIGN_IN",
+                "APPOINTMENT_BOOKING",
+                "LEAD_GENERATION",
+                "CONTACT_US",
+                "CUSTOMER_SUPPORT",
+                "SURVEY",
+                "OTHER"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 8
+          },
+          "endpoint_uri": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          }
+        }
+      },
+      "UploadWhatsappFlowJsonRequest": {
+        "type": "object",
+        "properties": {
+          "flow_json": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "flow_json"
+        ]
+      },
+      "SetWhatsappEncryptionKeyRequest": {
+        "type": "object",
+        "properties": {
+          "business_public_key": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "business_public_key"
+        ]
+      },
+      "CreateWhatsappSandboxSessionRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^\\+[1-9]\\d{6,14}$"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "phoneNumber"
+        ]
       },
       "SetIceBreakersRequest": {
         "type": "object",
@@ -42432,6 +45576,470 @@
           "reason"
         ]
       },
+      "WhatsappProfile": {
+        "type": "object",
+        "properties": {
+          "about": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vertical": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "websites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "profilePictureUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "displayNameStatus": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The platform's review state for the display name"
+          },
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "qualityRating": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "messagingLimitTier": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "about",
+          "websites",
+          "displayName"
+        ]
+      },
+      "WhatsappTemplate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "The review status the platform assigned, passed through unchanged"
+          },
+          "rejectedReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          },
+          "qualityScore": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "language",
+          "category",
+          "status"
+        ]
+      },
+      "WhatsappGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "participantCount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "inviteLink": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "subject"
+        ]
+      },
+      "WhatsappBlockResult": {
+        "type": "object",
+        "properties": {
+          "blocked": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unblocked": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "failed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "failed"
+        ]
+      },
+      "WhatsappCommerceSettings": {
+        "type": "object",
+        "properties": {
+          "cartEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "catalogVisible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "catalogId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "cartEnabled",
+          "catalogVisible",
+          "catalogId"
+        ]
+      },
+      "WhatsappFlow": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "DEPRECATED",
+              "BLOCKED"
+            ]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validationErrors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "error",
+                "message"
+              ]
+            }
+          },
+          "endpointUri": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "jsonVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "previewUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "previewExpiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "categories",
+          "validationErrors"
+        ]
+      },
+      "WhatsappFlowJsonResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "validationErrors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "error",
+                "message"
+              ]
+            }
+          }
+        },
+        "required": [
+          "success",
+          "validationErrors"
+        ]
+      },
+      "WhatsappFlowResponse": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "waId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "flowToken": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "answers": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "respondedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "messageId",
+          "answers"
+        ]
+      },
+      "WhatsappEncryptionKeyStatus": {
+        "type": "object",
+        "properties": {
+          "hasKey": {
+            "type": "boolean"
+          },
+          "signatureStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "hasKey",
+          "signatureStatus"
+        ]
+      },
+      "WhatsappSandboxSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "invited",
+              "active",
+              "expired"
+            ]
+          },
+          "phoneNumberLast4": {
+            "type": "string",
+            "description": "The last four digits only; the number itself is never stored"
+          },
+          "invitedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "activatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "phoneNumberLast4",
+          "invitedAt",
+          "expiresAt"
+        ]
+      },
+      "WhatsappDeleted": {
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "deleted"
+        ]
+      },
+      "WhatsappDisplayNameRequested": {
+        "type": "object",
+        "properties": {
+          "requested": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "requested"
+        ]
+      },
+      "WhatsappInviteLink": {
+        "type": "object",
+        "properties": {
+          "inviteLink": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "inviteLink"
+        ]
+      },
       "TelegramBotCommands": {
         "type": "object",
         "properties": {
@@ -47307,6 +50915,18 @@
           "audience": {
             "$ref": "#/components/schemas/AudienceFilter"
           },
+          "template_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "template_language": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -47400,6 +51020,20 @@
               "null"
             ],
             "format": "date-time"
+          },
+          "template_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An approved WhatsApp template to send instead of `text`. It is the only message the platform accepts once a contact’s 24-hour window has shut, and the platform bills the customer’s own WhatsApp Business Account for it."
+          },
+          "template_language": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Language code of the template, e.g. en_US"
           }
         },
         "required": [
@@ -47431,6 +51065,18 @@
               "null"
             ],
             "format": "date-time"
+          },
+          "template_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "template_language": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },

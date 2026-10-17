@@ -1,0 +1,51 @@
+meta {
+  name: Update the WhatsApp business profile
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/profile
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "about": "string",
+    "address": "string",
+    "description": "Hello from FoPost.",
+    "vertical": "UNDEFINED",
+    "profile_picture_media_id": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Writes the profile fields the platform allows. The display name is not one of them: it is a review, requested separately.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `about`: string
+  - `address`: string
+  - `description`: string
+  - `vertical`: `UNDEFINED` | `OTHER` | `AUTO` | `BEAUTY` | `APPAREL` | `EDU` | `ENTERTAIN` | `EVENT_PLAN` | `FINANCE` | `GROCERY` | `GOVT` | `HOTEL` | `HEALTH` | `NONPROFIT` | `PROF_SERVICES` | `RETAIL` | `TRAVEL` | `RESTAURANT`
+  - `websites`: string (uri)[]
+  - `profile_picture_media_id`: string
+}

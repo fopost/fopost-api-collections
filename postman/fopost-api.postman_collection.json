@@ -12129,7 +12129,7 @@
                 "broadcasts"
               ]
             },
-            "description": "Creates it without sending. Give `scheduled_at` to have it go out on its own, or call send when you are ready.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `media_id`: string (uuid)\n- `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.\n- `scheduled_at`: string (date-time) | null",
+            "description": "Creates it without sending. Give `scheduled_at` to have it go out on its own, or call send when you are ready.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `media_id`: string (uuid)\n- `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.\n- `scheduled_at`: string (date-time) | null\n- `template_name`: string | null — An approved WhatsApp template to send instead of `text`. It is the only message the platform accepts once a contact’s 24-hour window has shut, and the platform bills the customer’s own WhatsApp Business Account for it.\n- `template_language`: string | null — Language code of the template, e.g. en_US",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"account_id\": \"{{accountId}}\",\n  \"name\": \"Example name\",\n  \"text\": \"Hello from FoPost.\"\n}",
@@ -12223,10 +12223,10 @@
                 }
               ]
             },
-            "description": "Only a draft or scheduled broadcast can be edited.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `text`: string\n- `media_id`: string (uuid)\n- `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.\n- `scheduled_at`: string (date-time) | null",
+            "description": "Only a draft or scheduled broadcast can be edited.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `text`: string\n- `media_id`: string (uuid)\n- `audience`: object — Who a broadcast or enrollment resolves to. Every clause narrows: a contact has to match all of them.\n- `scheduled_at`: string (date-time) | null\n- `template_name`: string | null\n- `template_language`: string | null",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Example name\",\n  \"text\": \"Hello from FoPost.\",\n  \"media_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"scheduled_at\": \"2026-01-01T12:00:00.000Z\"\n}",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"text\": \"Hello from FoPost.\",\n  \"media_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"scheduled_at\": \"2026-01-01T12:00:00.000Z\",\n  \"template_name\": \"Example template\",\n  \"template_language\": \"string\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -12823,6 +12823,1990 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WhatsApp",
+      "description": "Templates, flows, groups, profile and commerce on a WhatsApp Business number",
+      "item": [
+        {
+          "name": "Get the WhatsApp business profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "profile"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "The profile on the connected business number, plus the number quality rating and messaging limit tier. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update the WhatsApp business profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "profile"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Writes the profile fields the platform allows. The display name is not one of them: it is a review, requested separately.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `about`: string\n- `address`: string\n- `description`: string\n- `vertical`: `UNDEFINED` | `OTHER` | `AUTO` | `BEAUTY` | `APPAREL` | `EDU` | `ENTERTAIN` | `EVENT_PLAN` | `FINANCE` | `GROCERY` | `GOVT` | `HOTEL` | `HEALTH` | `NONPROFIT` | `PROF_SERVICES` | `RETAIL` | `TRAVEL` | `RESTAURANT`\n- `websites`: string (uri)[]\n- `profile_picture_media_id`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"about\": \"string\",\n  \"address\": \"string\",\n  \"description\": \"Hello from FoPost.\",\n  \"vertical\": \"UNDEFINED\",\n  \"profile_picture_media_id\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Request a new WhatsApp display name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/profile/display-name",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "profile",
+                "display-name"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Files a display name change for platform review. The number keeps the old name until the review passes.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"display_name\": \"Example display\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Set the WhatsApp username",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/profile/username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "profile",
+                "username"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "The public username on the business number, where the account has one.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Example user\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List WhatsApp message templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Every template on the account with the review status the platform assigned. Cursor paginated through `after`. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a WhatsApp message template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Files a template for platform review and answers with the status it was given, which is PENDING on a normal submission.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `allow_category_change`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"language\": \"xx\",\n  \"category\": \"MARKETING\",\n  \"components\": [\n    {\n      \"type\": \"HEADER\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List the WhatsApp template library",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates/library",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates",
+                "library"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "The pre-written templates the platform offers, for adapting instead of drafting.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Import a library template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates/import",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates",
+                "import"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Creates a template from a library entry under a name of your own.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `library_template_button_inputs`: object[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"library_template_name\": \"Example library_template\",\n  \"name\": \"Example name\",\n  \"language\": \"xx\",\n  \"category\": \"MARKETING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a WhatsApp message template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "templateId",
+                  "value": "{{templateId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "One template with its current review status. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a WhatsApp message template",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "templateId",
+                  "value": "{{templateId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Edits the components or category. The name cannot change; create a new template instead.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `category`: `MARKETING` | `UTILITY` | `AUTHENTICATION`\n- `components`: object[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"MARKETING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a WhatsApp message template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "templateId",
+                  "value": "{{templateId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Removes the template from the account. The `name` query parameter is required, because that is what the platform deletes by.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List WhatsApp groups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Groups this business number created. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a WhatsApp group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Creates a group on the business number. Participation is invite-only: send the invite link, because no endpoint adds someone.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `description`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a WhatsApp group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "One group and its participant count.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a WhatsApp group",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Changes the subject or description.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `subject`: string\n- `description`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"x\",\n  \"description\": \"Hello from FoPost.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a WhatsApp group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Removes the group.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a WhatsApp group invite link",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/invite-link",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId",
+                "invite-link"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "The current invite link, which is how someone joins the group.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reset a WhatsApp group invite link",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/invite-link",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId",
+                "invite-link"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Issues a new link and invalidates the old one, which is how a leaked link is revoked.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove WhatsApp group participants",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/groups/:groupId/participants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "groups",
+                ":groupId",
+                "participants"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "groupId",
+                  "value": "{{groupId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Removes people from the group. There is no matching add: participants join through the invite link.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"users\": [\n    \"xxxxx\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List blocked WhatsApp users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "block"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "People this business number has blocked. Cursor paginated through `after`.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Block WhatsApp users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "block"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Blocks up to 100 numbers, and names the ones the platform refused.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"users\": [\n    \"xxxxx\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Unblock WhatsApp users",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "block"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Unblocks up to 100 numbers.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"users\": [\n    \"xxxxx\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get WhatsApp commerce settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/commerce",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "commerce"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Whether the cart and the catalog are visible on this number, and which catalog is linked.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update WhatsApp commerce settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/commerce",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "commerce"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Turns the cart or the catalog on or off.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `is_cart_enabled`: boolean\n- `is_catalog_visible`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_cart_enabled\": false,\n  \"is_catalog_visible\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Link a product catalog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/commerce/catalog",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "commerce",
+                "catalog"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Points the number at a catalog the customer already owns.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"catalog_id\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List WhatsApp flows",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "The in-chat forms on this account, with their status and validation errors.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a WhatsApp flow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Creates a draft flow. Upload its screens separately, then publish it.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `endpoint_uri`: string (uri)\n- `clone_flow_id`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"categories\": [\n    \"SIGN_UP\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List WhatsApp flow answers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/responses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                "responses"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "What people submitted through this account flows, newest first. An answer rides on the message it arrived as.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get the flow encryption key status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/encryption-key",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                "encryption-key"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Whether a business public key is registered and how the platform judged its signature. The key itself is never returned.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register the flow encryption public key",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/encryption-key",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                "encryption-key"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "Registers the public half of the key a flow endpoint payload is encrypted with. The private half stays with the customer.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_public_key\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a WhatsApp flow",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "One flow with its validation errors.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a WhatsApp flow",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Changes the name, categories or endpoint. The screens are uploaded separately.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `categories`: `SIGN_UP` | `SIGN_IN` | `APPOINTMENT_BOOKING` | `LEAD_GENERATION` | `CONTACT_US` | `CUSTOMER_SUPPORT` | `SURVEY` | `OTHER`[]\n- `endpoint_uri`: string (uri)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"endpoint_uri\": \"https://example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a WhatsApp flow",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Deletes a draft flow. A published flow is deprecated instead.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Upload a WhatsApp flow definition",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId/json",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId",
+                "json"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Replaces the flow screens. The platform answers with its validation errors rather than refusing, so they come back as data.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flow_json\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Publish a WhatsApp flow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId/publish",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId",
+                "publish"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Makes the flow sendable. A published flow can no longer be deleted.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deprecate a WhatsApp flow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/flows/:flowId/deprecate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "flows",
+                ":flowId",
+                "deprecate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                },
+                {
+                  "key": "flowId",
+                  "value": "{{flowId}}",
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Retires a published flow. This cannot be undone.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get WhatsApp account state",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/whatsapp/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "whatsapp",
+                "events"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "The account review and verification state, and the number quality rating, name status and messaging limit tier.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List WhatsApp sandbox sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/whatsapp/sandbox/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "whatsapp",
+                "sandbox",
+                "sessions"
+              ]
+            },
+            "description": "Sandbox invitations for a workspace. `meta.configured` says whether the sandbox number is set up at all.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invite a tester to the WhatsApp sandbox",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/whatsapp/sandbox/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "whatsapp",
+                "sandbox",
+                "sessions"
+              ]
+            },
+            "description": "Sends an approved template from the platform-owned test number to one tester. Their reply opens the messaging window and activates the session. This is a send, so it needs the publish scope.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspaceId\": \"x\",\n  \"phoneNumber\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
                   "});"
                 ]
               }

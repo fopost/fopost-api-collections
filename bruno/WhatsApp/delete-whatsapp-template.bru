@@ -1,0 +1,29 @@
+meta {
+  name: Delete a WhatsApp message template
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/v1/accounts/:id/whatsapp/templates/:templateId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Removes the template from the account. The `name` query parameter is required, because that is what the platform deletes by.
+
+  Requires the `accounts` scope when using an API key.
+
+  **Scope:** `accounts`
+}
