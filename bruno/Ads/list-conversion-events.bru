@@ -1,0 +1,31 @@
+meta {
+  name: List recent conversion batches
+  type: http
+  seq: 104
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/conversions/events
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~connection_id: 
+  ~limit: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The batches sent through FoPost, newest first, identity hashed. Across every workspace the key reaches unless `workspace_id` narrows it.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

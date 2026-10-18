@@ -1,5 +1,5 @@
 meta {
-  name: Upload offline conversions
+  name: Send conversions to a pixel
   type: http
   seq: 103
 }
@@ -36,7 +36,7 @@ tests {
 }
 
 docs {
-  Events that happened away from the site, attributed to a pixel the ad account owns. Emails and phone numbers are hashed before anything leaves FoPost.
+  The network's Conversions API, on every network that declares `conversions` and takes pixel events. Email, phone and external id are hashed before anything leaves FoPost and only the hashes are kept. An `Idempotency-Key` header, when sent, makes a repeat of the same key in the same workspace answer the first outcome without reaching the network; `POST /v1/ads/conversions/events` is the same route with the header required.
 
   Requires the `ads` scope when using an API key.
 
