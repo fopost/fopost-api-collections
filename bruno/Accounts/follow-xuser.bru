@@ -1,0 +1,39 @@
+meta {
+  name: Follow an X user
+  type: http
+  seq: 85
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/x/follow
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user_id": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Follows the user from this X account. Needs the `inbox` and `publish` scopes. Metered as one pass-through X call.
+
+  Requires the `inbox` and `publish` scopes when using an API key.
+
+  **Scope:** `inbox`
+}

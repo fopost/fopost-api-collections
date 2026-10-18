@@ -5885,6 +5885,118 @@
           ]
         },
         {
+          "name": "Follow an X user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/x/follow",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "x",
+                "follow"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "X account id"
+                }
+              ]
+            },
+            "description": "Follows the user from this X account. Needs the `inbox` and `publish` scopes. Metered as one pass-through X call.\n\nRequires the `inbox` and `publish` scopes when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Unfollow an X user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/x/unfollow",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "x",
+                "unfollow"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "X account id"
+                }
+              ]
+            },
+            "description": "Needs the `inbox` and `publish` scopes. Metered as one pass-through X call.\n\nRequires the `inbox` and `publish` scopes when using an API key.\n\n**Scope:** `inbox`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "List a subreddit's post flairs",
           "request": {
             "method": "GET",
@@ -11157,6 +11269,170 @@
           ]
         },
         {
+          "name": "Repost an item",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/repost",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "repost"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Repost to the account's own timeline (X). Only where `can_repost` is true. Also requires the `publish` scope. On X the call is metered as a pass-through write.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Take our repost back",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/unrepost",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "unrepost"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `can_repost` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Bookmark an item",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/bookmark",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "bookmark"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Save privately to the account's bookmarks (X). Only where `can_bookmark` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remove our bookmark",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/:id/unbookmark",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                ":id",
+                "unbookmark"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Inbox item id"
+                }
+              ]
+            },
+            "description": "Only where `can_bookmark` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Pin our own comment",
           "request": {
             "method": "POST",
@@ -11493,6 +11769,114 @@
               ]
             },
             "description": "Streams one attachment of a DM through the API. The URL grants nothing on its own: workspace membership is checked on every request. Accepts the session cookie as well as a header credential, so a plain `<img src>` works in the dashboard.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Look up an X post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/x/posts/:id?account_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "x",
+                "posts",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "X account id",
+                  "disabled": false
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "X post id (numeric)"
+                }
+              ]
+            },
+            "description": "One post by its X id, with its author and public metrics, read through the named X account. Metered as one pass-through X read. Needs the `inbox` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search recent X posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/x/search?account_id=&q=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "x",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "account_id",
+                  "value": "",
+                  "description": "X account id",
+                  "disabled": false
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "X search query, up to 512 characters",
+                  "disabled": false
+                },
+                {
+                  "key": "max_results",
+                  "value": "",
+                  "description": "10 to 100, default 10",
+                  "disabled": true
+                },
+                {
+                  "key": "next_token",
+                  "value": "",
+                  "description": "Cursor from the previous page",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Recent search over the last seven days, read through the named X account. Each page is one metered pass-through X read. Needs the `inbox` scope.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`"
           },
           "response": [],
           "event": [
