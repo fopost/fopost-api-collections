@@ -10,8 +10,8 @@
 // An operation counts as wrapped when the client's source spells its path as a
 // string literal (a path param may be any interpolation) with the HTTP verb
 // within a few lines, when the path sits in a helper and the verb is used in
-// that same file, or when the operationId itself appears in the source (a doc
-// comment naming it is the explicit escape hatch). Exits 1 on any gap.
+// that same file, or when the operationId is named in a comment or docstring (the
+// explicit escape hatch; a method merely named like it does not count). Exits 1 on any gap.
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -108,10 +108,25 @@ function verbPattern(verb) {
   );
 }
 
+const COMMENT_LINE = /^\s*(?:\/\/|#|\*|\/\*|@doc|@moduledoc|@typedoc|"""|''')/;
+
+/** The comment and docstring lines of a file, where an operationId may be named. */
+function commentText(lines) {
+  const out = [];
+  let docstring = false;
+  for (const line of lines) {
+    const fences = (line.match(/"""|'''/g) ?? []).length;
+    if (docstring || COMMENT_LINE.test(line)) out.push(line);
+    if (fences % 2 === 1) docstring = !docstring;
+  }
+  return out.join('\n');
+}
+
 function indexClient(dir) {
   return sourceFiles(dir).map((file) => {
     const text = readFileSync(file, 'utf8');
-    return { file, text, lines: text.split('\n') };
+    const lines = text.split('\n');
+    return { file, text, lines, comments: commentText(lines) };
   });
 }
 
@@ -120,8 +135,8 @@ function findOperation(files, op) {
   const verb = verbPattern(op.method);
   const idWord = new RegExp(`\\b${op.id}\\b`);
   let state = 'missing';
-  for (const { text, lines } of files) {
-    if (idWord.test(text)) return 'named';
+  for (const { text, lines, comments } of files) {
+    if (idWord.test(comments)) return 'named';
     let pathInFile = false;
     for (let i = 0; i < lines.length; i++) {
       pattern.lastIndex = 0;
