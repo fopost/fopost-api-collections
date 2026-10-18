@@ -1,0 +1,38 @@
+meta {
+  name: Create a pixel
+  type: http
+  seq: 108
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/pixels
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "name": "Example name"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Answers the new pixel with its install code. `unsupported` on a network without pixels of its own.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

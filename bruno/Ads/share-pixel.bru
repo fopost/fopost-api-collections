@@ -1,0 +1,42 @@
+meta {
+  name: Share a pixel with another ad account
+  type: http
+  seq: 111
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/pixels/:id/share
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "targetAdAccountId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([204]);
+  });
+}
+
+docs {
+  Both accounts have to sit under the business portfolio the connection was made with; a personal connection answers `validation_error`.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

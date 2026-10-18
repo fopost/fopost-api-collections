@@ -1,0 +1,43 @@
+meta {
+  name: Rename a pixel or change its data use
+  type: http
+  seq: 110
+}
+
+patch {
+  url: {{baseUrl}}/v1/ads/pixels/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `dataUseSetting`: `advertising_and_analytics` | `analytics_only`
+}
