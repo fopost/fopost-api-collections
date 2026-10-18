@@ -1,0 +1,39 @@
+meta {
+  name: Suggest search terms
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/blog/keywords/suggest
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  About 10 search terms from the blog goal and topics, for the user to edit before research. Pass the current `seeds` to refine them and `prompt` to steer. Spends AI credits.
+
+  Requires the `ai` scope when using an API key.
+
+  **Scope:** `ai`
+
+  **Optional fields** (not in the example body):
+  - `seeds`: string[]
+  - `prompt`: string
+}

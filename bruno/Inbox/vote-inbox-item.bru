@@ -1,0 +1,39 @@
+meta {
+  name: Vote on an item
+  type: http
+  seq: 27
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/vote
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "direction": "up"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

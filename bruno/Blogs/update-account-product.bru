@@ -1,0 +1,52 @@
+meta {
+  name: Update a product
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/v1/accounts/:id/products/:productId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+  productId: {{productId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "x",
+    "description": "Hello from FoPost.",
+    "status": "active",
+    "product_type": "string",
+    "vendor": "string"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Changes the product on the store. Only the fields sent are touched.
+
+  Requires the `publish` scope when using an API key.
+
+  **Scope:** `publish`
+
+  **Optional fields** (not in the example body):
+  - `title`: string
+  - `description`: string
+  - `status`: `active` | `draft` | `archived`
+  - `tags`: string[]
+  - `product_type`: string
+  - `vendor`: string
+}

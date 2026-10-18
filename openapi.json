@@ -60,6 +60,10 @@
       "description": "X (Twitter) communities"
     },
     {
+      "name": "Blogs",
+      "description": "Articles and products that live on a connected site, not in FoPost"
+    },
+    {
       "name": "Google Business",
       "description": "Manage a connected Google Business Profile location"
     },
@@ -105,7 +109,7 @@
     },
     {
       "name": "Ads",
-      "description": "Meta ads, audiences and lead forms"
+      "description": "Ads, audiences and lead forms across ad networks"
     },
     {
       "name": "Media",
@@ -5288,6 +5292,664 @@
             "description": "Account id"
           }
         ]
+      }
+    },
+    "/v1/accounts/{id}/blogs": {
+      "get": {
+        "operationId": "listAccountBlogs",
+        "summary": "List the blogs on a connected site",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteBlog"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/blogs/{blogId}/articles": {
+      "get": {
+        "operationId": "listBlogArticles",
+        "summary": "List articles on a blog",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteArticle"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "How many to return, 1 to 50 (default 20)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "published",
+                "draft",
+                "pending",
+                "scheduled"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Match the article title"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createBlogArticle",
+        "summary": "Create an article on a blog",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoteArticle"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemoteArticleRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/blogs/{blogId}/articles/{articleId}": {
+      "get": {
+        "operationId": "getBlogArticle",
+        "summary": "Read one article",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoteArticle"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateBlogArticle",
+        "summary": "Update an article in place",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoteArticle"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRemoteArticleRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteBlogArticle",
+        "summary": "Delete an article",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Removes the article from the connected site. This cannot be undone.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Blog id from the blogs list"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Article id on the platform"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/products": {
+      "get": {
+        "operationId": "listAccountProducts",
+        "summary": "List the store's products",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RemoteProduct"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "How many to return, 1 to 50 (default 20)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "draft",
+                "archived"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Match the product title"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/products/{productId}": {
+      "patch": {
+        "operationId": "updateAccountProduct",
+        "summary": "Update a product",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoteProduct"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Changes the product on the store. Only the fields sent are touched.\n\nRequires the `publish` scope when using an API key.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Product id on the platform"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRemoteProductRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/accounts/{id}/validate": {
@@ -17363,7 +18025,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Where articles publish, how often they are planned and how long a draft waits for review.\n\nRequires the `posts` scope when using an API key.",
+        "description": "What the blog is for, where articles publish, how often they are planned, and the last keyword research run.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -17742,10 +18404,93 @@
         }
       }
     },
+    "/v1/blog/keywords/suggest": {
+      "post": {
+        "operationId": "suggestBlogSeeds",
+        "summary": "Suggest search terms",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "seeds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "seeds"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "$ref": "#/components/responses/PaymentRequired"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "About 10 search terms from the blog goal and topics, for the user to edit before research. Pass the current `seeds` to refine them and `prompt` to steer. Spends AI credits.\n\nRequires the `ai` scope when using an API key.",
+        "x-fopost-scope": "ai",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspaceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "seeds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "maxLength": 500
+                  }
+                },
+                "required": [
+                  "workspaceId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/blog/keywords/plan": {
       "post": {
         "operationId": "planBlogKeywords",
-        "summary": "Research keywords and fill the calendar",
+        "summary": "Research keywords",
         "tags": [
           "Blog"
         ],
@@ -17792,7 +18537,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Runs in the background and spends AI credits. Seeds are derived from the site description when omitted.\n\nRequires the `ai` scope when using an API key.",
+        "description": "Researches the approved search terms in the background and spends AI credits. Results land as `suggested` keywords; set one to `planned` to put it on the calendar. Seeds are derived from the blog settings when omitted. Follow the run in `plan_run` on the settings.\n\nRequires the `ai` scope when using an API key.",
         "x-fopost-scope": "ai",
         "requestBody": {
           "required": true,
@@ -17857,7 +18602,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Requires the `posts` scope when using an API key.",
+        "description": "Setting `status` to `planned` picks the keyword; it takes the next free date.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -18082,7 +18827,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Queues the writer: research, outline, body, meta and images run in the background and the draft lands in review. Spends AI credits.\n\nRequires the `ai` scope when using an API key.",
+        "description": "Queues the writer: research, outline, body, meta and images run in the background and the article lands in drafts. Spends AI credits.\n\nRequires the `ai` scope when using an API key.",
         "x-fopost-scope": "ai",
         "requestBody": {
           "required": true,
@@ -18198,7 +18943,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Only a draft, scheduled, failed or rejected article can be edited.\n\nRequires the `posts` scope when using an API key.",
+        "description": "Only a draft, in-review, scheduled, failed or rejected article can be edited. Setting `publishAt` approves an article in review.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -18358,7 +19103,7 @@
     "/v1/blog/articles/{id}/publish": {
       "post": {
         "operationId": "publishBlogArticle",
-        "summary": "Publish an article now",
+        "summary": "Approve and publish an article now",
         "tags": [
           "Blog"
         ],
@@ -18394,8 +19139,73 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Sends the draft to the configured target without waiting for the review window.\n\nRequires the `publish` scope when using an API key.",
+        "description": "Sends an article in review to the configured target. A draft must be submitted for approval first (409).\n\nRequires the `publish` scope when using an API key.",
         "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Article id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The workspace the blog belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/blog/articles/{id}/submit": {
+      "post": {
+        "operationId": "submitBlogArticle",
+        "summary": "Submit an article for approval",
+        "tags": [
+          "Blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlogArticle"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Moves a draft, failed or rejected article to review.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
         "parameters": [
           {
             "name": "id",
@@ -18423,7 +19233,7 @@
     "/v1/blog/articles/{id}/reject": {
       "post": {
         "operationId": "rejectBlogArticle",
-        "summary": "Reject a draft",
+        "summary": "Reject an article",
         "tags": [
           "Blog"
         ],
@@ -23250,7 +24060,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Published posts with a delivery on an account a Meta Ads connection reaches.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Published posts with a delivery on an account an ad connection reaches.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "parameters": [
           {
@@ -23269,7 +24079,7 @@
     "/v1/ads/connections": {
       "get": {
         "operationId": "listAdConnections",
-        "summary": "List Meta Ads connections",
+        "summary": "List ad connections",
         "tags": [
           "Ads"
         ],
@@ -23329,7 +24139,7 @@
     "/v1/ads/connections/meta/authorize": {
       "post": {
         "operationId": "authorizeMetaAds",
-        "summary": "Start a Meta Ads connection",
+        "summary": "Start an ad connection",
         "tags": [
           "Ads"
         ],
@@ -23381,7 +24191,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "description": "The workspace already has an active Meta Ads connection",
+            "description": "The workspace already has an active connection to that network",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -23392,7 +24202,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "description": "Meta Ads is not configured on this deployment",
+            "description": "That ad network is not available on this deployment",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -23417,7 +24227,7 @@
     "/v1/ads/connections/{id}": {
       "delete": {
         "operationId": "deleteAdConnection",
-        "summary": "Remove a Meta Ads connection",
+        "summary": "Remove an ad connection",
         "tags": [
           "Ads"
         ],
@@ -26242,7 +27052,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Every Meta Ads connection with the ad accounts and Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Every ad connection with the ad accounts and, where the network has them, the Pages its grant reaches.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "parameters": [
           {
@@ -26326,7 +27136,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -26399,7 +27209,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -26550,7 +27360,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -26698,7 +27508,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -26777,7 +27587,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "after",
@@ -26953,7 +27763,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -27112,7 +27922,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -27211,7 +28021,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -27393,7 +28203,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -27639,7 +28449,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -27712,7 +28522,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -27875,7 +28685,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -28117,7 +28927,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "countries",
@@ -28258,7 +29068,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "page_id",
@@ -28408,7 +29218,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "page_id",
@@ -28489,7 +29299,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -28600,7 +29410,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -28826,7 +29636,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -28984,7 +29794,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29147,7 +29957,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29226,7 +30036,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29319,7 +30129,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29412,7 +30222,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29560,7 +30370,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29653,7 +30463,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -29801,7 +30611,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -30117,7 +30927,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Every Page a Meta Ads connection reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Every Page a lead-form network reaches, with its lead forms.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "parameters": [
           {
@@ -30501,7 +31311,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "object_id",
@@ -30704,7 +31514,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -30788,7 +31598,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -30880,7 +31690,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -31043,7 +31853,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_id",
@@ -31365,7 +32175,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -31521,7 +32331,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -31609,7 +32419,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -31689,7 +32499,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -31782,7 +32592,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -31948,7 +32758,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -32036,7 +32846,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -32116,7 +32926,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -32209,7 +33019,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -32375,7 +33185,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -32463,7 +33273,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -32543,7 +33353,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -32636,7 +33446,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -32803,7 +33613,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -32966,7 +33776,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -33036,7 +33846,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -33123,7 +33933,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -33211,7 +34021,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -33291,7 +34101,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -33387,7 +34197,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -33493,7 +34303,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -33725,7 +34535,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "ad_account_id",
@@ -33892,7 +34702,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       },
@@ -33980,7 +34790,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -34060,7 +34870,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ]
       }
@@ -34150,7 +34960,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -34248,7 +35058,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -34348,7 +35158,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "since",
@@ -34462,7 +35272,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           }
         ],
         "requestBody": {
@@ -34562,7 +35372,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
           },
           {
             "name": "page_id",
@@ -34957,7 +35767,598 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The Meta Ads connection to act through"
+            "description": "The ad connection to act through"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/subreddits": {
+      "get": {
+        "operationId": "listRedditSubreddits",
+        "summary": "List the account's subreddits",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RedditSubreddit"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Subreddits this Reddit account is subscribed to, busiest first, plus its own profile page. `isDefault` marks where a post goes when it names no subreddit. An account connected before we asked for the subreddit permission answers 409 `reconnect_required`.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/subreddits/{name}/rules": {
+      "get": {
+        "operationId": "listRedditSubredditRules",
+        "summary": "List a subreddit's rules",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditSubredditRules"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "The rules a subreddit posts, in its own order. Show them before publishing.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/flairs": {
+      "get": {
+        "operationId": "listRedditFlairs",
+        "summary": "List a subreddit's post flairs",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditFlairs"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Post flairs the subreddit offers this account. A flair id is valid only in the subreddit it came from, and preflight rejects one from anywhere else.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          },
+          {
+            "name": "subreddit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/reddit/default-subreddit": {
+      "put": {
+        "operationId": "setRedditDefaultSubreddit",
+        "summary": "Set the account's default subreddit",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedditDefaultSubreddit"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Where posts from this account go when they name no subreddit. `null` falls back to the account's own profile page, which always accepts a post.\n\nRequires the `accounts` scope when using an API key.",
+        "x-fopost-scope": "accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Reddit account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedditDefaultSubredditRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inbox/{id}/vote": {
+      "post": {
+        "operationId": "voteInboxItem",
+        "summary": "Vote on an item",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InboxItem"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot vote",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "An up or down vote where the network ranks by votes (Reddit). `none` takes an earlier vote back. Only where `canVote` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InboxVoteRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/validate/subreddit": {
+      "get": {
+        "operationId": "validateSubreddit",
+        "summary": "Check a subreddit",
+        "tags": [
+          "Validation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SubredditCheck"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account holds no usable token, or its grant is short of a permission this read needs (`reconnect_required`); reconnect it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "502": {
+            "description": "Reddit did not answer (`platform_error`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Whether a subreddit exists and takes a post from a connected Reddit account. The check runs with that account's token, so `account_id` is required.\n\nRequires the `posts` scope when using an API key.",
+        "x-fopost-scope": "posts",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The Reddit account to check as"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subreddit name without the `r/` prefix"
           }
         ]
       }
@@ -35634,7 +37035,7 @@
               "analytics": "Metrics and insights",
               "automations": "Automation rules and runs",
               "inbox": "Comments, mentions and messages",
-              "ads": "Meta ads, audiences and lead forms",
+              "ads": "Ads, audiences and lead forms across ad networks",
               "ai": "AI features (spends credits)",
               "extension": "Reserved for the browser extension"
             }
@@ -36224,6 +37625,7 @@
                 "kick",
                 "listmonk",
                 "wordpress",
+                "shopify",
                 "nostr",
                 "whop",
                 "skool",
@@ -36280,6 +37682,7 @@
                 "kick",
                 "listmonk",
                 "wordpress",
+                "shopify",
                 "nostr",
                 "whop",
                 "skool",
@@ -36344,6 +37747,139 @@
           "time",
           "timezone"
         ]
+      },
+      "CreateRemoteArticleRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "author_name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "image_url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          }
+        },
+        "required": [
+          "title",
+          "body"
+        ]
+      },
+      "UpdateRemoteArticleRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "author_name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "image_url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri"
+          }
+        }
+      },
+      "UpdateRemoteProductRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "draft",
+              "archived"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 50
+          },
+          "product_type": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "vendor": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
       },
       "UpdateQueueSlotRequest": {
         "type": "object",
@@ -36411,6 +37947,7 @@
               "kick",
               "listmonk",
               "wordpress",
+              "shopify",
               "nostr",
               "whop",
               "skool",
@@ -37861,6 +39398,39 @@
         ],
         "additionalProperties": false
       },
+      "RedditDefaultSubredditRequest": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_]{2,20}$"
+          }
+        },
+        "required": [
+          "subreddit"
+        ],
+        "additionalProperties": false
+      },
+      "InboxVoteRequest": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "none"
+            ]
+          }
+        },
+        "required": [
+          "direction"
+        ],
+        "additionalProperties": false
+      },
       "MoveAccountRequest": {
         "type": "object",
         "properties": {
@@ -39097,7 +40667,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "name": {
             "type": "string",
@@ -39132,7 +40702,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "name": {
             "type": "string",
@@ -39156,7 +40726,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "products": {
             "type": "array",
@@ -39283,7 +40853,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "name": {
             "type": "string",
@@ -39322,7 +40892,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "url": {
             "type": "string",
@@ -39346,7 +40916,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "name": {
             "type": "string",
@@ -39375,7 +40945,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39618,7 +41188,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39643,7 +41213,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "pageId": {
             "type": "string",
@@ -39675,7 +41245,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39706,7 +41276,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39747,7 +41317,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39824,7 +41394,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39873,7 +41443,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -39930,7 +41500,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -40198,7 +41768,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -41942,7 +43512,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -42025,7 +43595,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adId": {
             "type": "string",
@@ -42056,7 +43626,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adId": {
             "type": "string",
@@ -42085,7 +43655,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adId": {
             "type": "string",
@@ -42110,7 +43680,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -42182,7 +43752,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "campaignId": {
             "type": "string",
@@ -42670,7 +44240,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adSetId": {
             "type": "string",
@@ -42746,7 +44316,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "status": {
             "type": "string",
@@ -42801,7 +44371,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -42986,7 +44556,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "adAccountId": {
             "type": "string",
@@ -43197,7 +44767,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "pageId": {
             "type": "string",
@@ -43222,7 +44792,7 @@
           "connectionId": {
             "type": "string",
             "format": "uuid",
-            "description": "A Meta Ads connection in the workspace"
+            "description": "An ad connection in the workspace"
           },
           "pageId": {
             "type": "string",
@@ -43821,6 +45391,224 @@
         "required": [
           "data",
           "meta"
+        ]
+      },
+      "RemoteBlog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own blog id"
+          },
+          "title": {
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "handle",
+          "url"
+        ]
+      },
+      "RemoteArticle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own article id"
+          },
+          "blog_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "excerpt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "pending",
+              "scheduled"
+            ]
+          },
+          "author_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "blog_id",
+          "title",
+          "body_html",
+          "excerpt",
+          "status",
+          "author_name",
+          "tags",
+          "image_url",
+          "url",
+          "published_at",
+          "updated_at"
+        ]
+      },
+      "RemoteProduct": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform's own product id"
+          },
+          "title": {
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "draft",
+              "archived"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vendor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Lowest variant price, as a decimal string"
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "handle",
+          "status",
+          "description",
+          "vendor",
+          "product_type",
+          "tags",
+          "image_url",
+          "url",
+          "price",
+          "currency",
+          "updated_at"
         ]
       },
       "QueueSlot": {
@@ -49717,6 +51505,146 @@
           }
         }
       },
+      "RedditSubreddit": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Subreddit name without the `r/` prefix"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscribers": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "over18": {
+            "type": "boolean"
+          },
+          "canPost": {
+            "type": "boolean",
+            "description": "Whether this account may submit here"
+          },
+          "flairEnabled": {
+            "type": "boolean",
+            "description": "Whether the subreddit offers post flairs"
+          },
+          "iconUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "The account's default subreddit"
+          }
+        }
+      },
+      "RedditSubredditRule": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "appliesTo": {
+            "type": "string",
+            "description": "What the rule covers: `link`, `comment` or `all`"
+          }
+        }
+      },
+      "RedditSubredditRules": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RedditSubredditRule"
+            }
+          }
+        }
+      },
+      "RedditFlair": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Flair id, valid only in its own subreddit"
+          },
+          "text": {
+            "type": "string"
+          },
+          "editable": {
+            "type": "boolean",
+            "description": "Whether `flair_text` may replace the label"
+          }
+        }
+      },
+      "RedditFlairs": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "flairs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RedditFlair"
+            }
+          }
+        }
+      },
+      "RedditDefaultSubreddit": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Where posts go when a post names no subreddit"
+          }
+        }
+      },
+      "SubredditCheck": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "can_post": {
+            "type": "boolean"
+          },
+          "over_18": {
+            "type": "boolean"
+          },
+          "flair_enabled": {
+            "type": "boolean"
+          },
+          "ok": {
+            "type": "boolean",
+            "description": "True when the subreddit exists and takes a post from this account"
+          }
+        }
+      },
       "InboxPostContext": {
         "type": [
           "object",
@@ -49970,6 +51898,10 @@
           },
           "can_like": {
             "type": "boolean"
+          },
+          "can_vote": {
+            "type": "boolean",
+            "description": "The network ranks by votes, so a down vote exists"
           },
           "can_pin": {
             "type": "boolean",
@@ -50340,6 +52272,35 @@
               "null"
             ]
           },
+          "goal": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "traffic",
+              "leads",
+              "sales",
+              "signups",
+              "authority",
+              null
+            ],
+            "description": "What the blog is for; steers suggested terms and keyword ranking"
+          },
+          "focus_topics": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What the blog wants to write about"
+          },
+          "avoid_topics": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What the blog never writes about"
+          },
           "language": {
             "type": "string"
           },
@@ -50352,10 +52313,7 @@
           },
           "review_hold_days": {
             "type": "integer",
-            "description": "Days a draft waits for review before it may auto-publish"
-          },
-          "auto_publish": {
-            "type": "boolean"
+            "description": "Days before its planned date that a picked keyword starts being written"
           },
           "image_tier": {
             "type": "string",
@@ -50415,6 +52373,44 @@
           "has_website_secret": {
             "type": "boolean"
           },
+          "plan_run": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "The last keyword research run; null before the first",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "queued",
+                  "running",
+                  "done",
+                  "failed"
+                ]
+              },
+              "error": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "added": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "New keywords the run found"
+              },
+              "finished_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          },
           "keyword_data_available": {
             "type": "boolean",
             "description": "Whether search volume and difficulty can be fetched on this deployment; on GET only"
@@ -50428,7 +52424,6 @@
           "language",
           "cadence_per_week",
           "review_hold_days",
-          "auto_publish",
           "has_website_secret"
         ]
       },
@@ -50458,6 +52453,32 @@
               "null"
             ]
           },
+          "goal": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "traffic",
+              "leads",
+              "sales",
+              "signups",
+              "authority",
+              null
+            ]
+          },
+          "focusTopics": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "avoidTopics": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "language": {
             "type": "string"
           },
@@ -50473,9 +52494,6 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 14
-          },
-          "autoPublish": {
-            "type": "boolean"
           },
           "imageTier": {
             "type": "string",
@@ -50594,6 +52612,13 @@
             ],
             "format": "date"
           },
+          "fit_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the keyword serves the blog goal"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
@@ -50669,6 +52694,7 @@
               "queued",
               "writing",
               "draft",
+              "in_review",
               "scheduled",
               "publishing",
               "published",
@@ -50889,7 +52915,7 @@
               "null"
             ],
             "format": "date-time",
-            "description": "Puts the draft on the calendar; null returns it to review"
+            "description": "Approves an article in review onto the calendar; null takes a scheduled one back to drafts"
           }
         }
       },

@@ -1,7 +1,7 @@
 meta {
   name: Edit an article
   type: http
-  seq: 13
+  seq: 14
 }
 
 patch {
@@ -40,7 +40,7 @@ tests {
 }
 
 docs {
-  Only a draft, scheduled, failed or rejected article can be edited.
+  Only a draft, in-review, scheduled, failed or rejected article can be edited. Setting `publishAt` approves an article in review.
 
   Requires the `posts` scope when using an API key.
 
@@ -54,5 +54,5 @@ docs {
   - `metaDescription`: string | null
   - `bodyMarkdown`: string
   - `tags`: string[]
-  - `publishAt`: string (date-time) | null — Puts the draft on the calendar; null returns it to review
+  - `publishAt`: string (date-time) | null — Approves an article in review onto the calendar; null takes a scheduled one back to drafts
 }
