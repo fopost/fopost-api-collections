@@ -31714,24 +31714,265 @@
     "/v1/ads/conversions": {
       "post": {
         "operationId": "uploadConversions",
-        "summary": "Upload offline conversions",
+        "summary": "Send conversions to a pixel",
         "tags": [
           "Ads"
         ],
         "responses": {
           "202": {
-            "description": "Accepted by the network",
+            "description": "Accepted by the network, or replayed from the stored batch",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
-                      "type": "object",
-                      "properties": {
-                        "accepted": {
-                          "type": "integer"
-                        }
+                      "$ref": "#/components/schemas/ConversionUploadResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The network's Conversions API, on every network that declares `conversions` and takes pixel events. Email, phone and external id are hashed before anything leaves FoPost and only the hashes are kept. An `Idempotency-Key` header, when sent, makes a repeat of the same key in the same workspace answer the first outcome without reaching the network; `POST /v1/ads/conversions/events` is the same route with the header required.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Your own id for the batch, unique per workspace. Up to 255 characters."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadConversionsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/conversions/events": {
+      "post": {
+        "operationId": "sendConversionEvents",
+        "summary": "Send conversions to a pixel (idempotent)",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted by the network, or replayed from the stored batch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ConversionUploadResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The documented alias of `POST /v1/ads/conversions`: identical body and answer, with `Idempotency-Key` required. Send one key per batch and retry freely; the second delivery of a key answers the first outcome with `replayed: true` and an `Idempotency-Replayed: true` header, and the network is reached once.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Your own id for the batch, unique per workspace. Up to 255 characters."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadConversionsRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listConversionEvents",
+        "summary": "List recent conversion batches",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ConversionBatch"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The batches sent through FoPost, newest first, identity hashed. Across every workspace the key reaches unless `workspace_id` narrows it.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Up to 100; the default"
+          }
+        ]
+      }
+    },
+    "/v1/ads/pixels": {
+      "get": {
+        "operationId": "listPixels",
+        "summary": "List the pixels on an ad account",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AdPixel"
                       }
                     }
                   },
@@ -31771,14 +32012,939 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Events that happened away from the site, attributed to a pixel the ad account owns. Emails and phone numbers are hashed before anything leaves FoPost.\n\nRequires the `ads` scope when using an API key.",
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createPixel",
+        "summary": "Create a pixel",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdPixelDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Answers the new pixel with its install code. `unsupported` on a network without pixels of its own.\n\nRequires the `ads` scope when using an API key.",
         "x-fopost-scope": "ads",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UploadConversionsRequest"
+                "$ref": "#/components/schemas/CreatePixelRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/pixels/{id}": {
+      "get": {
+        "operationId": "getPixel",
+        "summary": "Read a pixel with its install code",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdPixelDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updatePixel",
+        "summary": "Rename a pixel or change its data use",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdPixelDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePixelRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/pixels/{id}/share": {
+      "post": {
+        "operationId": "sharePixel",
+        "summary": "Share a pixel with another ad account",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Shared",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Both accounts have to sit under the business portfolio the connection was made with; a personal connection answers `validation_error`.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SharePixelRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/pixels/{id}/stats": {
+      "get": {
+        "operationId": "getPixelStats",
+        "summary": "Fires per event over the last 28 days",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AdPixelStats"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/pixels/{id}/match-quality": {
+      "get": {
+        "operationId": "getEventMatchQuality",
+        "summary": "Event match quality per event name",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/EventMatchQuality"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The network's own score of how well the identity on sent events matches people, out of 10, with which identifiers the events carried.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/ads/custom-conversions": {
+      "get": {
+        "operationId": "listCustomConversions",
+        "summary": "List custom conversions on an ad account",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomConversion"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createCustomConversion",
+        "summary": "Create a custom conversion",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/CustomConversion"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Counts a pixel event as a conversion when the rule matches: an event name plus an optional URL condition. The pixel has to be on the ad account.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomConversionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ads/custom-conversions/{id}": {
+      "get": {
+        "operationId": "getCustomConversion",
+        "summary": "Read a custom conversion",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/CustomConversion"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          },
+          {
+            "name": "connection_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ad connection to act through"
+          },
+          {
+            "name": "ad_account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateCustomConversion",
+        "summary": "Update a custom conversion",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/CustomConversion"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Name, description and default value; the rule is fixed once created.\n\nRequires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCustomConversionRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteCustomConversion",
+        "summary": "Delete a custom conversion",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "description": "The ad network refused the request; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Requires the `ads` scope when using an API key.",
+        "x-fopost-scope": "ads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The network id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteCustomConversionRequest"
               }
             }
           }
@@ -43524,7 +44690,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 64,
-            "description": "From `GET /v1/ads/audiences`"
+            "description": "From `GET /v1/ads/pixels`"
           },
           "events": {
             "type": "array",
@@ -43534,7 +44700,8 @@
                 "eventName": {
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 64
+                  "maxLength": 64,
+                  "description": "A standard event such as `Purchase`, or a custom one"
                 },
                 "occurredAt": {
                   "type": [
@@ -43542,16 +44709,72 @@
                     "null"
                   ]
                 },
+                "eventId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "description": "Your own id for the event, so the network deduplicates a browser and server pair"
+                },
+                "actionSource": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "app",
+                    "email",
+                    "phone_call",
+                    "chat",
+                    "physical_store",
+                    "system_generated",
+                    "business_messaging",
+                    "other"
+                  ],
+                  "description": "Where the conversion happened; `website` when omitted"
+                },
+                "sourceUrl": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "format": "uri",
+                  "description": "The page the event fired on"
+                },
                 "email": {
                   "type": "string",
                   "format": "email",
-                  "description": "Hashed before it leaves FoPost"
+                  "description": "Hashed before it leaves FoPost; never stored"
                 },
                 "phone": {
                   "type": "string",
                   "minLength": 3,
                   "maxLength": 32,
-                  "description": "Hashed before it leaves FoPost"
+                  "description": "Hashed before it leaves FoPost; never stored"
+                },
+                "externalId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "description": "Your own user id. Hashed before it leaves FoPost; never stored"
+                },
+                "clientIpAddress": {
+                  "type": "string",
+                  "format": "ip",
+                  "description": "Sent as-is for matching; never stored"
+                },
+                "clientUserAgent": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512,
+                  "description": "Sent as-is; never stored"
+                },
+                "clickId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "description": "The network's click id (`fbc`)"
+                },
+                "browserId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "description": "The network's browser id (`fbp`)"
                 },
                 "valueMinor": {
                   "type": "integer",
@@ -43566,6 +44789,15 @@
                 "orderId": {
                   "type": "string",
                   "maxLength": 128
+                },
+                "contentIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "maxItems": 100
                 }
               },
               "required": [
@@ -43583,6 +44815,265 @@
           "adAccountId",
           "pixelId",
           "events"
+        ]
+      },
+      "CreatePixelRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "name"
+        ]
+      },
+      "UpdatePixelRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "dataUseSetting": {
+            "type": "string",
+            "enum": [
+              "advertising_and_analytics",
+              "analytics_only"
+            ]
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId"
+        ]
+      },
+      "SharePixelRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "targetAdAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Another ad account under the same business portfolio"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "targetAdAccountId"
+        ]
+      },
+      "CreateCustomConversionRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "pixelId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "eventType": {
+            "type": "string",
+            "enum": [
+              "ADD_PAYMENT_INFO",
+              "ADD_TO_CART",
+              "ADD_TO_WISHLIST",
+              "COMPLETE_REGISTRATION",
+              "CONTENT_VIEW",
+              "INITIATED_CHECKOUT",
+              "LEAD",
+              "PURCHASE",
+              "SEARCH",
+              "CONTACT",
+              "CUSTOMIZE_PRODUCT",
+              "DONATE",
+              "FIND_LOCATION",
+              "SCHEDULE",
+              "START_TRIAL",
+              "SUBMIT_APPLICATION",
+              "SUBSCRIBE",
+              "OTHER"
+            ]
+          },
+          "rule": {
+            "type": "object",
+            "properties": {
+              "eventName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "default": "PageView",
+                "description": "The pixel event the rule reads"
+              },
+              "urlContains": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "urlEquals": {
+                "type": "string",
+                "maxLength": 2048,
+                "format": "uri",
+                "description": "Pick one of `urlContains` and `urlEquals`"
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "defaultValueMinor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000,
+            "description": "Default value of one conversion, account currency, minor units"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId",
+          "pixelId",
+          "name",
+          "eventType",
+          "rule"
+        ]
+      },
+      "UpdateCustomConversionRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "defaultValueMinor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId"
+        ]
+      },
+      "DeleteCustomConversionRequest": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "An ad connection in the workspace"
+          },
+          "adAccountId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ad account id as the network addresses it: `act_…` on Meta, `urn:li:sponsoredAccount:…` on LinkedIn"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "connectionId",
+          "adAccountId"
         ]
       },
       "ReplyAdCommentRequest": {
@@ -57466,6 +58957,308 @@
           "ready": {
             "type": "boolean",
             "description": "False while the network has no answer for that audience"
+          }
+        }
+      },
+      "AdPixel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "AdPixelDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The script to place on the site"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastFiredAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isUnavailable": {
+            "type": "boolean"
+          },
+          "dataUseSetting": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "advertising_and_analytics",
+              "analytics_only",
+              null
+            ]
+          }
+        }
+      },
+      "AdPixelStats": {
+        "type": "object",
+        "properties": {
+          "since": {
+            "type": "string"
+          },
+          "until": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "eventName": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EventMatchQuality": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string"
+          },
+          "score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The network's match score out of 10"
+          },
+          "matchKeys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string"
+                },
+                "coveragePercent": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CustomConversionRule": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string"
+          },
+          "urlContains": {
+            "type": "string"
+          },
+          "urlEquals": {
+            "type": "string"
+          }
+        }
+      },
+      "CustomConversion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pixelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "eventType": {
+            "type": "string"
+          },
+          "rule": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CustomConversionRule"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "defaultValueMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "isArchived": {
+            "type": "boolean"
+          },
+          "isUnavailable": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastFiredAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ConversionUploadResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The stored batch"
+          },
+          "accepted": {
+            "type": "integer",
+            "description": "How many events the network received"
+          },
+          "eventCount": {
+            "type": "integer"
+          },
+          "replayed": {
+            "type": "boolean",
+            "description": "True when the Idempotency-Key had been used before and nothing was sent"
+          }
+        }
+      },
+      "ConversionBatch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "connectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "adAccountId": {
+            "type": "string"
+          },
+          "pixelId": {
+            "type": "string"
+          },
+          "idempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "eventCount": {
+            "type": "integer"
+          },
+          "accepted": {
+            "type": "integer"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "eventName": {
+                  "type": "string"
+                },
+                "occurredAt": {
+                  "type": "string"
+                },
+                "eventId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "actionSource": {
+                  "type": "string"
+                },
+                "emailHash": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "SHA-256 of the normalised email; the raw value is never stored"
+                },
+                "phoneHash": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "externalIdHash": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "valueMinor": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "currency": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "orderId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string"
           }
         }
       },
