@@ -216,6 +216,12 @@ function parseArgs(argv) {
   return args;
 }
 
+/** The repo name, or the path when a worktree hides it. */
+function labelFor(dir) {
+  const name = basename(dir);
+  return /^fopost-/.test(name) ? name : dir.replace(process.cwd() + '/', '');
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = parseArgs(process.argv.slice(2));
   const spec = loadSpec(args.spec);
@@ -223,7 +229,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   let failed = false;
   for (const dir of args.clients) {
     const gaps = gapsFor(spec, dir);
-    report[basename(dir)] = gaps;
+    report[labelFor(dir)] = gaps;
     if (gaps.length) failed = true;
   }
   if (args.json) {
