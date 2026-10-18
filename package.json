@@ -11,7 +11,8 @@
   "scripts": {
     "sync": "node scripts/sync-spec.mjs",
     "generate": "node scripts/generate.mjs",
-    "check": "node scripts/generate.mjs --check"
+    "check": "node scripts/generate.mjs --check",
+    "check:sdks": "node scripts/sdk-gaps.mjs"
   },
   "repository": {
     "type": "git",

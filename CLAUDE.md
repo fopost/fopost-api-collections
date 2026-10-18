@@ -102,7 +102,16 @@ documented, not pre-filled.
 npm run sync       # pull the current spec from the public API into openapi.json
 npm run generate   # rewrite postman/, bruno/, and ENDPOINTS.md
 npm run check      # fail if the committed output is stale (what CI runs)
+npm run check:sdks # list every operation a sibling SDK has no method for; exit 1 on any gap
 ```
+
+`check:sdks` (`scripts/sdk-gaps.mjs`) walks each full REST client checked out beside this repo
+(`--root` points elsewhere, or pass client paths) and matches every operation in `openapi.json`
+against the client's source: the path as a string literal with the HTTP verb nearby, a path
+built by a helper with the verb used in the same file, or the `operationId` named anywhere in
+the source (a doc comment is the explicit escape hatch for a path assembled from fragments).
+Browser redirects and the OAuth server are skipped by name in the script, with the reason. The
+CLI and the MCP server are not full clients and are not in its default list.
 
 No install step, no dependencies, no linter, no formatter, no test runner.
 
@@ -148,4 +157,4 @@ the spec, which comes from the API, not from `package.json`.
 ## Git
 
 Conventional Commits, atomic. Branch `feature/<description>`, merge to `main` via PR.
-Never `gh pr create` — push the branch and hand over the compare link.
+Open the PR yourself with `gh pr create` and hand over the link; merging is Ali's.
