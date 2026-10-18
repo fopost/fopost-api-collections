@@ -1,0 +1,35 @@
+meta {
+  name: Event match quality per event name
+  type: http
+  seq: 113
+}
+
+get {
+  url: {{baseUrl}}/v1/ads/pixels/:id/match-quality?connection_id=&ad_account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  connection_id: 
+  ad_account_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The network's own score of how well the identity on sent events matches people, out of 10, with which identifiers the events carried.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}

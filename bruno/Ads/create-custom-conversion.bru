@@ -1,0 +1,49 @@
+meta {
+  name: Create a custom conversion
+  type: http
+  seq: 115
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/custom-conversions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "pixelId": "x",
+    "name": "Example name",
+    "eventType": "ADD_PAYMENT_INFO",
+    "rule": {
+      "eventName": "PageView",
+      "urlContains": "x",
+      "urlEquals": "https://example.com"
+    }
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Counts a pixel event as a conversion when the rule matches: an event name plus an optional URL condition. The pixel has to be on the ad account.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+
+  **Optional fields** (not in the example body):
+  - `description`: string
+  - `defaultValueMinor`: integer — Default value of one conversion, account currency, minor units
+}
