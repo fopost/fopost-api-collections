@@ -81,16 +81,28 @@ const BOUNDARY = `(?=["'\`?)\\s,;]|$)`;
  * spelled from a quote, or only the segments after a param when a helper built the prefix
  * (`{AccountPath(id)}/telegram/commands`, `path(id) <> "/telegram/commands"`).
  */
-function pathPattern(path) {
+function pathPatterns(path) {
   const segments = path.replace(/^\/v1/, '').split('/').slice(1);
   const render = (segs) => segs.map((seg) => (isParam(seg) ? PARAM : literal(seg))).join('/');
-  const forms = [`["'\`](?:/v1)?/${render(segments)}`];
+  const tails = [];
   segments.forEach((seg, i) => {
     const tail = segments.slice(i + 1);
     if (!isParam(seg) || tail.length === 0 || !tail.some((t) => !isParam(t))) return;
-    forms.push(`(?:[})"'\`])/${render(tail)}`);
+    tails.push(`(?:[})"'\`])/${render(tail)}`);
   });
-  return new RegExp(`(?:${forms.join('|')})${BOUNDARY}`, 'g');
+  return {
+    full: new RegExp(`["'\`](?:/v1)?/${render(segments)}${BOUNDARY}`, 'g'),
+    tail: tails.length ? new RegExp(`(?:${tails.join('|')})${BOUNDARY}`, 'g') : null,
+    resource: segments[0],
+  };
+}
+
+/** A tail match on a line that spells another resource's path is that other resource. */
+function tailConflicts(line, resource, resources) {
+  for (const other of resources) {
+    if (other !== resource && new RegExp(`/${escape(other)}(?:/|["'\`])`).test(line)) return true;
+  }
+  return false;
 }
 
 const VERB = {
@@ -130,8 +142,16 @@ function indexClient(dir) {
   });
 }
 
-function findOperation(files, op) {
-  const pattern = pathPattern(op.path);
+function findOperation(files, op, resources) {
+  const { full, tail, resource } = pathPatterns(op.path);
+  const matches = (line) => {
+    full.lastIndex = 0;
+    if (full.test(line)) return true;
+    if (!tail) return false;
+    tail.lastIndex = 0;
+    return tail.test(line) && !tailConflicts(line, resource, resources);
+  };
+  const blank = (text) => text.replace(full, '""').replace(tail ?? /$^/, '""');
   const verb = verbPattern(op.method);
   const idWord = new RegExp(`\\b${op.id}\\b`);
   let state = 'missing';
@@ -139,16 +159,12 @@ function findOperation(files, op) {
     if (idWord.test(comments)) return 'named';
     let pathInFile = false;
     for (let i = 0; i < lines.length; i++) {
-      pattern.lastIndex = 0;
-      if (!pattern.test(lines[i])) continue;
+      if (!matches(lines[i])) continue;
       pathInFile = true;
-      const window = lines
-        .slice(Math.max(0, i - 3), i + 3)
-        .join('\n')
-        .replace(pattern, '""');
+      const window = blank(lines.slice(Math.max(0, i - 3), i + 3).join('\n'));
       if (verb.test(window)) return 'matched';
     }
-    if (pathInFile && verb.test(text.replace(pattern, '""'))) state = 'file';
+    if (pathInFile && verb.test(blank(text))) state = 'file';
     else if (pathInFile && state === 'missing') state = 'path-only';
   }
   return state;
@@ -168,10 +184,12 @@ export function operations(spec) {
 
 export function gapsFor(spec, clientDir) {
   const files = indexClient(clientDir);
+  const ops = operations(spec);
+  const resources = new Set(ops.map((op) => op.path.replace(/^\/v1/, '').split('/')[1]));
   const gaps = [];
-  for (const op of operations(spec)) {
+  for (const op of ops) {
     if (SKIPPED_TAGS[op.tag] || SKIPPED_OPERATIONS[op.id]) continue;
-    const state = findOperation(files, op);
+    const state = findOperation(files, op, resources);
     if (state === 'matched' || state === 'named' || state === 'file') continue;
     gaps.push({ ...op, state });
   }
