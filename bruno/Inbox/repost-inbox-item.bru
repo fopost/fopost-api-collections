@@ -1,0 +1,29 @@
+meta {
+  name: Repost an item
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/:id/repost
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Repost to the account's own timeline (X). Only where `can_repost` is true. Also requires the `publish` scope. On X the call is metered as a pass-through write.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

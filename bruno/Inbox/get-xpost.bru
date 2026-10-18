@@ -1,0 +1,33 @@
+meta {
+  name: Look up an X post
+  type: http
+  seq: 31
+}
+
+get {
+  url: {{baseUrl}}/v1/x/posts/:id?account_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  account_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One post by its X id, with its author and public metrics, read through the named X account. Metered as one pass-through X read. Needs the `inbox` scope.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+}

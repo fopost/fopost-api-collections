@@ -22968,6 +22968,358 @@
         ]
       }
     },
+    "/v1/inbox/{id}/repost": {
+      "post": {
+        "operationId": "repostInboxItem",
+        "summary": "Repost an item",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxItem"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The platform's pay-per-use balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot do it",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "The platform is rate limiting this account (`rate_limited`, with `retry_at`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Repost to the account's own timeline (X). Only where `can_repost` is true. Also requires the `publish` scope. On X the call is metered as a pass-through write.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ]
+      }
+    },
+    "/v1/inbox/{id}/unrepost": {
+      "post": {
+        "operationId": "unrepostInboxItem",
+        "summary": "Take our repost back",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxItem"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The platform's pay-per-use balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot do it",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "The platform is rate limiting this account (`rate_limited`, with `retry_at`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Only where `can_repost` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ]
+      }
+    },
+    "/v1/inbox/{id}/bookmark": {
+      "post": {
+        "operationId": "bookmarkInboxItem",
+        "summary": "Bookmark an item",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxItem"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The platform's pay-per-use balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot do it",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "The platform is rate limiting this account (`rate_limited`, with `retry_at`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Save privately to the account's bookmarks (X). Only where `can_bookmark` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ]
+      }
+    },
+    "/v1/inbox/{id}/unbookmark": {
+      "post": {
+        "operationId": "unbookmarkInboxItem",
+        "summary": "Remove our bookmark",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxItem"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The platform's pay-per-use balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected or the platform cannot do it",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "The platform is rate limiting this account (`rate_limited`, with `retry_at`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "The platform refused it; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Only where `can_bookmark` is true. Also requires the `publish` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Inbox item id"
+          }
+        ]
+      }
+    },
     "/v1/inbox/{id}/pin": {
       "post": {
         "operationId": "pinInboxItem",
@@ -35963,6 +36315,429 @@
               "type": "string"
             },
             "description": "Subreddit name without the `r/` prefix"
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{id}/x/follow": {
+      "post": {
+        "operationId": "followXUser",
+        "summary": "Follow an X user",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/XFollowResult"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The X API balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected, or X refused the token (`reconnect_required`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "X is rate limiting this account (`rate_limited`, with `retry_after`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "X refused the call; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Follows the user from this X account. Needs the `inbox` and `publish` scopes. Metered as one pass-through X call.\n\nRequires the `inbox` and `publish` scopes when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "X account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/XFollowInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{id}/x/unfollow": {
+      "post": {
+        "operationId": "unfollowXUser",
+        "summary": "Unfollow an X user",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/XFollowResult"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The X API balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected, or X refused the token (`reconnect_required`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "X is rate limiting this account (`rate_limited`, with `retry_after`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "X refused the call; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Needs the `inbox` and `publish` scopes. Metered as one pass-through X call.\n\nRequires the `inbox` and `publish` scopes when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "X account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/XFollowInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/x/posts/{id}": {
+      "get": {
+        "operationId": "getXPost",
+        "summary": "Look up an X post",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/XPost"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The X API balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected, or X refused the token (`reconnect_required`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "X is rate limiting this account (`rate_limited`, with `retry_after`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "X refused the call; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "One post by its X id, with its author and public metrics, read through the named X account. Metered as one pass-through X read. Needs the `inbox` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "X post id (numeric)"
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "X account id"
+          }
+        ]
+      }
+    },
+    "/v1/x/search": {
+      "get": {
+        "operationId": "searchXPosts",
+        "summary": "Search recent X posts",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/XPost"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "next_token": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "402": {
+            "description": "The X API balance is spent (`platform_balance_spent`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The account is disconnected, or X refused the token (`reconnect_required`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "description": "X is rate limiting this account (`rate_limited`, with `retry_after`)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "502": {
+            "description": "X refused the call; `message` carries its reason",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          }
+        },
+        "description": "Recent search over the last seven days, read through the named X account. Each page is one metered pass-through X read. Needs the `inbox` scope.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "X account id"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "X search query, up to 512 characters"
+          },
+          {
+            "name": "max_results",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "10 to 100, default 10"
+          },
+          {
+            "name": "next_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor from the previous page"
           }
         ]
       }
@@ -51726,6 +52501,132 @@
           }
         }
       },
+      "XPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The X post id"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "permalink": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "author_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "author_handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "author_avatar_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "author_followers": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "conversation_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thread root id"
+          },
+          "parent_external_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The post this one replied to"
+          },
+          "likes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "replies": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "reposts": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "quotes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "platform_created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "XFollowResult": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "The X user id that was followed or unfollowed"
+          },
+          "following": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "account_id",
+          "user_id",
+          "following"
+        ]
+      },
+      "XFollowInput": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Numeric X user id, as X reports it"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
       "InboxItem": {
         "type": "object",
         "properties": {
@@ -51865,6 +52766,14 @@
           "liked": {
             "type": "boolean"
           },
+          "reposted": {
+            "type": "boolean",
+            "description": "Reposted to the account's own timeline (X)"
+          },
+          "bookmarked": {
+            "type": "boolean",
+            "description": "Bookmarked on the account (X)"
+          },
           "pinned": {
             "type": "boolean"
           },
@@ -51898,6 +52807,14 @@
           },
           "can_like": {
             "type": "boolean"
+          },
+          "can_repost": {
+            "type": "boolean",
+            "description": "The network has a repost (X)"
+          },
+          "can_bookmark": {
+            "type": "boolean",
+            "description": "The network has bookmarks (X)"
           },
           "can_vote": {
             "type": "boolean",
