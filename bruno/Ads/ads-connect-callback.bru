@@ -1,0 +1,32 @@
+meta {
+  name: Finish an ad connection
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/v1/ads-connect/:provider/callback
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~code: 
+  ~state: 
+  ~error: 
+  ~error_description: 
+}
+
+params:path {
+  provider: {{provider}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Where the ad network sends the browser after login. Not called by clients: the state minted by the authorize call is consumed here, the signed-in session must be the user who started it, and the browser is redirected back to the dashboard with the outcome in the query string (`oauth=success` or `oauth=error&message=`).
+}
