@@ -8167,7 +8167,7 @@
                 }
               ]
             },
-            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `article.published` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `inbox.review_received` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
+            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `article.published` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `inbox.review_received` | `inbox.reply_sent` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Example name\",\n  \"url\": \"https://example.com\",\n  \"active\": false,\n  \"secret\": \"xxxxxxxxxxxxxxxx\"\n}",
@@ -9839,6 +9839,156 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List automation versions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/automations/:id/versions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "automations",
+                ":id",
+                "versions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automationId}}",
+                  "description": "Automation id"
+                }
+              ]
+            },
+            "description": "Every saved graph, newest first, with the nodes each save added and removed.\n\nRequires the `automations` scope when using an API key.\n\n**Scope:** `automations`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an automation version",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/automations/:id/versions/:version",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "automations",
+                ":id",
+                "versions",
+                ":version"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automationId}}",
+                  "description": "Automation id"
+                },
+                {
+                  "key": "version",
+                  "value": "{{version}}",
+                  "description": "Version number"
+                }
+              ]
+            },
+            "description": "The graph as it was saved at that version.\n\nRequires the `automations` scope when using an API key.\n\n**Scope:** `automations`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restore an automation version",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/automations/:id/versions/:version/restore",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "automations",
+                ":id",
+                "versions",
+                ":version",
+                "restore"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automationId}}",
+                  "description": "Automation id"
+                },
+                {
+                  "key": "version",
+                  "value": "{{version}}",
+                  "description": "Version number to restore"
+                }
+              ]
+            },
+            "description": "Saves that version’s graph as a new version on top of the history; nothing is rewritten. The old graph must still validate under the automation’s current trigger and workspace.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `automations`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
                   "});"
                 ]
               }
@@ -16444,6 +16594,73 @@
                 }
               }
             }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Finish an ad connection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/ads-connect/:provider/callback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ads-connect",
+                ":provider",
+                "callback"
+              ],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "",
+                  "description": "Authorization code from the network",
+                  "disabled": true
+                },
+                {
+                  "key": "state",
+                  "value": "",
+                  "description": "The nonce issued by the authorize call",
+                  "disabled": true
+                },
+                {
+                  "key": "error",
+                  "value": "",
+                  "description": "Set when the user declined",
+                  "disabled": true
+                },
+                {
+                  "key": "error_description",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "provider",
+                  "value": "{{provider}}",
+                  "description": "Ad network id"
+                }
+              ]
+            },
+            "description": "Where the ad network sends the browser after login. Not called by clients: the state minted by the authorize call is consumed here, the signed-in session must be the user who started it, and the browser is redirected back to the dashboard with the outcome in the query string (`oauth=success` or `oauth=error&message=`)."
           },
           "response": [],
           "event": [

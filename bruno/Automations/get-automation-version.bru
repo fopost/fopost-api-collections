@@ -1,0 +1,30 @@
+meta {
+  name: Get an automation version
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/v1/automations/:id/versions/:version
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+  version: {{version}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The graph as it was saved at that version.
+
+  Requires the `automations` scope when using an API key.
+
+  **Scope:** `automations`
+}

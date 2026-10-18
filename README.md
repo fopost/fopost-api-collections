@@ -101,7 +101,11 @@ The collections are generated, never hand-edited. There are no dependencies and 
 npm run sync       # pull the current spec from the public API
 npm run generate   # rewrite postman/, bruno/, and ENDPOINTS.md
 npm run check      # fail if the committed output is stale
+npm run check:sdks # list every operation an SDK checked out beside this repo has no method for
 ```
+
+`check:sdks` keeps the official SDKs honest against the spec: it exits 1 naming each operation a
+client cannot reach, so a new endpoint cannot ship without every SDK following.
 
 `scripts/lib/spec.mjs` holds the shared reading of the spec, and the two emitters build on it, so
 Postman and Bruno can never drift apart. Adding another client is a new emitter, not a new repo.
