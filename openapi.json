@@ -39972,6 +39972,7 @@
                 "inbox.mention_received",
                 "inbox.message_received",
                 "inbox.review_received",
+                "inbox.reply_sent",
                 "automation.triggered",
                 "automation.completed",
                 "automation.failed"
@@ -40038,6 +40039,7 @@
                 "inbox.mention_received",
                 "inbox.message_received",
                 "inbox.review_received",
+                "inbox.reply_sent",
                 "automation.triggered",
                 "automation.completed",
                 "automation.failed"
@@ -48629,6 +48631,7 @@
           "inbox.mention_received",
           "inbox.message_received",
           "inbox.review_received",
+          "inbox.reply_sent",
           "automation.triggered",
           "automation.completed",
           "automation.failed"
