@@ -20674,6 +20674,239 @@
         ]
       }
     },
+    "/v1/automations/{id}/versions": {
+      "get": {
+        "operationId": "listAutomationVersions",
+        "summary": "List automation versions",
+        "tags": [
+          "Automations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AutomationVersion"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMeta"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Every saved graph, newest first, with the nodes each save added and removed.\n\nRequires the `automations` scope when using an API key.",
+        "x-fopost-scope": "automations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Automation id"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 30,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ]
+      }
+    },
+    "/v1/automations/{id}/versions/{version}": {
+      "get": {
+        "operationId": "getAutomationVersion",
+        "summary": "Get an automation version",
+        "tags": [
+          "Automations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationVersionDetail"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The graph as it was saved at that version.\n\nRequires the `automations` scope when using an API key.",
+        "x-fopost-scope": "automations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Automation id"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Version number"
+          }
+        ]
+      }
+    },
+    "/v1/automations/{id}/versions/{version}/restore": {
+      "post": {
+        "operationId": "restoreAutomationVersion",
+        "summary": "Restore an automation version",
+        "tags": [
+          "Automations"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "integer",
+                      "description": "The new version number"
+                    },
+                    "graph": {
+                      "$ref": "#/components/schemas/WorkflowGraph"
+                    },
+                    "steps": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AutomationStep"
+                      }
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "graph",
+                    "steps"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Saves that version’s graph as a new version on top of the history; nothing is rewritten. The old graph must still validate under the automation’s current trigger and workspace.\n\nRequires the `automations` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "x-fopost-scope": "automations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Automation id"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Version number to restore"
+          }
+        ]
+      }
+    },
     "/v1/automations/{id}/runs": {
       "get": {
         "operationId": "listAutomationRuns",
@@ -24222,6 +24455,85 @@
             }
           }
         }
+      }
+    },
+    "/v1/ads-connect/{provider}/callback": {
+      "get": {
+        "operationId": "adsConnectCallback",
+        "summary": "Finish an ad connection",
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the dashboard with the outcome in the query string",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Where the ad network sends the browser after login. Not called by clients: the state minted by the authorize call is consumed here, the signed-in session must be the user who started it, and the browser is redirected back to the dashboard with the outcome in the query string (`oauth=success` or `oauth=error&message=`).",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "meta",
+                "google",
+                "linkedin",
+                "tiktok",
+                "pinterest",
+                "x",
+                "openai"
+              ]
+            },
+            "description": "Ad network id"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Authorization code from the network"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The nonce issued by the authorize call"
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Set when the user declined"
+          },
+          {
+            "name": "error_description",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
       }
     },
     "/v1/ads/connections/{id}": {
@@ -51129,6 +51441,109 @@
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "AutomationVersionNodeRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind"
+        ]
+      },
+      "AutomationVersion": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_by": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "node_count": {
+            "type": "integer"
+          },
+          "nodes_added": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutomationVersionNodeRef"
+            }
+          },
+          "nodes_removed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutomationVersionNodeRef"
+            }
+          }
+        }
+      },
+      "AutomationVersionDetail": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_by": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "graph": {
+            "$ref": "#/components/schemas/WorkflowGraph"
           }
         }
       },

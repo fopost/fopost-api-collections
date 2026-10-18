@@ -1,0 +1,32 @@
+meta {
+  name: Restore an automation version
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/v1/automations/:id/versions/:version/restore
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{automationId}}
+  version: {{version}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Saves that version’s graph as a new version on top of the history; nothing is rewritten. The old graph must still validate under the automation’s current trigger and workspace.
+
+  Requires the `automations` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `automations`
+}
