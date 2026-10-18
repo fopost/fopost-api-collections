@@ -1,0 +1,44 @@
+meta {
+  name: Send conversions to a pixel (idempotent)
+  type: http
+  seq: 105
+}
+
+post {
+  url: {{baseUrl}}/v1/ads/conversions/events
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspaceId": "{{workspaceId}}",
+    "connectionId": "00000000-0000-0000-0000-000000000000",
+    "adAccountId": "x",
+    "pixelId": "x",
+    "events": [
+      {
+        "eventName": "Example event",
+        "occurredAt": "string"
+      }
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  The documented alias of `POST /v1/ads/conversions`: identical body and answer, with `Idempotency-Key` required. Send one key per batch and retry freely; the second delivery of a key answers the first outcome with `replayed: true` and an `Idempotency-Replayed: true` header, and the network is reached once.
+
+  Requires the `ads` scope when using an API key.
+
+  **Scope:** `ads`
+}
