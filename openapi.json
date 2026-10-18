@@ -31793,7 +31793,7 @@
     },
     "/v1/ads/conversions/events": {
       "post": {
-        "operationId": "sendConversionEvents",
+        "operationId": "sendPixelConversionEvents",
         "summary": "Send conversions to a pixel (idempotent)",
         "tags": [
           "Ads"
