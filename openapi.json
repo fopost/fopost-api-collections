@@ -20802,34 +20802,48 @@
             }
           },
           {
-            "name": "state",
+            "name": "account_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "One or more connected account ids, comma-separated"
+          },
+          {
+            "name": "status",
             "in": "query",
             "required": false,
             "schema": {
               "type": "string",
               "enum": [
-                "unread",
-                "read",
-                "resolved",
-                "snoozed"
+                "unanswered",
+                "replied",
+                "resolved"
               ]
-            }
+            },
+            "description": "A reply also resolves an item, so the three never overlap"
           },
           {
-            "name": "platform",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "account_id",
+            "name": "since",
             "in": "query",
             "required": false,
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "date-time"
+            },
+            "description": "Only items the platform dates at or after this"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "newest",
+                "oldest"
+              ]
             }
           },
           {
@@ -20869,28 +20883,6 @@
               "enum": [
                 "inbound",
                 "outbound"
-              ]
-            }
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Searches text and author"
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "newest",
-                "oldest",
-                "unanswered"
               ]
             }
           },
@@ -21159,43 +21151,37 @@
             }
           },
           {
-            "name": "platform",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "type": "string"
+            },
+            "description": "One or more connected account ids, comma-separated"
           },
           {
-            "name": "state",
+            "name": "status",
             "in": "query",
             "required": false,
             "schema": {
               "type": "string",
               "enum": [
-                "unread",
-                "read",
-                "resolved",
-                "snoozed"
+                "unanswered",
+                "replied",
+                "resolved"
               ]
-            }
+            },
+            "description": "A reply also resolves an item, so the three never overlap"
           },
           {
-            "name": "q",
+            "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only items the platform dates at or after this"
           },
           {
             "name": "sort",
@@ -21205,8 +21191,7 @@
               "type": "string",
               "enum": [
                 "newest",
-                "oldest",
-                "unanswered"
+                "oldest"
               ]
             }
           },
@@ -21284,43 +21269,37 @@
             "description": "Restrict to a single workspace the user belongs to"
           },
           {
-            "name": "platform",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "type": "string"
+            },
+            "description": "One or more connected account ids, comma-separated"
           },
           {
-            "name": "state",
+            "name": "status",
             "in": "query",
             "required": false,
             "schema": {
               "type": "string",
               "enum": [
-                "unread",
-                "read",
-                "resolved",
-                "snoozed"
+                "unanswered",
+                "replied",
+                "resolved"
               ]
-            }
+            },
+            "description": "A reply also resolves an item, so the three never overlap"
           },
           {
-            "name": "q",
+            "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only items the platform dates at or after this"
           },
           {
             "name": "sort",
@@ -21330,8 +21309,7 @@
               "type": "string",
               "enum": [
                 "newest",
-                "oldest",
-                "unanswered"
+                "oldest"
               ]
             }
           },
@@ -21497,6 +21475,72 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MarkInboxReadRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inbox/resolve": {
+      "post": {
+        "operationId": "resolveInbox",
+        "summary": "Resolve items in bulk",
+        "tags": [
+          "Inbox"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "resolved": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "resolved"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Resolves every unanswered item of one type, optionally only on some accounts or only items dated before `before`. Nothing reaches a platform.\n\nRequires the `inbox` scope when using an API key.",
+        "x-fopost-scope": "inbox",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveInboxRequest"
               }
             }
           }
@@ -41870,6 +41914,42 @@
         "required": [
           "workspace_id",
           "account_id"
+        ]
+      },
+      "ResolveInboxRequest": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "comment",
+              "mention",
+              "review",
+              "dm"
+            ]
+          },
+          "account_id": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "maxItems": 200,
+            "description": "Only these connected accounts"
+          },
+          "before": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Only items the platform dates before this"
+          }
+        },
+        "required": [
+          "workspace_id",
+          "type"
         ]
       },
       "UpdateInboxItemRequest": {

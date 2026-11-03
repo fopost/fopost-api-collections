@@ -10464,20 +10464,26 @@
                   "disabled": true
                 },
                 {
-                  "key": "state",
-                  "value": "unread",
-                  "description": "",
-                  "disabled": true
-                },
-                {
-                  "key": "platform",
-                  "value": "",
-                  "description": "",
-                  "disabled": true
-                },
-                {
                   "key": "account_id",
                   "value": "",
+                  "description": "One or more connected account ids, comma-separated",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "unanswered",
+                  "description": "A reply also resolves an item, so the three never overlap",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "description": "Only items the platform dates at or after this",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
                   "description": "",
                   "disabled": true
                 },
@@ -10502,18 +10508,6 @@
                 {
                   "key": "direction",
                   "value": "inbound",
-                  "description": "",
-                  "disabled": true
-                },
-                {
-                  "key": "q",
-                  "value": "",
-                  "description": "Searches text and author",
-                  "disabled": true
-                },
-                {
-                  "key": "sort",
-                  "value": "newest",
                   "description": "",
                   "disabled": true
                 },
@@ -10698,27 +10692,21 @@
                   "disabled": true
                 },
                 {
-                  "key": "platform",
-                  "value": "",
-                  "description": "",
-                  "disabled": true
-                },
-                {
                   "key": "account_id",
                   "value": "",
-                  "description": "",
+                  "description": "One or more connected account ids, comma-separated",
                   "disabled": true
                 },
                 {
-                  "key": "state",
-                  "value": "unread",
-                  "description": "",
+                  "key": "status",
+                  "value": "unanswered",
+                  "description": "A reply also resolves an item, so the three never overlap",
                   "disabled": true
                 },
                 {
-                  "key": "q",
+                  "key": "since",
                   "value": "",
-                  "description": "",
+                  "description": "Only items the platform dates at or after this",
                   "disabled": true
                 },
                 {
@@ -10781,27 +10769,21 @@
                   "disabled": true
                 },
                 {
-                  "key": "platform",
-                  "value": "",
-                  "description": "",
-                  "disabled": true
-                },
-                {
                   "key": "account_id",
                   "value": "",
-                  "description": "",
+                  "description": "One or more connected account ids, comma-separated",
                   "disabled": true
                 },
                 {
-                  "key": "state",
-                  "value": "unread",
-                  "description": "",
+                  "key": "status",
+                  "value": "unanswered",
+                  "description": "A reply also resolves an item, so the three never overlap",
                   "disabled": true
                 },
                 {
-                  "key": "q",
+                  "key": "since",
                   "value": "",
-                  "description": "",
+                  "description": "Only items the platform dates at or after this",
                   "disabled": true
                 },
                 {
@@ -10929,6 +10911,53 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resolve items in bulk",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/inbox/resolve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "inbox",
+                "resolve"
+              ]
+            },
+            "description": "Resolves every unanswered item of one type, optionally only on some accounts or only items dated before `before`. Nothing reaches a platform.\n\nRequires the `inbox` scope when using an API key.\n\n**Scope:** `inbox`\n\n**Optional fields** (not in the example body):\n- `account_id`: string[] — Only these connected accounts\n- `before`: string (date-time) — Only items the platform dates before this",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"x\",\n  \"type\": \"comment\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }
