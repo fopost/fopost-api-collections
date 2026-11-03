@@ -1,0 +1,40 @@
+meta {
+  name: Resolve items in bulk
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/inbox/resolve
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "x",
+    "type": "comment"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Resolves every unanswered item of one type, optionally only on some accounts or only items dated before `before`. Nothing reaches a platform.
+
+  Requires the `inbox` scope when using an API key.
+
+  **Scope:** `inbox`
+
+  **Optional fields** (not in the example body):
+  - `account_id`: string[] — Only these connected accounts
+  - `before`: string (date-time) — Only items the platform dates before this
+}

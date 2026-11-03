@@ -1,0 +1,29 @@
+meta {
+  name: Get home overview
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/v1/home
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Everything the Home page shows in one call, read from a stored snapshot that is never computed on request: onboarding progress, the week streak, weekly posting goals, the comment score, this week against last for posts, followers and comments, the next five scheduled posts, the five most recent unanswered comments and the latest blog posts. `blocks` says when each part was computed; a null `updated_at` means the first snapshot is still being built. Omit workspace_id to read across every workspace the caller belongs to.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+}

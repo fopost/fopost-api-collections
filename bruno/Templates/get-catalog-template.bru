@@ -1,0 +1,25 @@
+meta {
+  name: Get a post template
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/template-catalog/:slug
+  body: none
+  auth: inherit
+}
+
+params:path {
+  slug: {{slug}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One published template from the public catalogue. No auth required.
+}
