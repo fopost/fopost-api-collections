@@ -1,7 +1,7 @@
 meta {
   name: Get analytics overview
   type: http
-  seq: 7
+  seq: 9
 }
 
 get {
@@ -14,6 +14,8 @@ params:query {
   ~account_id: 
   ~workspace_id: 
   ~days: 7
+  ~from: 
+  ~to: 
 }
 
 tests {
@@ -23,7 +25,7 @@ tests {
 }
 
 docs {
-  Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.
+  Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history. Use either `days` or an explicit `from`/`to` range.
 
   Requires the `analytics` scope when using an API key.
 

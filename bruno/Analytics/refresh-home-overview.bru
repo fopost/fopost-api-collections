@@ -1,0 +1,39 @@
+meta {
+  name: Refresh the home overview
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/v1/home/refresh
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([202]);
+  });
+}
+
+docs {
+  Queues a recompute of the snapshot after something the page shows changed. Defaults to the post metrics and comments blocks; a block younger than 30 seconds is left alone. Answers at once; the next read carries the new numbers.
+
+  Requires the `analytics` scope when using an API key.
+
+  **Scope:** `analytics`
+
+  **Optional fields** (not in the example body):
+  - `workspace_id`: string (uuid)
+  - `blocks`: `post_metrics` | `channel_metrics` | `comments` | `blog`[]
+}

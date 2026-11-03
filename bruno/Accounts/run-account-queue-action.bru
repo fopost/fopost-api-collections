@@ -1,0 +1,41 @@
+meta {
+  name: Act on an account’s posting queue
+  type: http
+  seq: 33
+}
+
+post {
+  url: {{baseUrl}}/v1/accounts/:id/queue
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{accountId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "action": "shuffle"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  One action on the posts waiting for this account. `shuffle` swaps which queued post sits on which slot time; `clean` removes every post whose delivery to this account failed; `delete_drafts` removes every draft targeting it; `empty` removes every post still waiting to go out to it. Removed posts are soft-deleted like any deleted post.
+
+  Requires the `publish` scope when using an API key.
+
+  Requires an active subscription; without one the request fails with 403 `subscription_required`.
+
+  **Scope:** `publish`
+}

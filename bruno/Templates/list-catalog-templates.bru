@@ -1,0 +1,30 @@
+meta {
+  name: List post templates
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/template-catalog
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~type: story
+  ~goal: engagement
+  ~network: 
+  ~q: 
+  ~page: 1
+  ~per_page: 24
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The public catalogue of fill-in post templates, in catalogue order. No auth required.
+}

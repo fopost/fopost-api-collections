@@ -85,8 +85,14 @@
                 },
                 {
                   "key": "status",
-                  "value": "draft",
-                  "description": "",
+                  "value": "",
+                  "description": "One status or a comma-separated set: draft, scheduled, publishing, published, partially_failed, failed, cancelled, unpublished",
+                  "disabled": true
+                },
+                {
+                  "key": "include",
+                  "value": "",
+                  "description": "Comma-separated extras: `metrics` adds the latest stored reading to each account, `status_counts` adds a per-status total to `meta` for the same filters without `status`",
                   "disabled": true
                 },
                 {
@@ -110,7 +116,7 @@
                 {
                   "key": "account_id",
                   "value": "",
-                  "description": "Comma-separated account uuids",
+                  "description": "Comma-separated account uuids. An id outside the caller’s workspaces answers 404, the same as an unknown one",
                   "disabled": true
                 },
                 {
@@ -135,6 +141,12 @@
                   "key": "unscheduled",
                   "value": "true",
                   "description": "Pass `true` for drafts with no `schedule_at`",
+                  "disabled": true
+                },
+                {
+                  "key": "artifact_type",
+                  "value": "",
+                  "description": "One artifact type or a comma-separated set: text_post, thread, article, carousel, short_video, story, link_share",
                   "disabled": true
                 },
                 {
@@ -664,7 +676,7 @@
                 }
               ]
             },
-            "description": "Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. Deliveries past the retry limit are reported in `exceeded` and skipped.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accountIds`: string (uuid)[]\n- `includePublished`: boolean",
+            "description": "Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. There is no retry ceiling: every retry is one billed attempt.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accountIds`: string (uuid)[]\n- `includePublished`: boolean",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"includePublished\": false\n}",
@@ -1318,12 +1330,12 @@
                 {
                   "key": "account_id",
                   "value": "",
-                  "description": "",
+                  "description": "One account id, or several separated by commas",
                   "disabled": true
                 }
               ]
             },
-            "description": "The time a post added to the queue now would get. Pass `account_id` to ask for one account; without it the answer is the next free occurrence of any slot.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+            "description": "The time a post added to the queue now would get. Pass `account_id` (one id, or several comma-separated) to ask for those accounts; an account with slots of its own uses only those, one without uses the workspace slots. Without it the answer is the next free occurrence of any slot.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
           },
           "response": [],
           "event": [
@@ -1365,7 +1377,7 @@
                 {
                   "key": "account_id",
                   "value": "",
-                  "description": "",
+                  "description": "One account id, or several separated by commas",
                   "disabled": true
                 },
                 {
@@ -2816,7 +2828,7 @@
           ]
         },
         {
-          "name": "Rename an account",
+          "name": "Update an account",
           "request": {
             "method": "PATCH",
             "header": [
@@ -2843,10 +2855,10 @@
                 }
               ]
             },
-            "description": "Sets a display name shown instead of the platform name. `null` or an empty string restores the platform name.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`",
+            "description": "Changes the display name, the weekly posting goal, the posting time zone or the paused state of the queue; send at least one field. A `display_name` of `null` or an empty string restores the platform name; `weekly_post_goal` `null` clears the goal; a `timezone` of `null` falls back to the workspace zone. Setting `queue_paused` to true parks every due post for this account; setting it back to false puts them back on the publish queue.\n\nRequires the `accounts` scope when using an API key.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `display_name`: string | null\n- `timezone`: string | null\n- `queue_paused`: boolean\n- `weekly_post_goal`: integer | null",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"display_name\": \"Example display\"\n}",
+              "raw": "{\n  \"display_name\": \"Example display\",\n  \"timezone\": \"UTC\",\n  \"queue_paused\": false,\n  \"weekly_post_goal\": 1\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3264,6 +3276,61 @@
               ]
             },
             "description": "Requires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `accounts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Act on an account’s posting queue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/accounts/:id/queue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "accounts",
+                ":id",
+                "queue"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{accountId}}",
+                  "description": "Account id"
+                }
+              ]
+            },
+            "description": "One action on the posts waiting for this account. `shuffle` swaps which queued post sits on which slot time; `clean` removes every post whose delivery to this account failed; `delete_drafts` removes every draft targeting it; `empty` removes every post still waiting to go out to it. Removed posts are soft-deleted like any deleted post.\n\nRequires the `publish` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `publish`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"shuffle\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           },
           "response": [],
           "event": [
@@ -8279,7 +8346,7 @@
                 }
               ]
             },
-            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `article.published` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `inbox.review_received` | `inbox.reply_sent` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
+            "description": "Re-enabling a webhook (`active: true`) resets its failure count.\n\nRequires the `webhooks` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `webhooks`\n\n**Optional fields** (not in the example body):\n- `name`: string | null\n- `url`: string (uri)\n- `events`: `post.scheduled` | `post.published` | `post.partially_failed` | `post.failed` | `post.deleted` | `delivery.published` | `delivery.failed` | `delivery.delayed` | `account.connected` | `account.disconnected` | `account.health_changed` | `inbox.comment_received` | `inbox.mention_received` | `inbox.message_received` | `inbox.review_received` | `inbox.reply_sent` | `automation.triggered` | `automation.completed` | `automation.failed`[]\n- `active`: boolean\n- `secret`: string — Rotates the signing secret; the new value is returned once in this response.\n- `headers`: object | null — Replaces the header set. A null value keeps the stored value of an existing header; a top-level null clears every header.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Example name\",\n  \"url\": \"https://example.com\",\n  \"active\": false,\n  \"secret\": \"xxxxxxxxxxxxxxxx\"\n}",
@@ -8826,6 +8893,93 @@
           ]
         },
         {
+          "name": "Get home overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/home",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "home"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Restrict to a single workspace the user belongs to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Everything the Home page shows in one call, read from a stored snapshot that is never computed on request: onboarding progress, the week streak, weekly posting goals, the comment score, this week against last for posts, followers and comments, the next five scheduled posts, the five most recent unanswered comments and the latest blog posts. `blocks` says when each part was computed; a null `updated_at` means the first snapshot is still being built. Omit workspace_id to read across every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh the home overview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/home/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "home",
+                "refresh"
+              ]
+            },
+            "description": "Queues a recompute of the snapshot after something the page shows changed. Defaults to the post metrics and comments blocks; a block younger than 30 seconds is left alone. Answers at once; the next read carries the new numbers.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`\n\n**Optional fields** (not in the example body):\n- `workspace_id`: string (uuid)\n- `blocks`: `post_metrics` | `channel_metrics` | `comments` | `blog`[]",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([202]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Get analytics overview",
           "request": {
             "method": "GET",
@@ -8858,10 +9012,22 @@
                   "value": "7",
                   "description": "Length of the reporting period in days",
                   "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "description": "Range start (used together with `to`)",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "description": "Range end (used together with `from`)",
+                  "disabled": true
                 }
               ]
             },
-            "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
+            "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history. Use either `days` or an explicit `from`/`to` range.\n\nRequires the `analytics` scope when using an API key.\n\n**Scope:** `analytics`"
           },
           "response": [],
           "event": [
@@ -25022,6 +25188,122 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "description": "The public catalogue of fill-in post templates",
+      "item": [
+        {
+          "name": "List post templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/template-catalog",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "template-catalog"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "story",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "goal",
+                  "value": "engagement",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "network",
+                  "value": "",
+                  "description": "Only templates suited to this platform",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Match in the title or description",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "24",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "The public catalogue of fill-in post templates, in catalogue order. No auth required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a post template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/template-catalog/:slug",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "template-catalog",
+                ":slug"
+              ],
+              "variable": [
+                {
+                  "key": "slug",
+                  "value": "{{slug}}",
+                  "description": "Template slug"
+                }
+              ]
+            },
+            "description": "One published template from the public catalogue. No auth required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }

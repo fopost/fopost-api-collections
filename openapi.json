@@ -112,6 +112,10 @@
       "description": "Upload and manage media files"
     },
     {
+      "name": "Templates",
+      "description": "The public catalogue of fill-in post templates"
+    },
+    {
       "name": "API",
       "description": "API metadata"
     },
@@ -153,6 +157,162 @@
           }
         },
         "description": "Returns the OpenAPI 3.1 description of the FoPost public API. No auth required.",
+        "security": []
+      }
+    },
+    "/v1/template-catalog": {
+      "get": {
+        "operationId": "listCatalogTemplates",
+        "summary": "List post templates",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogTemplateListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "The public catalogue of fill-in post templates, in catalogue order. No auth required.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "story",
+                "tip",
+                "opinion",
+                "behind_the_scenes",
+                "list",
+                "case_study",
+                "question",
+                "how_to"
+              ]
+            }
+          },
+          {
+            "name": "goal",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "engagement",
+                "reflection",
+                "connection",
+                "expertise",
+                "education",
+                "promotion",
+                "celebration"
+              ]
+            }
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Only templates suited to this platform"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "description": "Match in the title or description"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 24,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/v1/template-catalog/{slug}": {
+      "get": {
+        "operationId": "getCatalogTemplate",
+        "summary": "Get a post template",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogTemplate"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "One published template from the public catalogue. No auth required.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Template slug"
+          }
+        ],
         "security": []
       }
     },
@@ -815,18 +975,18 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": [
-                "draft",
-                "scheduled",
-                "publishing",
-                "published",
-                "partially_failed",
-                "failed",
-                "cancelled",
-                "unpublished"
-              ]
-            }
+              "type": "string"
+            },
+            "description": "One status or a comma-separated set: draft, scheduled, publishing, published, partially_failed, failed, cancelled, unpublished"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated extras: `metrics` adds the latest stored reading to each account, `status_counts` adds a per-status total to `meta` for the same filters without `status`"
           },
           {
             "name": "search",
@@ -862,7 +1022,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated account uuids"
+            "description": "Comma-separated account uuids. An id outside the caller’s workspaces answers 404, the same as an unknown one"
           },
           {
             "name": "date",
@@ -905,6 +1065,15 @@
               ]
             },
             "description": "Pass `true` for drafts with no `schedule_at`"
+          },
+          {
+            "name": "artifact_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "One artifact type or a comma-separated set: text_post, thread, article, carousel, short_video, story, link_share"
           },
           {
             "name": "sort",
@@ -1509,7 +1678,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "The time a post added to the queue now would get. Pass `account_id` to ask for one account; without it the answer is the next free occurrence of any slot.\n\nRequires the `posts` scope when using an API key.",
+        "description": "The time a post added to the queue now would get. Pass `account_id` (one id, or several comma-separated) to ask for those accounts; an account with slots of its own uses only those, one without uses the workspace slots. Without it the answer is the next free occurrence of any slot.\n\nRequires the `posts` scope when using an API key.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -1526,9 +1695,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "type": "string"
+            },
+            "description": "One account id, or several separated by commas"
           }
         ]
       }
@@ -1598,9 +1767,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "type": "string"
+            },
+            "description": "One account id, or several separated by commas"
           },
           {
             "name": "count",
@@ -1776,26 +1945,11 @@
               }
             }
           },
-          "422": {
-            "description": "Every selected delivery exceeded the retry limit (`retry_limit_exceeded`, with `exceeded`)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. Deliveries past the retry limit are reported in `exceeded` and skipped.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. There is no retry ceiling: every retry is one billed attempt.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "parameters": [
           {
@@ -4687,7 +4841,7 @@
       },
       "patch": {
         "operationId": "updateAccount",
-        "summary": "Rename an account",
+        "summary": "Update an account",
         "tags": [
           "Accounts"
         ],
@@ -4708,12 +4862,30 @@
                     },
                     "platform_name": {
                       "type": "string"
+                    },
+                    "weekly_post_goal": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "timezone": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "queue_paused": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "id",
                     "name",
-                    "platform_name"
+                    "platform_name",
+                    "weekly_post_goal",
+                    "timezone",
+                    "queue_paused"
                   ]
                 }
               }
@@ -4740,7 +4912,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Sets a display name shown instead of the platform name. `null` or an empty string restores the platform name.\n\nRequires the `accounts` scope when using an API key.",
+        "description": "Changes the display name, the weekly posting goal, the posting time zone or the paused state of the queue; send at least one field. A `display_name` of `null` or an empty string restores the platform name; `weekly_post_goal` `null` clears the goal; a `timezone` of `null` falls back to the workspace zone. Setting `queue_paused` to true parks every due post for this account; setting it back to false puts them back on the publish queue.\n\nRequires the `accounts` scope when using an API key.",
         "x-fopost-scope": "accounts",
         "parameters": [
           {
@@ -5288,6 +5460,90 @@
             "description": "Account id"
           }
         ]
+      }
+    },
+    "/v1/accounts/{id}/queue": {
+      "post": {
+        "operationId": "runAccountQueueAction",
+        "summary": "Act on an account’s posting queue",
+        "tags": [
+          "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "enum": [
+                        "shuffle",
+                        "clean",
+                        "delete_drafts",
+                        "empty"
+                      ]
+                    },
+                    "affected": {
+                      "type": "integer",
+                      "description": "Posts moved or removed"
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "affected"
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "One action on the posts waiting for this account. `shuffle` swaps which queued post sits on which slot time; `clean` removes every post whose delivery to this account failed; `delete_drafts` removes every draft targeting it; `empty` removes every post still waiting to go out to it. Removed posts are soft-deleted like any deleted post.\n\nRequires the `publish` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "x-fopost-scope": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Account id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountQueueActionRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/accounts/{id}/blogs": {
@@ -16145,6 +16401,119 @@
         ]
       }
     },
+    "/v1/home": {
+      "get": {
+        "operationId": "getHomeOverview",
+        "summary": "Get home overview",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeOverviewResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Everything the Home page shows in one call, read from a stored snapshot that is never computed on request: onboarding progress, the week streak, weekly posting goals, the comment score, this week against last for posts, followers and comments, the next five scheduled posts, the five most recent unanswered comments and the latest blog posts. `blocks` says when each part was computed; a null `updated_at` means the first snapshot is still being built. Omit workspace_id to read across every workspace the caller belongs to.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Restrict to a single workspace the user belongs to"
+          }
+        ]
+      }
+    },
+    "/v1/home/refresh": {
+      "post": {
+        "operationId": "refreshHomeOverview",
+        "summary": "Refresh the home overview",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "202": {
+            "description": "Refresh queued",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "description": "Queues a recompute of the snapshot after something the page shows changed. Defaults to the post metrics and comments blocks; a block younger than 30 seconds is left alone. Answers at once; the next read carries the new numbers.\n\nRequires the `analytics` scope when using an API key.",
+        "x-fopost-scope": "analytics",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workspace_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "blocks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "post_metrics",
+                        "channel_metrics",
+                        "comments",
+                        "blog"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/analytics/overview": {
       "get": {
         "operationId": "getAnalyticsOverview",
@@ -16178,7 +16547,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history.\n\nRequires the `analytics` scope when using an API key.",
+        "description": "Cross-workspace dashboard totals, period deltas, today’s stats, and a per-account breakdown with follower history. Use either `days` or an explicit `from`/`to` range.\n\nRequires the `analytics` scope when using an API key.",
         "x-fopost-scope": "analytics",
         "parameters": [
           {
@@ -16212,6 +16581,26 @@
               "maximum": 365
             },
             "description": "Length of the reporting period in days"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Range start (used together with `to`)"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Range end (used together with `from`)"
           }
         ]
       }
@@ -39955,10 +40344,43 @@
               "null"
             ],
             "maxLength": 255
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "queue_paused": {
+            "type": "boolean"
+          },
+          "weekly_post_goal": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21
+          }
+        }
+      },
+      "AccountQueueActionRequest": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "shuffle",
+              "clean",
+              "delete_drafts",
+              "empty"
+            ]
           }
         },
         "required": [
-          "display_name"
+          "action"
         ]
       },
       "SlackIdentityRequest": {
@@ -40910,7 +41332,6 @@
                 "account.connected",
                 "account.disconnected",
                 "account.health_changed",
-                "article.published",
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
@@ -40977,7 +41398,6 @@
                 "account.connected",
                 "account.disconnected",
                 "account.health_changed",
-                "article.published",
                 "inbox.comment_received",
                 "inbox.mention_received",
                 "inbox.message_received",
@@ -46315,8 +46735,80 @@
               "string",
               "null"
             ]
+          },
+          "metrics": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DeliveryMetrics"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Only with `include=metrics` on the list; null until a reading is stored"
           }
         }
+      },
+      "DeliveryMetrics": {
+        "type": "object",
+        "properties": {
+          "impressions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "reach": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "engagements": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "likes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "comments": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "shares": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "engagement_rate": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Engagements over reach, or over impressions when reach is unknown"
+          },
+          "permalink": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "fetched_at"
+        ]
       },
       "RemoteEdit": {
         "type": "object",
@@ -46655,7 +47147,23 @@
             }
           },
           "meta": {
-            "$ref": "#/components/schemas/PageMeta"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PageMeta"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "status_counts": {
+                    "type": "object",
+                    "description": "Only with `include=status_counts`: total per status",
+                    "additionalProperties": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            ]
           }
         },
         "required": [
@@ -47270,7 +47778,7 @@
                 }
               }
             },
-            "description": "Deliveries skipped because they exceeded the retry limit"
+            "description": "Always empty; kept for compatibility with clients that read it"
           }
         },
         "required": [
@@ -48420,6 +48928,13 @@
               "null"
             ]
           },
+          "weekly_post_goal": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Posts per week the account aims for; null when unset"
+          },
           "is_primary": {
             "type": "boolean"
           },
@@ -48453,6 +48968,17 @@
               "null"
             ],
             "description": "Your own id for the end user who connected through a hosted connect link"
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "IANA zone the account’s own posting slots default to; null falls back to the workspace zone"
+          },
+          "queue_paused": {
+            "type": "boolean",
+            "description": "True while the account’s posting queue is paused: due posts are parked until it resumes"
           }
         }
       },
@@ -49327,6 +49853,55 @@
               "null"
             ]
           },
+          "weekly_post_goal": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Posts per week the account aims for; null when unset"
+          },
+          "posts_this_week": {
+            "type": "integer",
+            "description": "Posts published from this account since Monday (UTC)"
+          },
+          "is_primary": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "health_status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "healthy",
+              "degraded",
+              "expired",
+              "revoked",
+              "unknown",
+              null
+            ]
+          },
+          "last_health_check": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "IANA zone the account’s own posting slots default to; null falls back to the workspace zone"
+          },
+          "queue_paused": {
+            "type": "boolean",
+            "description": "True while the account’s posting queue is paused: due posts are parked until it resumes"
+          },
           "workspace": {
             "type": "object",
             "properties": {
@@ -49894,7 +50469,6 @@
           "account.connected",
           "account.disconnected",
           "account.health_changed",
-          "article.published",
           "inbox.comment_received",
           "inbox.mention_received",
           "inbox.message_received",
@@ -50206,6 +50780,422 @@
             "description": "Present only when this request rotated the secret. Returned once."
           }
         }
+      },
+      "HomeOverviewMetric": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer"
+          },
+          "delta": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Change against the previous seven days, as a count; null without a baseline"
+          }
+        },
+        "required": [
+          "value",
+          "delta"
+        ]
+      },
+      "HomeBlockStatus": {
+        "type": "object",
+        "properties": {
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When the block was last computed; null until the first run"
+          },
+          "interval": {
+            "type": "string",
+            "description": "How often the block is recomputed, e.g. \"24 h\""
+          }
+        },
+        "required": [
+          "updated_at",
+          "interval"
+        ]
+      },
+      "HomeGoalAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "goal": {
+            "type": "integer",
+            "description": "Posts per week the account aims for"
+          },
+          "posts": {
+            "type": "integer",
+            "description": "Posts published from it since Monday (UTC)"
+          }
+        },
+        "required": [
+          "id",
+          "platform",
+          "username",
+          "name",
+          "avatar",
+          "goal",
+          "posts"
+        ]
+      },
+      "HomeOverviewResponse": {
+        "type": "object",
+        "properties": {
+          "onboarding": {
+            "type": "object",
+            "properties": {
+              "intro_dismissed": {
+                "type": "boolean",
+                "description": "First Steps was dismissed, or all of its steps were done"
+              },
+              "has_account": {
+                "type": "boolean"
+              },
+              "has_post": {
+                "type": "boolean"
+              },
+              "has_team": {
+                "type": "boolean",
+                "description": "Another member is in a workspace, or an invitation was sent"
+              },
+              "has_api_key": {
+                "type": "boolean",
+                "description": "An API key is bound to the workspace, or is the caller’s own unbound key"
+              }
+            },
+            "required": [
+              "intro_dismissed",
+              "has_account",
+              "has_post",
+              "has_team",
+              "has_api_key"
+            ]
+          },
+          "period": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The seven days the pulse covers; null before the first snapshot"
+          },
+          "streak": {
+            "type": "object",
+            "properties": {
+              "weeks": {
+                "type": "integer",
+                "description": "Consecutive weeks with at least one published post"
+              }
+            },
+            "required": [
+              "weeks"
+            ]
+          },
+          "goals": {
+            "type": "object",
+            "properties": {
+              "met": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer",
+                "description": "Accounts with a weekly posting goal"
+              },
+              "percent": {
+                "type": "integer",
+                "description": "Share of goals met this week, 0 to 100"
+              },
+              "accounts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/HomeGoalAccount"
+                }
+              }
+            },
+            "required": [
+              "met",
+              "total",
+              "percent",
+              "accounts"
+            ]
+          },
+          "comment_score": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "0 to 100, the mean of the three parts"
+                  },
+                  "response_rate": {
+                    "type": "integer",
+                    "description": "Share of comments and mentions answered, last 7 days"
+                  },
+                  "response_speed": {
+                    "type": "integer",
+                    "description": "Median time to first reply mapped to 0 to 100: under 1 h is 100, over 48 h is 0"
+                  },
+                  "consistency": {
+                    "type": "integer",
+                    "description": "Share of the last 7 days with a reply when something arrived"
+                  },
+                  "trend": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "up",
+                      "down",
+                      "same",
+                      null
+                    ]
+                  }
+                },
+                "required": [
+                  "value",
+                  "response_rate",
+                  "response_speed",
+                  "consistency",
+                  "trend"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when nothing arrived to answer in the last 7 days"
+          },
+          "pulse": {
+            "type": "object",
+            "properties": {
+              "posts": {
+                "$ref": "#/components/schemas/HomeOverviewMetric"
+              },
+              "followers": {
+                "$ref": "#/components/schemas/HomeOverviewMetric"
+              },
+              "comments": {
+                "$ref": "#/components/schemas/HomeOverviewMetric"
+              }
+            },
+            "required": [
+              "posts",
+              "followers",
+              "comments"
+            ]
+          },
+          "up_next": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            },
+            "description": "The next five scheduled posts, soonest first"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "platform": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "comment",
+                    "mention",
+                    "dm"
+                  ]
+                },
+                "author_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "author_handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "author_avatar_url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "platform_created_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "conversation_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "A DM's thread key. Null on comments and mentions"
+                },
+                "account": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "description": "The five most recent unanswered inbox items"
+          },
+          "unanswered_total": {
+            "type": "integer"
+          },
+          "blog": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "cover_image": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "published_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The post on the marketing site"
+                }
+              },
+              "required": [
+                "id",
+                "slug",
+                "title",
+                "cover_image",
+                "published_at",
+                "url"
+              ]
+            }
+          },
+          "blocks": {
+            "type": "object",
+            "properties": {
+              "post_metrics": {
+                "$ref": "#/components/schemas/HomeBlockStatus"
+              },
+              "channel_metrics": {
+                "$ref": "#/components/schemas/HomeBlockStatus"
+              },
+              "comments": {
+                "$ref": "#/components/schemas/HomeBlockStatus"
+              },
+              "blog": {
+                "$ref": "#/components/schemas/HomeBlockStatus"
+              }
+            },
+            "required": [
+              "post_metrics",
+              "channel_metrics",
+              "comments",
+              "blog"
+            ]
+          }
+        },
+        "required": [
+          "onboarding",
+          "period",
+          "streak",
+          "goals",
+          "comment_score",
+          "pulse",
+          "up_next",
+          "comments",
+          "unanswered_total",
+          "blog",
+          "blocks"
+        ]
       },
       "AnalyticsOverviewResponse": {
         "type": "object",
@@ -51627,6 +52617,97 @@
             }
           }
         }
+      },
+      "CatalogTemplate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "description": "Post text; each `{{label: example, example}}` is a blank to fill in"
+          },
+          "emoji": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "story",
+              "tip",
+              "opinion",
+              "behind_the_scenes",
+              "list",
+              "case_study",
+              "question",
+              "how_to"
+            ]
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "engagement",
+              "reflection",
+              "connection",
+              "expertise",
+              "education",
+              "promotion",
+              "celebration"
+            ]
+          },
+          "networks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Platforms the template suits"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Sort order, lowest first"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "title",
+          "description",
+          "body",
+          "emoji",
+          "type",
+          "goal",
+          "networks",
+          "position"
+        ]
+      },
+      "CatalogTemplateListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogTemplate"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
       },
       "NativePostListResponse": {
         "type": "object",
@@ -54596,6 +55677,10 @@
           },
           "unread_count": {
             "type": "integer"
+          },
+          "replied_count": {
+            "type": "integer",
+            "description": "Comments in the thread the account has replied to"
           },
           "last_comment_at": {
             "type": [

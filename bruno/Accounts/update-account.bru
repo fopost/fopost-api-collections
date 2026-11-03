@@ -1,5 +1,5 @@
 meta {
-  name: Rename an account
+  name: Update an account
   type: http
   seq: 23
 }
@@ -20,7 +20,10 @@ headers {
 
 body:json {
   {
-    "display_name": "Example display"
+    "display_name": "Example display",
+    "timezone": "UTC",
+    "queue_paused": false,
+    "weekly_post_goal": 1
   }
 }
 
@@ -31,9 +34,15 @@ tests {
 }
 
 docs {
-  Sets a display name shown instead of the platform name. `null` or an empty string restores the platform name.
+  Changes the display name, the weekly posting goal, the posting time zone or the paused state of the queue; send at least one field. A `display_name` of `null` or an empty string restores the platform name; `weekly_post_goal` `null` clears the goal; a `timezone` of `null` falls back to the workspace zone. Setting `queue_paused` to true parks every due post for this account; setting it back to false puts them back on the publish queue.
 
   Requires the `accounts` scope when using an API key.
 
   **Scope:** `accounts`
+
+  **Optional fields** (not in the example body):
+  - `display_name`: string | null
+  - `timezone`: string | null
+  - `queue_paused`: boolean
+  - `weekly_post_goal`: integer | null
 }

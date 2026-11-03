@@ -31,7 +31,7 @@ tests {
 }
 
 docs {
-  Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. Deliveries past the retry limit are reported in `exceeded` and skipped.
+  Re-queues failed deliveries of a failed, partially failed, or published post. Resending to already-published accounts requires `includePublished: true`. There is no retry ceiling: every retry is one billed attempt.
 
   Requires the `posts` scope when using an API key.
 
