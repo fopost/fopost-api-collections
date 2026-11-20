@@ -195,12 +195,20 @@ export function describeType(schema, resolve) {
   return nullable ? `${label} | null` : label;
 }
 
+/** Operations an API key cannot call, left out of every collection, with the reason. */
+export const NOT_FOR_API_KEYS = {
+  listCreateSuggestions: 'dashboard session only',
+  skipCreateSuggestion: 'dashboard session only',
+  enableCreateSuggestion: 'dashboard session only',
+  getMediaFile: 'dashboard session only, read by an <img src> with the session cookie',
+};
+
 export function operations(spec) {
   const list = [];
   for (const [path, item] of Object.entries(spec.paths)) {
     for (const method of METHODS) {
       const op = item[method];
-      if (!op) continue;
+      if (!op || NOT_FOR_API_KEYS[op.operationId]) continue;
       list.push({ path, method, op, tag: op.tags?.[0] ?? 'Other' });
     }
   }
