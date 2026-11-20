@@ -1,0 +1,42 @@
+meta {
+  name: Create a review link
+  type: http
+  seq: 21
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/review-links
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "expires_in_days": 14
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  A link for someone without an account to view, comment on and decide on the design. The token is returned once and only its hash is stored.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `expires_in_days`: integer
+}

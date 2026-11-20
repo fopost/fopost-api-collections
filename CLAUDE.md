@@ -110,7 +110,9 @@ npm run check:sdks # list every operation a sibling SDK has no method for; exit 
 against the client's source: the path as a string literal with the HTTP verb nearby, a path
 built by a helper with the verb used in the same file, or the `operationId` named anywhere in
 the source (a doc comment is the explicit escape hatch for a path assembled from fragments).
-Browser redirects and the OAuth server are skipped by name in the script, with the reason. The
+Browser redirects and the OAuth server are skipped by name in the script, with the reason.
+Operations an API key cannot call (dashboard session only) are listed in `NOT_FOR_API_KEYS`
+in `scripts/lib/spec.mjs`: they are left out of every collection and out of the gap check. The
 CLI and the MCP server are not full clients and are not in its default list.
 
 No install step, no dependencies, no linter, no formatter, no test runner.

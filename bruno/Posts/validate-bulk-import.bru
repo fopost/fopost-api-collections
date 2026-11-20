@@ -17,7 +17,7 @@ tests {
 }
 
 docs {
-  Dry-runs a CSV/TSV import (max 500 data rows, 2 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`.
+  Dry-runs a CSV/TSV import (max 5,000 data rows, 10 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`. Files exported for Buffer, Publer and Hootsuite bulk upload are read as they are.
 
   Requires the `posts` scope when using an API key.
 

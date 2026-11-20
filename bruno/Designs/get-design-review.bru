@@ -1,0 +1,29 @@
+meta {
+  name: Get a design review
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/v1/designs/:id/review
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The latest review, every comment thread, live review links, whether the caller may approve, and whether the design may go to the composer (a workspace that holds posts for approval needs an approval from an owner or admin first).
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

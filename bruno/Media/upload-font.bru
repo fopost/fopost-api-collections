@@ -1,0 +1,23 @@
+meta {
+  name: Upload a font
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/fonts
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

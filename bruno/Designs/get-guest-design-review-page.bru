@@ -1,0 +1,26 @@
+meta {
+  name: Get a review page image
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/v1/design-review/:token/pages/:index
+  body: none
+  auth: inherit
+}
+
+params:path {
+  token: {{token}}
+  index: {{index}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Public: a JPEG of one page of the design behind the review link.
+}

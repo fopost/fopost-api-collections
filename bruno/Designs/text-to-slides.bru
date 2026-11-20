@@ -1,0 +1,41 @@
+meta {
+  name: Turn text into slides
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/text-to-slides
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Splits long text, or a post, into carousel slides. Uses AI credits. Also requires the `ai` scope.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `text`: string
+  - `post_id`: string
+  - `max_slides`: integer
+  - `brand_voice_id`: string (uuid) | null
+}

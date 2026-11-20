@@ -1,0 +1,45 @@
+meta {
+  name: Comment on a design
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/comments
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "body": "x"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  A comment may carry a pin (`x`, `y`) on a page; a reply joins its thread.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `page_index`: integer
+  - `x`: number | null
+  - `y`: number | null
+  - `parent_id`: string (uuid) | null — Reply to this comment
+}

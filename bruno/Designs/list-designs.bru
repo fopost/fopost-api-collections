@@ -1,23 +1,20 @@
 meta {
-  name: List the store's products
+  name: List designs
   type: http
-  seq: 7
+  seq: 1
 }
 
 get {
-  url: {{baseUrl}}/v1/accounts/:id/products
+  url: {{baseUrl}}/v1/designs?workspace_id=
   body: none
   auth: inherit
 }
 
 params:query {
+  workspace_id: 
+  ~kind: story
   ~limit: 
-  ~status: active
-  ~q: 
-}
-
-params:path {
-  id: {{accountId}}
+  ~offset: 
 }
 
 tests {
@@ -27,7 +24,7 @@ tests {
 }
 
 docs {
-  Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.
+  Designs in a workspace, newest first, without their documents.
 
   Requires the `posts` scope when using an API key.
 

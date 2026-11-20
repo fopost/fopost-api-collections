@@ -1,0 +1,38 @@
+meta {
+  name: Resolve or reopen a comment
+  type: http
+  seq: 19
+}
+
+patch {
+  url: {{baseUrl}}/v1/designs/:id/comments/:commentId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+  commentId: {{commentId}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "resolved": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

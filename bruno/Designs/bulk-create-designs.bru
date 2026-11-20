@@ -1,0 +1,44 @@
+meta {
+  name: Create designs from rows
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/bulk
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "rows": [
+      {}
+    ]
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  One copy of the design per row, with each row's values filling named layers.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `name_column`: string
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Delete a comment
+  type: http
+  seq: 20
+}
+
+delete {
+  url: {{baseUrl}}/v1/designs/:id/comments/:commentId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+  commentId: {{commentId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  The author, or a workspace owner or admin. Deleting a thread removes its replies.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

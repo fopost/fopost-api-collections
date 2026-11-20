@@ -1,0 +1,28 @@
+meta {
+  name: Restore a design version
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/versions/:versionId/restore
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+  versionId: {{versionId}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

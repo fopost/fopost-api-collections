@@ -1,0 +1,31 @@
+meta {
+  name: List design versions
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/designs/:id/versions
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~include: document
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

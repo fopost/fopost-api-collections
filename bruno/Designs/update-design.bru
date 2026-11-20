@@ -1,0 +1,45 @@
+meta {
+  name: Update a design
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/v1/designs/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "kind": "story",
+    "create_version": false
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `kind`: `story` | `post` | `carousel` | `thumbnail` | `card` | `collage`
+  - `document`: object
+  - `create_version`: boolean
+}

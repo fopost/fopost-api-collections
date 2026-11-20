@@ -16,7 +16,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { METHODS, loadSpec } from './lib/spec.mjs';
+import { METHODS, NOT_FOR_API_KEYS, loadSpec } from './lib/spec.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -46,6 +46,11 @@ const SKIPPED_TAGS = {
 const SKIPPED_OPERATIONS = {
   adsConnectCallback: 'browser redirect at the end of an ad-network login',
   triggerAutomationWebhook: 'called by the third party, authenticated by the automation secret',
+  getGuestDesignReview: 'the review link page for an outside reviewer, the token is the credential',
+  getGuestDesignReviewPage: 'the review link page for an outside reviewer, the token is the credential',
+  createGuestDesignComment: 'the review link page for an outside reviewer, the token is the credential',
+  decideGuestDesignReview: 'the review link page for an outside reviewer, the token is the credential',
+  ...NOT_FOR_API_KEYS,
 };
 
 const SOURCE_EXT = /\.(ts|js|mjs|py|php|rb|go|rs|java|cs|swift|kt|dart|ex|exs)$/;

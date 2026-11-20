@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "8f6a2c14-5b7d-4c39-9e02-fopost000001",
     "name": "FoPost API",
-    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Responses\n\nEvery key in a response body and every query parameter is snake_case; request bodies keep the field names documented on each operation. The ads endpoints (`/v1/ads/*`) are the one exception and keep camelCase keys. A single resource is returned as the object itself (`201` on create); a collection is `{ \"data\": [...], \"meta\": {...} }`. A success with nothing to return is `204` with an empty body.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status, including an unknown route (`404 not_found`) and a server fault (`500 internal_error`). `error` is a stable snake_case code; `message` is for humans and may change. Some errors include additional context fields. A feature that is not set up on this deployment answers `503 not_configured`; a malformed answer from an upstream provider answers `502 upstream_error`.\n\n## Request ids\n\nEvery response carries an `X-Request-Id` header. Quote it when contacting support about a specific request.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nOffset-paged lists accept `page` and `per_page` (1 to 100) and return `meta: { page, per_page, total, total_pages }`. Cursor-paged lists return `meta: { next_cursor, has_more }`; pass `next_cursor` back in the cursor parameter the operation documents until `has_more` is false. Lists that do not paginate return `{ \"data\": [...] }` with no `meta`.",
+    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Developers → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Responses\n\nEvery key in a response body and every query parameter is snake_case; request bodies keep the field names documented on each operation. The ads endpoints (`/v1/ads/*`) are the one exception and keep camelCase keys. A single resource is returned as the object itself (`201` on create); a collection is `{ \"data\": [...], \"meta\": {...} }`. A success with nothing to return is `204` with an empty body.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status, including an unknown route (`404 not_found`) and a server fault (`500 internal_error`). `error` is a stable snake_case code; `message` is for humans and may change. Some errors include additional context fields. A feature that is not set up on this deployment answers `503 not_configured`; a malformed answer from an upstream provider answers `502 upstream_error`.\n\n## Request ids\n\nEvery response carries an `X-Request-Id` header. Quote it when contacting support about a specific request.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nOffset-paged lists accept `page` and `per_page` (1 to 100) and return `meta: { page, per_page, total, total_pages }`. Cursor-paged lists return `meta: { next_cursor, has_more }`; pass `next_cursor` back in the cursor parameter the operation documents until `has_more` is false. Lists that do not paginate return `{ \"data\": [...] }` with no `meta`.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -203,7 +203,7 @@
                 "posts"
               ]
             },
-            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `account_group_id`: string (uuid)\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `schedule`: `queue`\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `source_ids`: string (uuid)[]\n- `companion_of`: string (uuid) | null",
+            "description": "Creates a draft or scheduled post targeting one or more connected accounts. Content is an ordered list of blocks (threads use multiple blocks).\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `accounts`: string (uuid)[]\n- `account_group_id`: string (uuid)\n- `content_type`: `post` | `thread` | `reel`\n- `artifact_type`: `text_post` | `thread` | `article` | `carousel` | `short_video` | `story` | `link_share`\n- `status`: `draft` | `scheduled`\n- `schedule_at`: string (date-time) | null\n- `schedule`: `queue`\n- `repeatable`: boolean\n- `repeatable_times`: integer | null\n- `repeatable_gap`: integer | null\n- `repeatable_gap_unit`: `hours` | `days` | `weeks` | `months`\n- `labels`: string (uuid)[]\n- `title`: string | null\n- `internal_title`: string | null\n- `summary`: string | null\n- `auto_plug`: boolean\n- `auto_plug_content`: string | null\n- `settings`: object\n- `companion_of`: string (uuid) | null",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"content\": [\n    {\n      \"text\": \"Hello from FoPost.\"\n    }\n  ]\n}",
@@ -494,7 +494,7 @@
                 "validate"
               ]
             },
-            "description": "Dry-runs a CSV/TSV import (max 500 data rows, 2 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
+            "description": "Dry-runs a CSV/TSV import (max 5,000 data rows, 10 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`. Files exported for Buffer, Publer and Hootsuite bulk upload are read as they are.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `posts`"
           },
           "response": [],
           "event": [
@@ -1892,7 +1892,7 @@
                 "accounts"
               ]
             },
-            "description": "Creates a connected account from caller-supplied credentials (for platforms that use tokens or keys instead of an OAuth redirect flow). Credentials are validated against the platform before the account is stored.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `avatar`: string | null\n- `credentials`: object",
+            "description": "Creates a connected account from caller-supplied credentials (for platforms that use tokens or keys instead of an OAuth redirect flow). Credentials are validated against the platform before the account is stored.\n\nRequires the `accounts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.\n\n**Scope:** `accounts`\n\n**Optional fields** (not in the example body):\n- `avatar`: string | null\n- `credentials`: object\n- `devtoOrganization`: string",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"platform\": \"twitter\",\n  \"username\": \"Example user\",\n  \"name\": \"Example name\"\n}",
@@ -6405,481 +6405,6 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Blogs",
-      "description": "Articles and products that live on a connected site, not in FoPost",
-      "item": [
-        {
-          "name": "List the blogs on a connected site",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                }
-              ]
-            },
-            "description": "Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "List articles on a blog",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs",
-                ":blogId",
-                "articles"
-              ],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "",
-                  "description": "How many to return, 1 to 50 (default 20)",
-                  "disabled": true
-                },
-                {
-                  "key": "status",
-                  "value": "published",
-                  "description": "",
-                  "disabled": true
-                },
-                {
-                  "key": "q",
-                  "value": "",
-                  "description": "Match the article title",
-                  "disabled": true
-                }
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "blogId",
-                  "value": "{{blogId}}",
-                  "description": "Blog id from the blogs list"
-                }
-              ]
-            },
-            "description": "Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Create an article on a blog",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs",
-                ":blogId",
-                "articles"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "blogId",
-                  "value": "{{blogId}}",
-                  "description": "Blog id from the blogs list"
-                }
-              ]
-            },
-            "description": "Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `excerpt`: string\n- `status`: `published` | `draft` | `pending` | `scheduled`\n- `tags`: string[]\n- `author_name`: string\n- `image_url`: string (uri)",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"x\",\n  \"body\": \"string\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Read one article",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs",
-                ":blogId",
-                "articles",
-                ":articleId"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "blogId",
-                  "value": "{{blogId}}",
-                  "description": "Blog id from the blogs list"
-                },
-                {
-                  "key": "articleId",
-                  "value": "{{articleId}}",
-                  "description": "Article id on the platform"
-                }
-              ]
-            },
-            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Update an article in place",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs",
-                ":blogId",
-                "articles",
-                ":articleId"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "blogId",
-                  "value": "{{blogId}}",
-                  "description": "Blog id from the blogs list"
-                },
-                {
-                  "key": "articleId",
-                  "value": "{{articleId}}",
-                  "description": "Article id on the platform"
-                }
-              ]
-            },
-            "description": "Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `title`: string\n- `body`: string\n- `excerpt`: string\n- `status`: `published` | `draft` | `pending` | `scheduled`\n- `tags`: string[]\n- `author_name`: string\n- `image_url`: string (uri)",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"x\",\n  \"body\": \"string\",\n  \"excerpt\": \"string\",\n  \"status\": \"published\",\n  \"author_name\": \"Example author\",\n  \"image_url\": \"https://example.com\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Delete an article",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/blogs/:blogId/articles/:articleId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "blogs",
-                ":blogId",
-                "articles",
-                ":articleId"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "blogId",
-                  "value": "{{blogId}}",
-                  "description": "Blog id from the blogs list"
-                },
-                {
-                  "key": "articleId",
-                  "value": "{{articleId}}",
-                  "description": "Article id on the platform"
-                }
-              ]
-            },
-            "description": "Removes the article from the connected site. This cannot be undone.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([204]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "List the store's products",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/products",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "products"
-              ],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "",
-                  "description": "How many to return, 1 to 50 (default 20)",
-                  "disabled": true
-                },
-                {
-                  "key": "status",
-                  "value": "active",
-                  "description": "",
-                  "disabled": true
-                },
-                {
-                  "key": "q",
-                  "value": "",
-                  "description": "Match the product title",
-                  "disabled": true
-                }
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                }
-              ]
-            },
-            "description": "Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Update a product",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/accounts/:id/products/:productId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "accounts",
-                ":id",
-                "products",
-                ":productId"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{accountId}}",
-                  "description": "Account id"
-                },
-                {
-                  "key": "productId",
-                  "value": "{{productId}}",
-                  "description": "Product id on the platform"
-                }
-              ]
-            },
-            "description": "Changes the product on the store. Only the fields sent are touched.\n\nRequires the `publish` scope when using an API key.\n\n**Scope:** `publish`\n\n**Optional fields** (not in the example body):\n- `title`: string\n- `description`: string\n- `status`: `active` | `draft` | `archived`\n- `tags`: string[]\n- `product_type`: string\n- `vendor`: string",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"x\",\n  \"description\": \"Hello from FoPost.\",\n  \"status\": \"active\",\n  \"product_type\": \"string\",\n  \"vendor\": \"string\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('status is successful', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }
@@ -12064,9 +11589,15 @@
                   "disabled": true
                 },
                 {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "`meta.next_cursor` from the previous page",
+                  "disabled": true
+                },
+                {
                   "key": "next_token",
                   "value": "",
-                  "description": "Cursor from the previous page",
+                  "description": "Older name for `cursor`, still accepted",
                   "disabled": true
                 }
               ]
@@ -15826,10 +15357,10 @@
                 "ads"
               ]
             },
-            "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `text`: string — Required unless `sparkPostId` is set, which carries the post’s own caption\n- `sparkPostId`: string — A post already live on the network, from `GET /v1/ads/spark-posts`. Runs it as a Spark ad, so `text` and `mediaUrl` are ignored. Needs `capabilities.sparkAds`.\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`\n- `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number\n- `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`\n- `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set",
+            "description": "Creates a campaign, ad set and ad on the Meta ad account from the given creative. The ad starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `conversionTagId`: string — The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one\n- `conversionEvent`: `checkout` | `add_to_cart` | `initiate_checkout` | `add_payment_info` | `add_to_wishlist` | `customize_product` | `signup` | `subscribe` | `submit_application` | `start_trial` | `lead` | `schedule` | `contact` | `find_location` — Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on\n- `paused`: boolean — Create the ad paused; set to false to go live at once\n- `pageId`: string — The Page the ad runs as; only networks with `usesPages` need one\n- `text`: string — Required unless `sparkPostId` is set, which carries the post’s own caption\n- `sparkPostId`: string — A post already live on the network, from `GET /v1/ads/spark-posts`. Runs it as a Spark ad, so `text` and `mediaUrl` are ignored. Needs `capabilities.sparkAds`.\n- `headline`: string\n- `destinationUrl`: string (uri)\n- `mediaUrl`: string — A media library asset url\n- `urlTags`: string — Query string appended to every link in the ad, e.g. `utm_source=meta&utm_medium=paid`\n- `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number\n- `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`\n- `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"pageId\": \"x\"\n}",
+              "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -15873,7 +15404,7 @@
                 "boost"
               ]
             },
-            "description": "Promotes a post FoPost already published to the given account. Candidates come from `GET /v1/ads/boostable`. The boost starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create the ad paused; set to false to go live at once",
+            "description": "Promotes a post FoPost already published to the given account. Candidates come from `GET /v1/ads/boostable`. The boost starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `conversionTagId`: string — The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one\n- `conversionEvent`: `checkout` | `add_to_cart` | `initiate_checkout` | `add_payment_info` | `add_to_wishlist` | `customize_product` | `signup` | `subscribe` | `submit_application` | `start_trial` | `lead` | `schedule` | `contact` | `find_location` — Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on\n- `paused`: boolean — Create the ad paused; set to false to go live at once",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"adAccountId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  },\n  \"postId\": \"{{postId}}\",\n  \"accountId\": \"{{accountId}}\"\n}",
@@ -22734,7 +22265,7 @@
                 "ad-sets"
               ]
             },
-            "description": "Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once\n- `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number\n- `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`\n- `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set",
+            "description": "Under a campaign on an ad account the connection reaches. Starts paused unless `paused` is false. Also requires the `publish` scope.\n\nRequires the `ads` scope when using an API key.\n\n**Scope:** `ads`\n\n**Optional fields** (not in the example body):\n- `paused`: boolean — Create it paused; set to false to go live at once\n- `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number\n- `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`\n- `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set\n- `conversionTagId`: string — The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one\n- `conversionEvent`: `checkout` | `add_to_cart` | `initiate_checkout` | `add_payment_info` | `add_to_wishlist` | `customize_product` | `signup` | `subscribe` | `submit_application` | `start_trial` | `lead` | `schedule` | `contact` | `find_location` — Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"workspaceId\": \"{{workspaceId}}\",\n  \"connectionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"campaignId\": \"x\",\n  \"pageId\": \"x\",\n  \"name\": \"Example name\",\n  \"goal\": \"engagement\",\n  \"budget\": {\n    \"minor\": 1,\n    \"type\": \"daily\"\n  },\n  \"targeting\": {\n    \"countries\": [\n      \"xx\"\n    ],\n    \"ageMin\": 13,\n    \"ageMax\": 13,\n    \"gender\": \"all\"\n  }\n}",
@@ -24875,6 +24406,159 @@
       "description": "Upload and manage media files",
       "item": [
         {
+          "name": "List fonts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/fonts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "fonts"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "Workspace to list uploads for",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Returns the font library and, when `workspace_id` is given, that workspace's uploaded fonts.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Upload a font",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/fonts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "fonts"
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a font",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/fonts/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "fonts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Font id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Generate alt text for an image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/media/:id/alt-text",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "media",
+                ":id",
+                "alt-text"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{mediaId}}",
+                  "description": "Media id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "List media library items",
           "request": {
             "method": "GET",
@@ -25217,6 +24901,1474 @@
                 "exec": [
                   "pm.test('status is successful', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Designs",
+      "description": "Designs, their versions and exports",
+      "item": [
+        {
+          "name": "List designs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs?workspace_id=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": false
+                },
+                {
+                  "key": "kind",
+                  "value": "story",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "offset",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Designs in a workspace, newest first, without their documents.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a design",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs"
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `document`: object\n- `brand_voice_id`: string (uuid) | null",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\",\n  \"kind\": \"story\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Turn text into slides",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/text-to-slides",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                "text-to-slides"
+              ]
+            },
+            "description": "Splits long text, or a post, into carousel slides. Uses AI credits. Also requires the `ai` scope.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `text`: string\n- `post_id`: string\n- `max_slides`: integer\n- `brand_voice_id`: string (uuid) | null",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a design from a post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/from-post",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                "from-post"
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `text`: string\n- `post_id`: string\n- `style`: `quote` | `post` | `plain`\n- `preset`: string\n- `account_id`: string\n- `carousel`: boolean\n- `name`: string\n- `brand_voice_id`: string (uuid) | null",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": \"{{workspaceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a design",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update a design",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `name`: string\n- `kind`: `story` | `post` | `carousel` | `thumbnail` | `card` | `collage`\n- `document`: object\n- `create_version`: boolean",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"kind\": \"story\",\n  \"create_version\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a design",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List design versions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/versions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "versions"
+              ],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "document",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restore a design version",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/versions/:versionId/restore",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "versions",
+                ":versionId",
+                "restore"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                },
+                {
+                  "key": "versionId",
+                  "value": "{{versionId}}",
+                  "description": "Version id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate a design",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/duplicate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "duplicate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `name`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Export a design",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "export"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Renders pages into the media library.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `page_indexes`: integer[]\n- `duration_sec`: `5` | `10` | `15`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create designs from rows",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/bulk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "bulk"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "One copy of the design per row, with each row's values filling named layers.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `name_column`: string",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rows\": [\n    {}\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List a design's posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "posts"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Posts that used this design's exported media, with their metrics.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a design review",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "review"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "The latest review, every comment thread, live review links, whether the caller may approve, and whether the design may go to the composer (a workspace that holds posts for approval needs an approval from an owner or admin first).\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Request a review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/review/request",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "review",
+                "request"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Opens a pending review, or returns the one already pending.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Approve a design or request changes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/review/decision",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "review",
+                "decision"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Workspace owners and admins only, the same rule as post approvals.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"approved\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List design comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comment on a design",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "A comment may carry a pin (`x`, `y`) on a page; a reply joins its thread.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `page_index`: integer\n- `x`: number | null\n- `y`: number | null\n- `parent_id`: string (uuid) | null — Reply to this comment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resolve or reopen a comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                },
+                {
+                  "key": "commentId",
+                  "value": "{{commentId}}",
+                  "description": "Comment id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolved\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete a comment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                },
+                {
+                  "key": "commentId",
+                  "value": "{{commentId}}",
+                  "description": "Comment id"
+                }
+              ]
+            },
+            "description": "The author, or a workspace owner or admin. Deleting a thread removes its replies.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create a review link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/review-links",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "review-links"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                }
+              ]
+            },
+            "description": "A link for someone without an account to view, comment on and decide on the design. The token is returned once and only its hash is stored.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `expires_in_days`: integer",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expires_in_days\": 14\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revoke a review link",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/designs/:id/review-links/:linkId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "designs",
+                ":id",
+                "review-links",
+                ":linkId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Design id"
+                },
+                {
+                  "key": "linkId",
+                  "value": "{{linkId}}",
+                  "description": "Review link id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Open a review link",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/design-review/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "design-review",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "description": "Review link token"
+                }
+              ]
+            },
+            "description": "Public: the token is the credential. An unknown, expired or revoked token answers 404."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a review page image",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/design-review/:token/pages/:index",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "design-review",
+                ":token",
+                "pages",
+                ":index"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "description": "Review link token"
+                },
+                {
+                  "key": "index",
+                  "value": "{{index}}",
+                  "description": "Page index"
+                }
+              ]
+            },
+            "description": "Public: a JPEG of one page of the design behind the review link."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comment through a review link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/design-review/:token/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "design-review",
+                ":token",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "description": "Review link token"
+                }
+              ]
+            },
+            "description": "Public: the guest writes under the name they give.\n\n**Optional fields** (not in the example body):\n- `page_index`: integer\n- `x`: number | null\n- `y`: number | null\n- `parent_id`: string (uuid) | null — Reply to this comment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"body\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Decide through a review link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/design-review/:token/decision",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "design-review",
+                ":token",
+                "decision"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "description": "Review link token"
+                }
+              ]
+            },
+            "description": "Public: records the guest decision. A guest approval does not by itself clear a workspace that holds posts for approval.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example name\",\n  \"decision\": \"approved\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "description": "Video edit jobs",
+      "item": [
+        {
+          "name": "List video edit operations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/video-edits/ops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "video-edits",
+                "ops"
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List video edits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/video-edits",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "video-edits"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                },
+                {
+                  "key": "media_id",
+                  "value": "",
+                  "description": "Only edits of this video",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Needs `workspace_id` or `media_id`.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start a video edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/video-edits",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "video-edits"
+              ]
+            },
+            "description": "Queues the operations on a video; poll the job for the result.\n\nRequires the `posts` scope when using an API key.\n\n**Scope:** `posts`\n\n**Optional fields** (not in the example body):\n- `workspace_id`: string (uuid)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"media_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"operations\": [\n    {\n      \"op\": \"trim\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get a video edit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/video-edits/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "video-edits",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "workspace_id",
+                  "value": "",
+                  "description": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{id}}",
+                  "description": "Video edit id"
+                }
+              ]
+            },
+            "description": "Requires the `posts` scope when using an API key.\n\n**Scope:** `posts`"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is successful', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});"
                 ]
               }
