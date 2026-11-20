@@ -3,7 +3,7 @@
   "info": {
     "title": "FoPost API",
     "version": "1.0.0",
-    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Settings → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Responses\n\nEvery key in a response body and every query parameter is snake_case; request bodies keep the field names documented on each operation. The ads endpoints (`/v1/ads/*`) are the one exception and keep camelCase keys. A single resource is returned as the object itself (`201` on create); a collection is `{ \"data\": [...], \"meta\": {...} }`. A success with nothing to return is `204` with an empty body.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status, including an unknown route (`404 not_found`) and a server fault (`500 internal_error`). `error` is a stable snake_case code; `message` is for humans and may change. Some errors include additional context fields. A feature that is not set up on this deployment answers `503 not_configured`; a malformed answer from an upstream provider answers `502 upstream_error`.\n\n## Request ids\n\nEvery response carries an `X-Request-Id` header. Quote it when contacting support about a specific request.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nOffset-paged lists accept `page` and `per_page` (1 to 100) and return `meta: { page, per_page, total, total_pages }`. Cursor-paged lists return `meta: { next_cursor, has_more }`; pass `next_cursor` back in the cursor parameter the operation documents until `has_more` is false. Lists that do not paginate return `{ \"data\": [...] }` with no `meta`.",
+    "description": "REST API for FoPost — schedule, publish, and analyze social media content across every connected platform.\n\n## Authentication\n\nProgrammatic access uses an API key sent in the `X-API-Key` header. Keys are created in the FoPost dashboard under **Developers → API Keys** and are limited to the scopes granted at creation. Requests from the FoPost dashboard use a JWT bearer token instead (`Authorization: Bearer <token>`), which implicitly carries all scopes. Either method works on every endpoint in this document unless noted otherwise.\n\n## Scopes\n\nEach operation lists its required scope (also machine-readable as `x-fopost-scope`): `posts` (includes publishing, deliveries, and media), `workspaces`, `accounts`, `labels`, `webhooks`, `analytics`, `automations`.\n\n## Responses\n\nEvery key in a response body and every query parameter is snake_case; request bodies keep the field names documented on each operation. The ads endpoints (`/v1/ads/*`) are the one exception and keep camelCase keys. A single resource is returned as the object itself (`201` on create); a collection is `{ \"data\": [...], \"meta\": {...} }`. A success with nothing to return is `204` with an empty body.\n\n## Errors\n\nErrors return `{ \"error\": \"<code>\", \"message\": \"<explanation>\" }` with a matching HTTP status, including an unknown route (`404 not_found`) and a server fault (`500 internal_error`). `error` is a stable snake_case code; `message` is for humans and may change. Some errors include additional context fields. A feature that is not set up on this deployment answers `503 not_configured`; a malformed answer from an upstream provider answers `502 upstream_error`.\n\n## Request ids\n\nEvery response carries an `X-Request-Id` header. Quote it when contacting support about a specific request.\n\n## Rate limiting\n\nRequests are rate limited per API key, per minute, with a ceiling set by the plan behind the key. Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`; exceeding the limit returns `429` with error code `too_many_requests`, a `retry_after` field and a `Retry-After` header. Mutating endpoints additionally require an active subscription and return `403` with error code `subscription_required` without one.\n\n## Pagination\n\nOffset-paged lists accept `page` and `per_page` (1 to 100) and return `meta: { page, per_page, total, total_pages }`. Cursor-paged lists return `meta: { next_cursor, has_more }`; pass `next_cursor` back in the cursor parameter the operation documents until `has_more` is false. Lists that do not paginate return `{ \"data\": [...] }` with no `meta`.",
     "contact": {
       "name": "FoPost Support",
       "url": "https://fopost.com/contact"
@@ -58,10 +58,6 @@
     {
       "name": "Communities",
       "description": "X (Twitter) communities"
-    },
-    {
-      "name": "Blogs",
-      "description": "Articles and products that live on a connected site, not in FoPost"
     },
     {
       "name": "Google Business",
@@ -2796,7 +2792,7 @@
             "$ref": "#/components/responses/RateLimited"
           }
         },
-        "description": "Dry-runs a CSV/TSV import (max 500 data rows, 2 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
+        "description": "Dry-runs a CSV/TSV import (max 5,000 data rows, 10 MB) and returns per-row validation results without creating anything. Columns: `content` (required), `schedule_at` (ISO 8601 or `YYYY-MM-DD HH:mm` in the workspace timezone), `accounts` (comma-separated account ids or platform names), `labels`, `media_url`, and per-platform overrides `caption_<platform>`. Files exported for Buffer, Publer and Hootsuite bulk upload are read as they are.\n\nRequires the `posts` scope when using an API key.\n\nRequires an active subscription; without one the request fails with 403 `subscription_required`.",
         "x-fopost-scope": "posts",
         "requestBody": {
           "required": true,
@@ -2812,6 +2808,10 @@
                   "workspace_id": {
                     "type": "string",
                     "format": "uuid"
+                  },
+                  "accounts": {
+                    "type": "string",
+                    "description": "Comma-separated account ids or platform names, used for every row whose `accounts` cell is empty."
                   }
                 },
                 "required": [
@@ -2909,6 +2909,10 @@
                   "workspace_id": {
                     "type": "string",
                     "format": "uuid"
+                  },
+                  "accounts": {
+                    "type": "string",
+                    "description": "Comma-separated account ids or platform names, used for every row whose `accounts` cell is empty."
                   }
                 },
                 "required": [
@@ -5540,664 +5544,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/AccountQueueActionRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/accounts/{id}/blogs": {
-      "get": {
-        "operationId": "listAccountBlogs",
-        "summary": "List the blogs on a connected site",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/RemoteBlog"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Blogs the connected account can write to. WordPress reports its one implicit blog; a Shopify store reports every blog it has. Platforms that cannot manage articles answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
-        "x-fopost-scope": "posts",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          }
-        ]
-      }
-    },
-    "/v1/accounts/{id}/blogs/{blogId}/articles": {
-      "get": {
-        "operationId": "listBlogArticles",
-        "summary": "List articles on a blog",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/RemoteArticle"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Articles that already live on the blog, newest first, drafts included. These are the platform's own posts, whether FoPost created them or not.\n\nRequires the `posts` scope when using an API key.",
-        "x-fopost-scope": "posts",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "blogId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Blog id from the blogs list"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "How many to return, 1 to 50 (default 20)"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "published",
-                "draft",
-                "pending",
-                "scheduled"
-              ]
-            }
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Match the article title"
-          }
-        ]
-      },
-      "post": {
-        "operationId": "createBlogArticle",
-        "summary": "Create an article on a blog",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemoteArticle"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Writes a new article to the connected site. `body` is FoPost body markup and the adapter renders it to the site's own format.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "blogId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Blog id from the blogs list"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRemoteArticleRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/accounts/{id}/blogs/{blogId}/articles/{articleId}": {
-      "get": {
-        "operationId": "getBlogArticle",
-        "summary": "Read one article",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemoteArticle"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Requires the `posts` scope when using an API key.",
-        "x-fopost-scope": "posts",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "blogId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Blog id from the blogs list"
-          },
-          {
-            "name": "articleId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Article id on the platform"
-          }
-        ]
-      },
-      "patch": {
-        "operationId": "updateBlogArticle",
-        "summary": "Update an article in place",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemoteArticle"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Changes the live article. Only the fields sent are touched, and the article is addressed by its own id, so this never creates a second post.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "blogId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Blog id from the blogs list"
-          },
-          {
-            "name": "articleId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Article id on the platform"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRemoteArticleRequest"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "deleteBlogArticle",
-        "summary": "Delete an article",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted",
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Removes the article from the connected site. This cannot be undone.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "blogId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Blog id from the blogs list"
-          },
-          {
-            "name": "articleId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Article id on the platform"
-          }
-        ]
-      }
-    },
-    "/v1/accounts/{id}/products": {
-      "get": {
-        "operationId": "listAccountProducts",
-        "summary": "List the store's products",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/RemoteProduct"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Products on a connected commerce account. Platforms with no catalogue answer 400 `unsupported_platform`.\n\nRequires the `posts` scope when using an API key.",
-        "x-fopost-scope": "posts",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "How many to return, 1 to 50 (default 20)"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "active",
-                "draft",
-                "archived"
-              ]
-            }
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Match the product title"
-          }
-        ]
-      }
-    },
-    "/v1/accounts/{id}/products/{productId}": {
-      "patch": {
-        "operationId": "updateAccountProduct",
-        "summary": "Update a product",
-        "tags": [
-          "Blogs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemoteProduct"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/XRequestId"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/InvalidId"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
-        },
-        "description": "Changes the product on the store. Only the fields sent are touched.\n\nRequires the `publish` scope when using an API key.",
-        "x-fopost-scope": "publish",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "Account id"
-          },
-          {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Product id on the platform"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRemoteProductRequest"
               }
             }
           }
@@ -12432,7 +11778,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The profile on the connected business number, plus the number quality rating and messaging limit tier. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
@@ -12493,7 +11839,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Writes the profile fields the platform allows. The display name is not one of them: it is a review, requested separately.\n\nRequires the `accounts` scope when using an API key.",
@@ -12566,7 +11912,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Files a display name change for platform review. The number keeps the old name until the review passes.\n\nRequires the `accounts` scope when using an API key.",
@@ -12639,7 +11985,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The public username on the business number, where the account has one.\n\nRequires the `accounts` scope when using an API key.",
@@ -12712,7 +12058,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Every template on the account with the review status the platform assigned. Cursor paginated through `after`. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
@@ -12773,7 +12119,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Files a template for platform review and answers with the status it was given, which is PENDING on a normal submission.\n\nRequires the `accounts` scope when using an API key.",
@@ -12846,7 +12192,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The pre-written templates the platform offers, for adapting instead of drafting.\n\nRequires the `accounts` scope when using an API key.",
@@ -12909,7 +12255,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Creates a template from a library entry under a name of your own.\n\nRequires the `accounts` scope when using an API key.",
@@ -12982,7 +12328,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "One template with its current review status. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
@@ -13043,7 +12389,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Edits the components or category. The name cannot change; create a new template instead.\n\nRequires the `accounts` scope when using an API key.",
@@ -13114,7 +12460,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Removes the template from the account. The `name` query parameter is required, because that is what the platform deletes by.\n\nRequires the `accounts` scope when using an API key.",
@@ -13177,7 +12523,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Groups this business number created. Read live from the customer WhatsApp Business Account; answers 503 while WhatsApp is not set up.\n\nRequires the `accounts` scope when using an API key.",
@@ -13238,7 +12584,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Creates a group on the business number. Participation is invite-only: send the invite link, because no endpoint adds someone.\n\nRequires the `accounts` scope when using an API key.",
@@ -13311,7 +12657,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "One group and its participant count.\n\nRequires the `accounts` scope when using an API key.",
@@ -13372,7 +12718,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Changes the subject or description.\n\nRequires the `accounts` scope when using an API key.",
@@ -13443,7 +12789,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Removes the group.\n\nRequires the `accounts` scope when using an API key.",
@@ -13506,7 +12852,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The current invite link, which is how someone joins the group.\n\nRequires the `accounts` scope when using an API key.",
@@ -13567,7 +12913,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Issues a new link and invalidates the old one, which is how a leaked link is revoked.\n\nRequires the `accounts` scope when using an API key.",
@@ -13630,7 +12976,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Removes people from the group. There is no matching add: participants join through the invite link.\n\nRequires the `accounts` scope when using an API key.",
@@ -13703,7 +13049,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "People this business number has blocked. Cursor paginated through `after`.\n\nRequires the `accounts` scope when using an API key.",
@@ -13764,7 +13110,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Blocks up to 100 numbers, and names the ones the platform refused.\n\nRequires the `accounts` scope when using an API key.",
@@ -13835,7 +13181,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Unblocks up to 100 numbers.\n\nRequires the `accounts` scope when using an API key.",
@@ -13908,7 +13254,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Whether the cart and the catalog are visible on this number, and which catalog is linked.\n\nRequires the `accounts` scope when using an API key.",
@@ -13969,7 +13315,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Turns the cart or the catalog on or off.\n\nRequires the `accounts` scope when using an API key.",
@@ -14042,7 +13388,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Points the number at a catalog the customer already owns.\n\nRequires the `accounts` scope when using an API key.",
@@ -14115,7 +13461,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The in-chat forms on this account, with their status and validation errors.\n\nRequires the `accounts` scope when using an API key.",
@@ -14176,7 +13522,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Creates a draft flow. Upload its screens separately, then publish it.\n\nRequires the `accounts` scope when using an API key.",
@@ -14249,7 +13595,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "What people submitted through this account flows, newest first. An answer rides on the message it arrived as.\n\nRequires the `accounts` scope when using an API key.",
@@ -14312,7 +13658,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Whether a business public key is registered and how the platform judged its signature. The key itself is never returned.\n\nRequires the `accounts` scope when using an API key.",
@@ -14373,7 +13719,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Registers the public half of the key a flow endpoint payload is encrypted with. The private half stays with the customer.\n\nRequires the `accounts` scope when using an API key.",
@@ -14446,7 +13792,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "One flow with its validation errors.\n\nRequires the `accounts` scope when using an API key.",
@@ -14507,7 +13853,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Changes the name, categories or endpoint. The screens are uploaded separately.\n\nRequires the `accounts` scope when using an API key.",
@@ -14578,7 +13924,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Deletes a draft flow. A published flow is deprecated instead.\n\nRequires the `accounts` scope when using an API key.",
@@ -14641,7 +13987,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Replaces the flow screens. The platform answers with its validation errors rather than refusing, so they come back as data.\n\nRequires the `accounts` scope when using an API key.",
@@ -14714,7 +14060,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Makes the flow sendable. A published flow can no longer be deleted.\n\nRequires the `accounts` scope when using an API key.",
@@ -14777,7 +14123,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Retires a published flow. This cannot be undone.\n\nRequires the `accounts` scope when using an API key.",
@@ -14840,7 +14186,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "The account review and verification state, and the number quality rating, name status and messaging limit tier.\n\nRequires the `accounts` scope when using an API key.",
@@ -14903,7 +14249,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Sandbox invitations for a workspace. `meta.configured` says whether the sandbox number is set up at all.\n\nRequires the `publish` scope when using an API key.",
@@ -14952,7 +14298,7 @@
             "$ref": "#/components/responses/RateLimited"
           },
           "503": {
-            "$ref": "#/components/responses/Error"
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "description": "Sends an approved template from the platform-owned test number to one tester. Their reply opens the messaging window and activates the session. This is a send, so it needs the publish scope.\n\nRequires the `publish` scope when using an API key.",
@@ -26209,7 +25555,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "$ref": "#/components/responses/NotFoundError"
+            "$ref": "#/components/responses/NotFound"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -26283,7 +25629,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "$ref": "#/components/responses/NotFoundError"
+            "$ref": "#/components/responses/NotFound"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -37231,15 +36577,24 @@
                       }
                     },
                     "meta": {
-                      "type": "object",
-                      "properties": {
-                        "next_token": {
-                          "type": [
-                            "string",
-                            "null"
-                          ]
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/CursorMeta"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "next_token": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "deprecated": true,
+                              "description": "Same value as `next_cursor`, kept for older clients"
+                            }
+                          }
                         }
-                      }
+                      ]
                     }
                   },
                   "required": [
@@ -37332,13 +36687,23 @@
             "description": "10 to 100, default 10"
           },
           {
-            "name": "next_token",
+            "name": "cursor",
             "in": "query",
             "required": false,
             "schema": {
               "type": "string"
             },
-            "description": "Cursor from the previous page"
+            "description": "`meta.next_cursor` from the previous page"
+          },
+          {
+            "name": "next_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "deprecated": true
+            },
+            "description": "Older name for `cursor`, still accepted"
           }
         ]
       }
@@ -38673,14 +38038,6 @@
               "additionalProperties": {}
             }
           },
-          "source_ids": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "maxItems": 5
-          },
           "companion_of": {
             "type": [
               "string",
@@ -39000,8 +38357,6 @@
                 "google-business",
                 "kick",
                 "listmonk",
-                "wordpress",
-                "shopify",
                 "nostr",
                 "whop",
                 "skool",
@@ -39057,8 +38412,6 @@
                 "google-business",
                 "kick",
                 "listmonk",
-                "wordpress",
-                "shopify",
                 "nostr",
                 "whop",
                 "skool",
@@ -39123,139 +38476,6 @@
           "time",
           "timezone"
         ]
-      },
-      "CreateRemoteArticleRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "body": {
-            "type": "string",
-            "maxLength": 500000
-          },
-          "excerpt": {
-            "type": "string",
-            "maxLength": 5000
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "published",
-              "draft",
-              "pending",
-              "scheduled"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100
-            },
-            "maxItems": 50
-          },
-          "author_name": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "image_url": {
-            "type": "string",
-            "maxLength": 2048,
-            "format": "uri"
-          }
-        },
-        "required": [
-          "title",
-          "body"
-        ]
-      },
-      "UpdateRemoteArticleRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "body": {
-            "type": "string",
-            "maxLength": 500000
-          },
-          "excerpt": {
-            "type": "string",
-            "maxLength": 5000
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "published",
-              "draft",
-              "pending",
-              "scheduled"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100
-            },
-            "maxItems": 50
-          },
-          "author_name": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "image_url": {
-            "type": "string",
-            "maxLength": 2048,
-            "format": "uri"
-          }
-        }
-      },
-      "UpdateRemoteProductRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 500000
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "draft",
-              "archived"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100
-            },
-            "maxItems": 50
-          },
-          "product_type": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "vendor": {
-            "type": "string",
-            "maxLength": 200
-          }
-        }
       },
       "UpdateQueueSlotRequest": {
         "type": "object",
@@ -39322,8 +38542,6 @@
               "google-business",
               "kick",
               "listmonk",
-              "wordpress",
-              "shopify",
               "nostr",
               "whop",
               "skool",
@@ -39350,6 +38568,10 @@
           "credentials": {
             "type": "object",
             "additionalProperties": {}
+          },
+          "devtoOrganization": {
+            "type": "string",
+            "maxLength": 200
           }
         },
         "required": [
@@ -42938,6 +42160,31 @@
       "BoostPostRequest": {
         "type": "object",
         "properties": {
+          "conversionTagId": {
+            "type": "string",
+            "pattern": "^\\d{1,20}$",
+            "description": "The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one"
+          },
+          "conversionEvent": {
+            "type": "string",
+            "enum": [
+              "checkout",
+              "add_to_cart",
+              "initiate_checkout",
+              "add_payment_info",
+              "add_to_wishlist",
+              "customize_product",
+              "signup",
+              "subscribe",
+              "submit_application",
+              "start_trial",
+              "lead",
+              "schedule",
+              "contact",
+              "find_location"
+            ],
+            "description": "Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on"
+          },
           "workspaceId": {
             "type": "string",
             "format": "uuid"
@@ -42968,7 +42215,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "budget": {
@@ -43206,6 +42455,31 @@
       "CreateAdRequest": {
         "type": "object",
         "properties": {
+          "conversionTagId": {
+            "type": "string",
+            "pattern": "^\\d{1,20}$",
+            "description": "The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one"
+          },
+          "conversionEvent": {
+            "type": "string",
+            "enum": [
+              "checkout",
+              "add_to_cart",
+              "initiate_checkout",
+              "add_payment_info",
+              "add_to_wishlist",
+              "customize_product",
+              "signup",
+              "subscribe",
+              "submit_application",
+              "start_trial",
+              "lead",
+              "schedule",
+              "contact",
+              "find_location"
+            ],
+            "description": "Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on"
+          },
           "workspaceId": {
             "type": "string",
             "format": "uuid"
@@ -43236,7 +42510,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "budget": {
@@ -43450,9 +42726,8 @@
           },
           "pageId": {
             "type": "string",
-            "minLength": 1,
             "maxLength": 64,
-            "description": "Facebook Page id on Meta, `urn:li:organization:…` on LinkedIn"
+            "description": "The Page the ad runs as; only networks with `usesPages` need one"
           },
           "text": {
             "type": "string",
@@ -43514,8 +42789,7 @@
           "name",
           "goal",
           "budget",
-          "targeting",
-          "pageId"
+          "targeting"
         ]
       },
       "SetAdStatusRequest": {
@@ -43810,7 +43084,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "targeting": {
@@ -44044,7 +43320,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "targeting": {
@@ -45473,7 +44751,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "paused": {
@@ -45551,7 +44831,9 @@
               "messages",
               "calls",
               "whatsapp",
-              "sales"
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "budget": {
@@ -45782,6 +45064,31 @@
             "minLength": 1,
             "maxLength": 64,
             "description": "Required by the `sales` goal: makes this a catalog ad over that product set"
+          },
+          "conversionTagId": {
+            "type": "string",
+            "pattern": "^\\d{1,20}$",
+            "description": "The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one"
+          },
+          "conversionEvent": {
+            "type": "string",
+            "enum": [
+              "checkout",
+              "add_to_cart",
+              "initiate_checkout",
+              "add_payment_info",
+              "add_to_wishlist",
+              "customize_product",
+              "signup",
+              "subscribe",
+              "submit_application",
+              "start_trial",
+              "lead",
+              "schedule",
+              "contact",
+              "find_location"
+            ],
+            "description": "Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on"
           }
         },
         "required": [
@@ -47249,224 +46556,6 @@
         "required": [
           "data",
           "meta"
-        ]
-      },
-      "RemoteBlog": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The platform's own blog id"
-          },
-          "title": {
-            "type": "string"
-          },
-          "handle": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "url": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "handle",
-          "url"
-        ]
-      },
-      "RemoteArticle": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The platform's own article id"
-          },
-          "blog_id": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "body_html": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "excerpt": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "published",
-              "draft",
-              "pending",
-              "scheduled"
-            ]
-          },
-          "author_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "image_url": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "url": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "published_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "blog_id",
-          "title",
-          "body_html",
-          "excerpt",
-          "status",
-          "author_name",
-          "tags",
-          "image_url",
-          "url",
-          "published_at",
-          "updated_at"
-        ]
-      },
-      "RemoteProduct": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The platform's own product id"
-          },
-          "title": {
-            "type": "string"
-          },
-          "handle": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "draft",
-              "archived"
-            ]
-          },
-          "description": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "vendor": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "product_type": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "image_url": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "url": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "price": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Lowest variant price, as a decimal string"
-          },
-          "currency": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "updated_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "handle",
-          "status",
-          "description",
-          "vendor",
-          "product_type",
-          "tags",
-          "image_url",
-          "url",
-          "price",
-          "currency",
-          "updated_at"
         ]
       },
       "QueueSlot": {
@@ -53227,7 +52316,7 @@
           },
           "approval_mode": {
             "type": "boolean",
-            "description": "Generated posts go through the approval queue"
+            "description": "Generated posts go through the approval queue. Defaults to true on create"
           },
           "last_triggered_at": {
             "type": [
@@ -55853,6 +54942,13 @@
           "last_message_outbound": {
             "type": "boolean"
           },
+          "last_message_attachment_kind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Kind of the last message's first attachment, null when it had none"
+          },
           "participant": {
             "type": "object",
             "properties": {
@@ -56404,7 +55500,13 @@
               "engagement",
               "traffic",
               "awareness",
-              "video_views"
+              "video_views",
+              "messages",
+              "calls",
+              "whatsapp",
+              "sales",
+              "website_sales",
+              "website_leads"
             ]
           },
           "status": {
@@ -57407,6 +56509,10 @@
               "type": "boolean"
             },
             "description": "What the network supports: campaigns, boost, audiences, leadForms, and so on"
+          },
+          "usesPages": {
+            "type": "boolean",
+            "description": "The network runs ads as a Page, so a standalone ad needs `pageId`"
           }
         }
       },
@@ -59957,6 +59063,55 @@
           },
           "leads": {
             "type": "integer"
+          },
+          "websiteConversions": {
+            "type": "object",
+            "properties": {
+              "pageVisits": {
+                "type": "integer"
+              },
+              "addToCart": {
+                "type": "integer"
+              },
+              "initiateCheckout": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "addPaymentInfo": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "addToWishlist": {
+                "type": "integer"
+              },
+              "checkout": {
+                "type": "integer"
+              },
+              "checkoutValueMinor": {
+                "type": "integer",
+                "description": "Account currency, minor units"
+              },
+              "viewContent": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "signup": {
+                "type": "integer"
+              },
+              "subscribe": {
+                "type": "integer"
+              },
+              "lead": {
+                "type": "integer"
+              }
+            },
+            "description": "Site events per type, on networks that report them (Pinterest). A null count is one the network does not report for this ad account yet"
           }
         }
       },

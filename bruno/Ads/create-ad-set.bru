@@ -55,4 +55,6 @@ docs {
   - `messagingDestination`: `messenger` | `instagram_direct` | `whatsapp` — Required by the `messages` goal. `whatsapp` is refused unless the deployment has a WhatsApp business number
   - `phoneNumber`: string — Required by the `calls` goal, in E.164, e.g. `+14155550123`
   - `productSetId`: string — Required by the `sales` goal: makes this a catalog ad over that product set
+  - `conversionTagId`: string — The `website_sales` and `website_leads` goals: the ad account’s conversion tag, from `GET /v1/ads/pixels`. May be left out when the account has exactly one
+  - `conversionEvent`: `checkout` | `add_to_cart` | `initiate_checkout` | `add_payment_info` | `add_to_wishlist` | `customize_product` | `signup` | `subscribe` | `submit_application` | `start_trial` | `lead` | `schedule` | `contact` | `find_location` — Required by `website_sales` (checkout, add_to_cart, initiate_checkout, add_payment_info, add_to_wishlist, customize_product) and `website_leads` (signup, subscribe, submit_application, start_trial, lead, schedule, contact, find_location): the site event the ad is judged on
 }
