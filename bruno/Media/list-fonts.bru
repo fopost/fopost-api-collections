@@ -1,0 +1,29 @@
+meta {
+  name: List fonts
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/fonts
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Returns the font library and, when `workspace_id` is given, that workspace's uploaded fonts.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

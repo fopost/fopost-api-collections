@@ -1,0 +1,29 @@
+meta {
+  name: List a design's posts
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/v1/designs/:id/posts
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Posts that used this design's exported media, with their metrics.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

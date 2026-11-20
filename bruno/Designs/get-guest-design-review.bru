@@ -1,0 +1,25 @@
+meta {
+  name: Open a review link
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/v1/design-review/:token
+  body: none
+  auth: inherit
+}
+
+params:path {
+  token: {{token}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Public: the token is the credential. An unknown, expired or revoked token answers 404.
+}

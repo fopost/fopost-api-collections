@@ -1,0 +1,43 @@
+meta {
+  name: Export a design
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/export
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "format": "png"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Renders pages into the media library.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `page_indexes`: integer[]
+  - `duration_sec`: `5` | `10` | `15`
+}

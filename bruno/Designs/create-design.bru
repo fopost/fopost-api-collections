@@ -1,0 +1,39 @@
+meta {
+  name: Create a design
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/designs
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workspace_id": "{{workspaceId}}",
+    "kind": "story"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([201]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+
+  **Optional fields** (not in the example body):
+  - `name`: string
+  - `document`: object
+  - `brand_voice_id`: string (uuid) | null
+}

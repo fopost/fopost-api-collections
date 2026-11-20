@@ -1,0 +1,36 @@
+meta {
+  name: Decide through a review link
+  type: http
+  seq: 26
+}
+
+post {
+  url: {{baseUrl}}/v1/design-review/:token/decision
+  body: json
+  auth: inherit
+}
+
+params:path {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Example name",
+    "decision": "approved"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Public: records the guest decision. A guest approval does not by itself clear a workspace that holds posts for approval.
+}

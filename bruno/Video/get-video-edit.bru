@@ -1,0 +1,31 @@
+meta {
+  name: Get a video edit
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/video-edits/:id
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+}
+
+params:path {
+  id: {{id}}
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

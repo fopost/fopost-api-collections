@@ -1,0 +1,32 @@
+meta {
+  name: List designs
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/designs?workspace_id=
+  body: none
+  auth: inherit
+}
+
+params:query {
+  workspace_id: 
+  ~kind: story
+  ~limit: 
+  ~offset: 
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Designs in a workspace, newest first, without their documents.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

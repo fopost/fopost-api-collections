@@ -1,0 +1,39 @@
+meta {
+  name: Approve a design or request changes
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/v1/designs/:id/review/decision
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "decision": "approved"
+  }
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Workspace owners and admins only, the same rule as post approvals.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}

@@ -1,0 +1,31 @@
+meta {
+  name: List video edits
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/video-edits
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~workspace_id: 
+  ~media_id: 
+  ~limit: 20
+}
+
+tests {
+  test('status is successful', function () {
+    expect(res.getStatus()).to.be.oneOf([200]);
+  });
+}
+
+docs {
+  Needs `workspace_id` or `media_id`.
+
+  Requires the `posts` scope when using an API key.
+
+  **Scope:** `posts`
+}
